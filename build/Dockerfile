@@ -17,9 +17,6 @@ RUN CGO_ENABLED=0 go build -o /app/pocketfhir
 # Use a lightweight image for the final container
 FROM caddy:2.6.2-alpine
 
-# Install curl in the final container
-RUN apk add --no-cache curl
-
 # Set the working directory
 WORKDIR /app
 
@@ -29,8 +26,8 @@ COPY --from=builder /app/pocketfhir /app/
 # Copy Caddy configuration file
 COPY config/caddy/Caddyfile /etc/caddy/Caddyfile
 
-# Ensure pb_data and pb_migrations directories exist
-RUN mkdir -p /app/pb_data /app/pb_migrations
+# Ensure pb_data, pb_public, and pb_hooks directories exist
+RUN mkdir -p /cloud/storage/pb_data /cloud/storage/pb_public /cloud/storage/pb_hooks
 
 # Copy entrypoint script
 COPY build/entrypoint.sh /app/entrypoint.sh

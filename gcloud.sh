@@ -4,7 +4,7 @@
 projectId="fhirfli-413723"
 location="us-central1"
 repository="containers"
-projectName="pocketfhir"
+projectName="pocket-fhir"
 gcloud config set project $projectId
 
 # only needed the first time
@@ -23,4 +23,5 @@ docker tag $projectName $registryLocation
 docker push $registryLocation
 
 # Deploy on Google Cloud Run
-gcloud run deploy $projectName --image $registryLocation --platform managed --region $location --allow-unauthenticated --port 8080
+gcloud run deploy $projectName --image $registryLocation --platform managed --region $location --allow-unauthenticated --port 8080 \
+--update-env-vars PB_ENCRYPTION_KEY=$PB_ENCRYPTION_KEY,AUTO_HTTPS=$AUTO_HTTPS,TLS_CONFIG=$TLS_CONFIG
