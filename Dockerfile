@@ -28,7 +28,7 @@ RUN apk add --no-cache \
 # Copy the built binary from the builder stage
 COPY --from=builder /app/pocketfhir /app/
 
-# Set environment variables
+# Set environment variables for directories (not secrets)
 ENV PB_DATA_DIR /app/pb_data
 ENV PB_PUBLIC_DIR /app/pb_public
 ENV PB_HOOKS_DIR /app/pb_hooks
