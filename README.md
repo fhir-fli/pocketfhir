@@ -59,12 +59,15 @@ pocketfhir-caddy | └─ Admin UI: http://0.0.0.0:8090/_/
 - TODO
 
 ### Fly.io
-- 
+- Generate locally: ```$ ./build/generate.sh```
 - You need a Fly.io account (obviously) if you don't already have one
 - Install on your local system
     - macOS: brew install superfly/tap/flyctl
     - Linux: curl -L https://fly.io/install.sh | sh
 - CLI login: ```$ flyctl auth login```
 - Make sure you have dotenv-cli installed: ```$ npm install -g dotenv-cli```
-- Set environment variables on Fly.io: ```$ flyctl secrets set PB_ENCRYPTION_KEY=y5E69SptuHgUzspVNipzjl9ZmsKVPkIH AUTO_HTTPS=on```
-- 
+- Create app: ```$ flyctl apps create pocketfhir --org mayjuun```
+- Create and mount the volume: ```$  flyctl volumes create pb_data --size=1 --app pocketfhir --region=atl```
+- Set secrets: ```$ flyctl secrets set PB_ENCRYPTION_KEY=y5E69SptuHgUzspVNipzjl9ZmsKVPkIH --app pocketfhir```
+- Deploy: ```$ flyctl deploy --app pocketfhir```
+- May need to deploy a second time: ```$ flyctl deploy --app pocketfhir --wait-timeout 300```

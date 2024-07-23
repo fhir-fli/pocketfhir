@@ -21,9 +21,7 @@ FROM alpine:latest
 WORKDIR /app
 
 # Install necessary packages
-RUN apk add --no-cache \
-    unzip \
-    openssh
+RUN apk add --no-cache unzip openssh
 
 # Copy the built binary from the builder stage
 COPY --from=builder /app/pocketfhir /app/
