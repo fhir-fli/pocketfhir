@@ -6,8 +6,8 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  fhir_r5: 
-    path: ../../../new_fhir/fhir_r5
+  fhir_r4: 
+    path: ../../../new_fhir/fhir_r4
   pocketbase: ^0.18.1
   riverpod: ^2.5.1
   rxdart: ^0.28.0
