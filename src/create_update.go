@@ -6,105 +6,104 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fhir-fli/fhirpath-go/fhir"
+	"github.com/fhir-fli/fhirpath-go/pkg/containedresource"
+	"github.com/fhir-fli/fhirpath-go/pkg/fhirwrapper"
+	"github.com/google/fhir/go/fhirversion"
+	"github.com/google/fhir/go/jsonformat"
+	"github.com/google/fhir/go/jsonformat/fhirvalidate"
+	bcrpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/models"
 	"github.com/pocketbase/pocketbase/tools/types"
+	"google.golang.org/protobuf/proto"
 )
 
 func handleResourceCreation(app *pocketbase.PocketBase, e *core.ModelEvent) error {
-	// Create the resource to be saved
 	resource, ok := e.Model.(*models.Record)
 	if !ok {
 		return nil
 	}
 
-	// If this is a historical record, we don't need to update anything since we're
-	// just copying it over
 	collectionName := resource.Collection().Name
 	if strings.HasSuffix(collectionName, "history") {
 		return nil
 	}
 
-	// Check if the collection is versioned, if not, we're done
 	if !isVersionedCollection(app, collectionName) {
 		return nil
 	}
 
-	// Get the resourceField (which is the resource JSON)
 	resourceField := resource.Get("resource")
-
-	// Get the resource data - we need for validation
 	resourceData, err := getResourceData(resourceField)
 	if err != nil {
 		return fmt.Errorf("failed to get resource data: %w", err)
 	}
 
-	// Validate the resource data
 	if err := validateFHIRResource(resourceData); err != nil {
 		return fmt.Errorf("validation error: %w", err)
 	}
 
-	// Update the resource (apply id if none, update versionid and lastUpdated)
+	searchParams := getSearchParamsForResource(collectionName)
+	results, err := evaluateFHIRPathExpressions(resourceData, searchParams)
+	if err != nil {
+		return fmt.Errorf("failed to evaluate FHIRPath expressions: %w", err)
+	}
+
+	for k, v := range results {
+		resource.Set(k, v)
+	}
+
 	updatedResourceBytes, err := updateResourceJson(resourceData, 1, resource.Id, resource.Updated.Time().UTC().Format(time.RFC3339))
 	if err != nil {
 		return fmt.Errorf("failed to update resource meta: %w", err)
 	}
 
-	// Set the updated resource back to the record
 	resource.Set("resource", types.JsonRaw(updatedResourceBytes))
 
-	// Again, since this is the creation, the versionId is 0
+	if err := storeFHIRData(app, resource, resourceData); err != nil {
+		return fmt.Errorf("failed to store FHIR data: %w", err)
+	}
+
 	resource.Set("versionId", 1)
 
 	return nil
 }
 
 func handleResourceUpdate(app *pocketbase.PocketBase, e *core.ModelEvent) error {
-	// Create the resource to be saved
 	newResourceVersion, ok := e.Model.(*models.Record)
 	if !ok {
 		return nil
 	}
 
-	// Should be a ResourceType
 	collectionName := newResourceVersion.Collection().Name
 	if !isVersionedCollection(app, collectionName) {
 		return nil
 	}
 
-	// Get the resourceField (which is the resource JSON)
 	resourceField := newResourceVersion.Get("resource")
-
-	// Get the resource data - we need for validation
 	resourceData, err := getResourceData(resourceField)
 	if err != nil {
 		return fmt.Errorf("failed to get resource data: %w", err)
 	}
 
-	// Validate the resource data
 	if err := validateFHIRResource(resourceData); err != nil {
 		return fmt.Errorf("validation error: %w", err)
 	}
 
-	// Now move the current resource - remember, this will end up calling
-	// handleResourceCreation eventually - which can cause issues if you're unaware
 	currentResourceVersion, err := app.Dao().FindRecordById(collectionName, newResourceVersion.Id)
 	if err != nil {
 		return fmt.Errorf("failed to fetch existing resource: %w", err)
 	}
 
-	// Get the history table for this resource
 	historyCollectionName := collectionName + "history"
 	historyCollection, err := app.Dao().FindCollectionByNameOrId(historyCollectionName)
 	if err != nil {
 		return fmt.Errorf("failed to create history collection: %w", err)
 	}
 
-	// Create a new record in the history table
 	historicalResourceVersion := models.NewRecord(historyCollection)
-
-	// Copy over the values
 	historicalResourceVersion.Set("fhirId", currentResourceVersion.Id)
 	historicalResourceVersion.Set("resourceType", currentResourceVersion.Get("resourceType"))
 	historicalResourceVersionId := currentResourceVersion.GetInt("versionId")
@@ -112,30 +111,46 @@ func handleResourceUpdate(app *pocketbase.PocketBase, e *core.ModelEvent) error 
 	historicalResourceVersion.Set("versionId", historicalResourceVersionId)
 	historicalResourceVersion.Set("resource", currentResourceVersion.Get("resource"))
 
-	// Finish saving the old version of the record
 	saveErr := app.Dao().SaveRecord(historicalResourceVersion)
 	if saveErr != nil {
 		return fmt.Errorf("failed to save resource to history table: %w", saveErr)
 	}
 
-	// Update the resource (apply id if none, update versionId and lastUpdated)
+	searchParams := getSearchParamsForResource(collectionName)
+	results, err := evaluateFHIRPathExpressions(resourceData, searchParams)
+	if err != nil {
+		return fmt.Errorf("failed to evaluate FHIRPath expressions: %w", err)
+	}
+
+	for k, v := range results {
+		newResourceVersion.Set(k, v)
+	}
+
 	updatedResourceBytes, err := updateResourceJson(resourceData, updatedVersionId, newResourceVersion.Id, newResourceVersion.Updated.Time().UTC().Format(time.RFC3339))
 	if err != nil {
 		return fmt.Errorf("failed to update resource meta: %w", err)
 	}
 
-	// Set the updated resource back to the record
 	newResourceVersion.Set("resource", types.JsonRaw(updatedResourceBytes))
 
-	// Be sure to update the versionId in the table, not just the JSON
+	if err := storeFHIRData(app, newResourceVersion, resourceData); err != nil {
+		return fmt.Errorf("failed to store FHIR data: %w", err)
+	}
+
 	newResourceVersion.Set("versionId", updatedVersionId)
 
 	return nil
 }
 
-func updateResourceJson(resourceData []byte, newVersionId int, id string, lastUpdated string) (updatedResourceBytes []byte, err error) {
+func getSearchParamsForResource(resourceType string) []SearchParameter {
+	// Implement this function to return the search parameters for the given resource type
+	// This is a placeholder implementation
+	return []SearchParameter{
+		{Code: "example-code", Expression: "example-expression"},
+	}
+}
 
-	// Parse the resource JSON
+func updateResourceJson(resourceData []byte, newVersionId int, id string, lastUpdated string) (updatedResourceBytes []byte, err error) {
 	var resourceJson map[string]interface{}
 	if err := json.Unmarshal(resourceData, &resourceJson); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal resource JSON: %w", err)
@@ -175,4 +190,72 @@ func getResourceData(resourceField any) (resourceData []byte, err error) {
 		return nil, fmt.Errorf("resource field is not of expected type")
 	}
 	return resourceData, nil
+}
+
+func validateFHIRResource(resourceData []byte) error {
+	unmarshaller, err := jsonformat.NewUnmarshaller("UTC", fhirversion.R4)
+	if err != nil {
+		return fmt.Errorf("failed to create unmarshaller: %w", err)
+	}
+
+	msg, err := unmarshaller.Unmarshal(resourceData)
+	if err != nil {
+		return fmt.Errorf("failed to unmarshal FHIR resource: %w", err)
+	}
+
+	if err := fhirvalidate.Validate(proto.Message(msg)); err != nil {
+		return fmt.Errorf("FHIR resource validation failed: %w", err)
+	}
+
+	return nil
+}
+
+func storeFHIRData(app *pocketbase.PocketBase, resource *models.Record, resourceData []byte) error {
+	// Unmarshal the resource data to a map
+	var resourceJson map[string]interface{}
+	if err := json.Unmarshal(resourceData, &resourceJson); err != nil {
+		return fmt.Errorf("failed to unmarshal resource JSON: %w", err)
+	}
+
+	// Create an unmarshaller
+	unmarshaller, err := jsonformat.NewUnmarshaller("r4", fhirversion.R4)
+	if err != nil {
+		return fmt.Errorf("failed to create unmarshaller: %w", err)
+	}
+
+	// Unmarshal the resource data into a FHIR proto message
+	unmarshalledResource, err := unmarshaller.Unmarshal(resourceData)
+	if err != nil {
+		return fmt.Errorf("failed to unmarshal resource to proto: %w", err)
+	}
+
+	// Wrap the proto message as a contained resource
+	containedResource := containedresource.Wrap(unmarshalledResource.(fhir.Resource))
+
+	// Evaluate the FHIRPath expressions and update the resource
+	searchParams := getSearchParamsForResource(resource.Collection().Name)
+	for _, param := range searchParams {
+		value, err := evaluateFHIRPath(containedResource, param.Expression)
+		if err != nil {
+			return fmt.Errorf("failed to evaluate FHIRPath expression %s: %w", param.Expression, err)
+		}
+
+		if len(value) > 0 {
+			resource.Set(param.Code, value[0])
+		}
+	}
+
+	return nil
+}
+
+func evaluateFHIRPath(resource *bcrpb.ContainedResource, expression string) ([]interface{}, error) {
+	compiledExpr, err := fhirwrapper.CompileFHIRPath(expression)
+	if err != nil {
+		return nil, fmt.Errorf("failed to compile FHIRPath expression: %w", err)
+	}
+	result, err := fhirwrapper.EvaluateFHIRPath(compiledExpr, resource)
+	if err != nil {
+		return nil, fmt.Errorf("failed to evaluate FHIRPath expression: %w", err)
+	}
+	return result, nil
 }

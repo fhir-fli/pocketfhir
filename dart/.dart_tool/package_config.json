@@ -39,13 +39,13 @@
     },
     {
       "name": "fhir_primitives",
-      "rootUri": "../../../new_fhir/fhir_primitives",
+      "rootUri": "../../../../new_fhir/fhir_primitives",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "fhir_r5",
-      "rootUri": "../../../new_fhir/fhir_r5",
+      "rootUri": "../../../../new_fhir/fhir_r5",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -60,18 +60,6 @@
       "rootUri": "file:///home/grey/dev/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.3"
-    },
-    {
-      "name": "flutter_web_auth_2",
-      "rootUri": "file:///home/grey/.pub-cache/hosted/pub.dev/flutter_web_auth_2-3.1.2",
-      "packageUri": "lib/",
-      "languageVersion": "2.15"
-    },
-    {
-      "name": "flutter_web_auth_2_platform_interface",
-      "rootUri": "file:///home/grey/.pub-cache/hosted/pub.dev/flutter_web_auth_2_platform_interface-3.1.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.15"
     },
     {
       "name": "flutter_web_plugins",
@@ -327,7 +315,7 @@
     },
     {
       "name": "uuid",
-      "rootUri": "file:///home/grey/.pub-cache/hosted/pub.dev/uuid-4.4.0",
+      "rootUri": "file:///home/grey/.pub-cache/hosted/pub.dev/uuid-4.4.2",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -342,12 +330,6 @@
       "rootUri": "file:///home/grey/.pub-cache/hosted/pub.dev/web-0.5.1",
       "packageUri": "lib/",
       "languageVersion": "3.3"
-    },
-    {
-      "name": "window_to_front",
-      "rootUri": "file:///home/grey/.pub-cache/hosted/pub.dev/window_to_front-0.0.3",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
     },
     {
       "name": "xml",
@@ -368,10 +350,10 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2024-07-13T21:06:13.408734Z",
+  "generated": "2024-07-24T15:52:46.469316Z",
   "generator": "pub",
-  "generatorVersion": "3.4.1",
+  "generatorVersion": "3.4.3",
   "flutterRoot": "file:///home/grey/dev/flutter",
-  "flutterVersion": "3.22.1",
+  "flutterVersion": "3.22.2",
   "pubCache": "file:///home/grey/.pub-cache"
 }

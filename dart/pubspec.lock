@@ -52,14 +52,14 @@ packages:
   fhir_primitives:
     dependency: transitive
     description:
-      path: "../../new_fhir/fhir_primitives"
+      path: "../../../new_fhir/fhir_primitives"
       relative: true
     source: path
-    version: "0.1.0"
+    version: "0.1.1"
   fhir_r5:
     dependency: "direct main"
     description:
-      path: "../../new_fhir/fhir_r5"
+      path: "../../../new_fhir/fhir_r5"
       relative: true
     source: path
     version: "0.1.0"
@@ -76,22 +76,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_web_auth_2:
-    dependency: transitive
-    description:
-      name: flutter_web_auth_2
-      sha256: "4d3d2fd3d26bf1a26b3beafd4b4b899c0ffe10dc99af25abc58ffe24e991133c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.2"
-  flutter_web_auth_2_platform_interface:
-    dependency: transitive
-    description:
-      name: flutter_web_auth_2_platform_interface
-      sha256: e8669e262005a8354389ba2971f0fc1c36188481234ff50d013aaf993f30f739
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -426,10 +410,10 @@ packages:
     dependency: transitive
     description:
       name: uuid
-      sha256: "814e9e88f21a176ae1359149021870e87f7cddaf633ab678a5d2b0bff7fd1ba8"
+      sha256: "83d37c7ad7aaf9aa8e275490669535c8080377cfa7a7004c24dfac53afffaa90"
       url: "https://pub.dev"
     source: hosted
-    version: "4.4.0"
+    version: "4.4.2"
   vector_math:
     dependency: transitive
     description:
@@ -446,14 +430,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
-  window_to_front:
-    dependency: transitive
-    description:
-      name: window_to_front
-      sha256: "7aef379752b7190c10479e12b5fd7c0b9d92adc96817d9e96c59937929512aee"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.3"
   xml:
     dependency: transitive
     description:

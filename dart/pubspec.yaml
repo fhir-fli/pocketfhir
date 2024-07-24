@@ -7,7 +7,7 @@ environment:
 
 dependencies:
   fhir_r5: 
-    path: ../../new_fhir/fhir_r5
+    path: ../../../new_fhir/fhir_r5
   pocketbase: ^0.18.1
   riverpod: ^2.5.1
   rxdart: ^0.28.0
