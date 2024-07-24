@@ -7,6 +7,7 @@ Future<void> main() async {
   final searchMap = <String, Map<String, String>>{};
   final Bundle spBundle = Bundle.fromJsonString(
       await File('search-parameters.json').readAsString());
+
   for (final BundleEntry entry in spBundle.entry ?? <BundleEntry>[]) {
     final SearchParameter sp = entry.resource as SearchParameter;
     final name = sp.name;
@@ -31,6 +32,7 @@ Future<void> main() async {
   searchMap.remove('Resource');
   searchMap.remove('DomainResource');
 
+  // Change the output file name to collections.go
   String goString = '''// collections.go
 package main
 
@@ -46,67 +48,76 @@ var collections = []map[string]interface{}{''';
           print('$key $k $v');
         }
       }
-      goString += entries(k, v);
+      if (k != '_id' && k != '_content') {
+        goString += entries(k, v);
+      }
     });
-    goString += '''	},
-	  },''';
-    goString += historyClass(key);
-    goString += tokenClass(key); // Add token table for each resource
+    goString += '''    },
+  },''';
+    goString += historyClass(key, searchMap[key]!);
   }
 
-  goString += '}';
+  goString += '\n}';
 
-  await File('search_parameters_map.go').writeAsString(goString);
+  // Write to collections.go instead of search_parameters_map.go
+  await File('collections.go').writeAsString(goString);
 }
 
 String entries(String key, String value) {
   switch (value) {
     case 'number':
-      return '			{"name": "$key", "type": "number"},\n';
+      return '      {"name": "$key", "type": "REAL"},\n';
     case 'date':
-      return '			{"name": "$key", "type": "text"},\n';
+      return '      {"name": "$key", "type": "TEXT"},\n';
     case 'string':
-      return '			{"name": "$key", "type": "text"},\n';
+      return '      {"name": "$key", "type": "TEXT"},\n';
     case 'token':
-      return ''; // Token is handled separately
+      return '      {"name": "$key", "type": "JSON"},\n';
     case 'reference':
-      return '			{"name": "$key", "type": "text"},\n';
+      return '      {"name": "$key", "type": "JSON"},\n';
+    case 'composite':
+      return '      {"name": "$key", "type": "TEXT"},\n';
+    case 'quantity':
+      return '      {"name": "$key", "type": "JSON"},\n';
     case 'uri':
-      return '			{"name": "$key", "type": "text"},\n';
+      return '      {"name": "$key", "type": "TEXT"},\n';
+    case 'special':
+      return '      {"name": "$key", "type": "TEXT"},\n';
     default:
       return '';
   }
 }
 
 String mainClass(String className) => '''\n
-	{
-		"name": "$className",
-		"schema": []map[string]interface{}{
-			{"name": "versionId", "type": "number"},
-			{"name": "resource", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}},
+  {
+    "name": "$className",
+    "schema": []map[string]interface{}{
+      {"name": "id", "type": "TEXT"},
+      {"name": "versionId", "type": "REAL"},
+      {"name": "resource", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}},
 ''';
 
-String historyClass(String className) => '''\n
-	{
-		"name": "${className}History",
-		"schema": []map[string]interface{}{
-			{"name": "fhirId", "type": "text"},
-			{"name": "versionId", "type": "number"},
-			{"name": "resource", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}},
-		},
-	},''';
+String historyClass(String className, Map<String, String> columns) {
+  String historySchema = '''\n
+  {
+    "name": "${className}History",
+    "schema": []map[string]interface{}{
+      {"name": "fhirId", "type": "TEXT"},
+      {"name": "versionId", "type": "REAL"},
+      {"name": "resource", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}},
+''';
 
-String tokenClass(String className) => '''\n
-	{
-		"name": "${className}Token",
-		"schema": []map[string]interface{}{
-			{"name": "resourceId", "type": "text"},
-			{"name": "system", "type": "text"},
-			{"name": "code", "type": "text"},
-			{"name": "searchParameter", "type": "text"},
-			{"name": "index", "type": "number"},
-		},
-	},''';
+  columns.forEach((k, v) {
+    if (k != '_id' && k != '_content') {
+      historySchema += entries(k, v);
+    }
+  });
+
+  historySchema += '''    },
+  },''';
+
+  return historySchema;
+}
 
 JsonEncoder encoder = JsonEncoder.withIndent('  ');
 
