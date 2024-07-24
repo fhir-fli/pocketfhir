@@ -25,24 +25,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "Account.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "Account.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Account.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Account.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Account.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Account.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Account.meta.tag",
-      },      {
         Code: "identifier",
         Expression: "Account.identifier",
       },      {
@@ -67,24 +49,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "type",
         Expression: "Account.type",
       },    },    "ActivityDefinition": {      {
-        Code: "_id",
-        Expression: "ActivityDefinition.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "ActivityDefinition.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "ActivityDefinition.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "ActivityDefinition.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "ActivityDefinition.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "ActivityDefinition.meta.tag",
-      },      {
         Code: "_id",
         Expression: "ActivityDefinition.id",
       },      {
@@ -187,24 +151,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "AdverseEvent.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "AdverseEvent.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "AdverseEvent.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "AdverseEvent.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "AdverseEvent.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "AdverseEvent.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "AdverseEvent.meta.tag",
-      },      {
         Code: "actuality",
         Expression: "AdverseEvent.actuality",
       },      {
@@ -241,24 +187,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "substance",
         Expression: "AdverseEvent.suspectEntity.instance",
       },    },    "AllergyIntolerance": {      {
-        Code: "_id",
-        Expression: "AllergyIntolerance.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "AllergyIntolerance.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "AllergyIntolerance.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "AllergyIntolerance.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "AllergyIntolerance.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "AllergyIntolerance.meta.tag",
-      },      {
         Code: "_id",
         Expression: "AllergyIntolerance.id",
       },      {
@@ -325,24 +253,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "verification-status",
         Expression: "AllergyIntolerance.verificationStatus",
       },    },    "Condition": {      {
-        Code: "_id",
-        Expression: "Condition.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Condition.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Condition.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Condition.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Condition.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Condition.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Condition.id",
       },      {
@@ -442,24 +352,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "DeviceRequest.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "DeviceRequest.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "DeviceRequest.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "DeviceRequest.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "DeviceRequest.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "DeviceRequest.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "DeviceRequest.meta.tag",
-      },      {
         Code: "code",
         Expression: "",
       },      {
@@ -514,24 +406,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "subject",
         Expression: "DeviceRequest.subject",
       },    },    "DiagnosticReport": {      {
-        Code: "_id",
-        Expression: "DiagnosticReport.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "DiagnosticReport.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "DiagnosticReport.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "DiagnosticReport.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "DiagnosticReport.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "DiagnosticReport.meta.tag",
-      },      {
         Code: "_id",
         Expression: "DiagnosticReport.id",
       },      {
@@ -616,24 +490,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "FamilyMemberHistory.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "FamilyMemberHistory.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "FamilyMemberHistory.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "FamilyMemberHistory.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "FamilyMemberHistory.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "FamilyMemberHistory.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "FamilyMemberHistory.meta.tag",
-      },      {
         Code: "code",
         Expression: "",
       },      {
@@ -661,24 +517,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "status",
         Expression: "FamilyMemberHistory.status",
       },    },    "List": {      {
-        Code: "_id",
-        Expression: "List.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "List.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "List.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "List.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "List.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "List.meta.tag",
-      },      {
         Code: "_id",
         Expression: "List.id",
       },      {
@@ -751,24 +589,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "Medication.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "Medication.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Medication.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Medication.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Medication.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Medication.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Medication.meta.tag",
-      },      {
         Code: "code",
         Expression: "",
       },      {
@@ -796,24 +616,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "status",
         Expression: "Medication.status",
       },    },    "MedicationAdministration": {      {
-        Code: "_id",
-        Expression: "MedicationAdministration.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "MedicationAdministration.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "MedicationAdministration.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "MedicationAdministration.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "MedicationAdministration.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "MedicationAdministration.meta.tag",
-      },      {
         Code: "_id",
         Expression: "MedicationAdministration.id",
       },      {
@@ -889,24 +691,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "MedicationDispense.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "MedicationDispense.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "MedicationDispense.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "MedicationDispense.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "MedicationDispense.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "MedicationDispense.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "MedicationDispense.meta.tag",
-      },      {
         Code: "code",
         Expression: "",
       },      {
@@ -952,24 +736,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "whenprepared",
         Expression: "MedicationDispense.whenPrepared",
       },    },    "MedicationRequest": {      {
-        Code: "_id",
-        Expression: "MedicationRequest.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "MedicationRequest.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "MedicationRequest.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "MedicationRequest.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "MedicationRequest.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "MedicationRequest.meta.tag",
-      },      {
         Code: "_id",
         Expression: "MedicationRequest.id",
       },      {
@@ -1054,24 +820,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "MedicationStatement.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "MedicationStatement.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "MedicationStatement.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "MedicationStatement.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "MedicationStatement.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "MedicationStatement.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "MedicationStatement.meta.tag",
-      },      {
         Code: "code",
         Expression: "",
       },      {
@@ -1105,24 +853,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "subject",
         Expression: "MedicationStatement.subject",
       },    },    "Observation": {      {
-        Code: "_id",
-        Expression: "Observation.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Observation.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Observation.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Observation.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Observation.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Observation.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Observation.id",
       },      {
@@ -1273,24 +1003,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "Procedure.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "Procedure.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Procedure.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Procedure.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Procedure.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Procedure.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Procedure.meta.tag",
-      },      {
         Code: "code",
         Expression: "",
       },      {
@@ -1339,24 +1051,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "subject",
         Expression: "Procedure.subject",
       },    },    "ServiceRequest": {      {
-        Code: "_id",
-        Expression: "ServiceRequest.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "ServiceRequest.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "ServiceRequest.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "ServiceRequest.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "ServiceRequest.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "ServiceRequest.meta.tag",
-      },      {
         Code: "_id",
         Expression: "ServiceRequest.id",
       },      {
@@ -1456,24 +1150,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "CarePlan.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "CarePlan.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "CarePlan.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "CarePlan.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "CarePlan.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "CarePlan.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "CarePlan.meta.tag",
-      },      {
         Code: "date",
         Expression: "",
       },      {
@@ -1552,24 +1228,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "CareTeam.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "CareTeam.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "CareTeam.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "CareTeam.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "CareTeam.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "CareTeam.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "CareTeam.meta.tag",
-      },      {
         Code: "date",
         Expression: "",
       },      {
@@ -1594,24 +1252,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "subject",
         Expression: "CareTeam.subject",
       },    },    "ClinicalImpression": {      {
-        Code: "_id",
-        Expression: "ClinicalImpression.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "ClinicalImpression.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "ClinicalImpression.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "ClinicalImpression.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "ClinicalImpression.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "ClinicalImpression.meta.tag",
-      },      {
         Code: "_id",
         Expression: "ClinicalImpression.id",
       },      {
@@ -1669,24 +1309,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "supporting-info",
         Expression: "ClinicalImpression.supportingInfo",
       },    },    "Composition": {      {
-        Code: "_id",
-        Expression: "Composition.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Composition.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Composition.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Composition.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Composition.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Composition.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Composition.id",
       },      {
@@ -1777,24 +1399,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "Consent.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "Consent.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Consent.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Consent.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Consent.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Consent.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Consent.meta.tag",
-      },      {
         Code: "date",
         Expression: "",
       },      {
@@ -1840,24 +1444,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "status",
         Expression: "Consent.status",
       },    },    "Encounter": {      {
-        Code: "_id",
-        Expression: "Encounter.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Encounter.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Encounter.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Encounter.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Encounter.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Encounter.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Encounter.id",
       },      {
@@ -1963,24 +1549,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "EpisodeOfCare.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "EpisodeOfCare.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "EpisodeOfCare.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "EpisodeOfCare.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "EpisodeOfCare.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "EpisodeOfCare.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "EpisodeOfCare.meta.tag",
-      },      {
         Code: "date",
         Expression: "",
       },      {
@@ -2026,24 +1594,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "Flag.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "Flag.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Flag.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Flag.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Flag.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Flag.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Flag.meta.tag",
-      },      {
         Code: "date",
         Expression: "",
       },      {
@@ -2062,24 +1612,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "subject",
         Expression: "Flag.subject",
       },    },    "Immunization": {      {
-        Code: "_id",
-        Expression: "Immunization.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Immunization.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Immunization.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Immunization.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Immunization.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Immunization.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Immunization.id",
       },      {
@@ -2164,24 +1696,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "RiskAssessment.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "RiskAssessment.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "RiskAssessment.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "RiskAssessment.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "RiskAssessment.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "RiskAssessment.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "RiskAssessment.meta.tag",
-      },      {
         Code: "date",
         Expression: "",
       },      {
@@ -2212,24 +1726,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "subject",
         Expression: "RiskAssessment.subject",
       },    },    "SupplyRequest": {      {
-        Code: "_id",
-        Expression: "SupplyRequest.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "SupplyRequest.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "SupplyRequest.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "SupplyRequest.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "SupplyRequest.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "SupplyRequest.meta.tag",
-      },      {
         Code: "_id",
         Expression: "SupplyRequest.id",
       },      {
@@ -2287,24 +1783,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "DetectedIssue.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "DetectedIssue.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "DetectedIssue.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "DetectedIssue.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "DetectedIssue.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "DetectedIssue.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "DetectedIssue.meta.tag",
-      },      {
         Code: "identifier",
         Expression: "",
       },      {
@@ -2323,24 +1801,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "implicated",
         Expression: "DetectedIssue.implicated",
       },    },    "DocumentManifest": {      {
-        Code: "_id",
-        Expression: "DocumentManifest.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "DocumentManifest.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "DocumentManifest.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "DocumentManifest.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "DocumentManifest.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "DocumentManifest.meta.tag",
-      },      {
         Code: "_id",
         Expression: "DocumentManifest.id",
       },      {
@@ -2398,24 +1858,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "subject",
         Expression: "DocumentManifest.subject",
       },    },    "DocumentReference": {      {
-        Code: "_id",
-        Expression: "DocumentReference.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "DocumentReference.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "DocumentReference.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "DocumentReference.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "DocumentReference.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "DocumentReference.meta.tag",
-      },      {
         Code: "_id",
         Expression: "DocumentReference.id",
       },      {
@@ -2527,24 +1969,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "Goal.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "Goal.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Goal.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Goal.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Goal.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Goal.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Goal.meta.tag",
-      },      {
         Code: "identifier",
         Expression: "",
       },      {
@@ -2569,24 +1993,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "target-date",
         Expression: "(Goal.target.due as date)",
       },    },    "ImagingStudy": {      {
-        Code: "_id",
-        Expression: "ImagingStudy.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "ImagingStudy.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "ImagingStudy.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "ImagingStudy.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "ImagingStudy.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "ImagingStudy.meta.tag",
-      },      {
         Code: "_id",
         Expression: "ImagingStudy.id",
       },      {
@@ -2674,24 +2080,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "NutritionOrder.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "NutritionOrder.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "NutritionOrder.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "NutritionOrder.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "NutritionOrder.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "NutritionOrder.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "NutritionOrder.meta.tag",
-      },      {
         Code: "identifier",
         Expression: "",
       },      {
@@ -2746,24 +2134,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "SupplyDelivery.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "SupplyDelivery.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "SupplyDelivery.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "SupplyDelivery.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "SupplyDelivery.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "SupplyDelivery.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "SupplyDelivery.meta.tag",
-      },      {
         Code: "identifier",
         Expression: "",
       },      {
@@ -2779,24 +2149,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "supplier",
         Expression: "SupplyDelivery.supplier",
       },    },    "VisionPrescription": {      {
-        Code: "_id",
-        Expression: "VisionPrescription.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "VisionPrescription.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "VisionPrescription.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "VisionPrescription.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "VisionPrescription.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "VisionPrescription.meta.tag",
-      },      {
         Code: "_id",
         Expression: "VisionPrescription.id",
       },      {
@@ -2851,24 +2203,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "DeviceUseStatement.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "DeviceUseStatement.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "DeviceUseStatement.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "DeviceUseStatement.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "DeviceUseStatement.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "DeviceUseStatement.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "DeviceUseStatement.meta.tag",
-      },      {
         Code: "patient",
         Expression: "",
       },      {
@@ -2881,24 +2215,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "subject",
         Expression: "DeviceUseStatement.subject",
       },    },    "Appointment": {      {
-        Code: "_id",
-        Expression: "Appointment.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Appointment.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Appointment.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Appointment.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Appointment.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Appointment.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Appointment.id",
       },      {
@@ -2986,24 +2302,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "AppointmentResponse.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "AppointmentResponse.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "AppointmentResponse.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "AppointmentResponse.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "AppointmentResponse.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "AppointmentResponse.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "AppointmentResponse.meta.tag",
-      },      {
         Code: "actor",
         Expression: "AppointmentResponse.actor",
       },      {
@@ -3025,24 +2323,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "practitioner",
         Expression: "AppointmentResponse.actor.where(resolve() is Practitioner)",
       },    },    "AuditEvent": {      {
-        Code: "_id",
-        Expression: "AuditEvent.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "AuditEvent.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "AuditEvent.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "AuditEvent.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "AuditEvent.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "AuditEvent.meta.tag",
-      },      {
         Code: "_id",
         Expression: "AuditEvent.id",
       },      {
@@ -3133,24 +2413,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "Basic.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "Basic.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Basic.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Basic.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Basic.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Basic.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Basic.meta.tag",
-      },      {
         Code: "author",
         Expression: "Basic.author",
       },      {
@@ -3169,24 +2431,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "subject",
         Expression: "Basic.subject",
       },    },    "BodyStructure": {      {
-        Code: "_id",
-        Expression: "BodyStructure.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "BodyStructure.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "BodyStructure.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "BodyStructure.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "BodyStructure.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "BodyStructure.meta.tag",
-      },      {
         Code: "_id",
         Expression: "BodyStructure.id",
       },      {
@@ -3235,24 +2479,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "Bundle.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "Bundle.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Bundle.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Bundle.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Bundle.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Bundle.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Bundle.meta.tag",
-      },      {
         Code: "composition",
         Expression: "Bundle.entry[0].resource",
       },      {
@@ -3268,24 +2494,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "type",
         Expression: "Bundle.type",
       },    },    "CapabilityStatement": {      {
-        Code: "_id",
-        Expression: "CapabilityStatement.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "CapabilityStatement.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "CapabilityStatement.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "CapabilityStatement.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "CapabilityStatement.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "CapabilityStatement.meta.tag",
-      },      {
         Code: "_id",
         Expression: "CapabilityStatement.id",
       },      {
@@ -3391,24 +2599,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "CodeSystem.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "CodeSystem.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "CodeSystem.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "CodeSystem.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "CodeSystem.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "CodeSystem.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "CodeSystem.meta.tag",
-      },      {
         Code: "context",
         Expression: "",
       },      {
@@ -3487,24 +2677,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "CompartmentDefinition.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "CompartmentDefinition.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "CompartmentDefinition.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "CompartmentDefinition.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "CompartmentDefinition.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "CompartmentDefinition.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "CompartmentDefinition.meta.tag",
-      },      {
         Code: "context",
         Expression: "",
       },      {
@@ -3547,24 +2719,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "resource",
         Expression: "CompartmentDefinition.resource.code",
       },    },    "ConceptMap": {      {
-        Code: "_id",
-        Expression: "ConceptMap.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "ConceptMap.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "ConceptMap.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "ConceptMap.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "ConceptMap.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "ConceptMap.meta.tag",
-      },      {
         Code: "_id",
         Expression: "ConceptMap.id",
       },      {
@@ -3679,24 +2833,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "GraphDefinition.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "GraphDefinition.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "GraphDefinition.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "GraphDefinition.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "GraphDefinition.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "GraphDefinition.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "GraphDefinition.meta.tag",
-      },      {
         Code: "context",
         Expression: "",
       },      {
@@ -3739,24 +2875,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "start",
         Expression: "GraphDefinition.start",
       },    },    "ImplementationGuide": {      {
-        Code: "_id",
-        Expression: "ImplementationGuide.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "ImplementationGuide.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "ImplementationGuide.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "ImplementationGuide.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "ImplementationGuide.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "ImplementationGuide.meta.tag",
-      },      {
         Code: "_id",
         Expression: "ImplementationGuide.id",
       },      {
@@ -3829,24 +2947,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "resource",
         Expression: "ImplementationGuide.definition.resource.reference",
       },    },    "MessageDefinition": {      {
-        Code: "_id",
-        Expression: "MessageDefinition.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "MessageDefinition.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "MessageDefinition.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "MessageDefinition.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "MessageDefinition.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "MessageDefinition.meta.tag",
-      },      {
         Code: "_id",
         Expression: "MessageDefinition.id",
       },      {
@@ -3940,24 +3040,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "NamingSystem.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "NamingSystem.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "NamingSystem.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "NamingSystem.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "NamingSystem.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "NamingSystem.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "NamingSystem.meta.tag",
-      },      {
         Code: "context",
         Expression: "",
       },      {
@@ -4015,24 +3097,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "value",
         Expression: "NamingSystem.uniqueId.value",
       },    },    "OperationDefinition": {      {
-        Code: "_id",
-        Expression: "OperationDefinition.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "OperationDefinition.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "OperationDefinition.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "OperationDefinition.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "OperationDefinition.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "OperationDefinition.meta.tag",
-      },      {
         Code: "_id",
         Expression: "OperationDefinition.id",
       },      {
@@ -4135,24 +3199,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "SearchParameter.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "SearchParameter.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "SearchParameter.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "SearchParameter.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "SearchParameter.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "SearchParameter.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "SearchParameter.meta.tag",
-      },      {
         Code: "context",
         Expression: "",
       },      {
@@ -4210,24 +3256,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "type",
         Expression: "SearchParameter.type",
       },    },    "StructureDefinition": {      {
-        Code: "_id",
-        Expression: "StructureDefinition.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "StructureDefinition.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "StructureDefinition.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "StructureDefinition.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "StructureDefinition.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "StructureDefinition.meta.tag",
-      },      {
         Code: "_id",
         Expression: "StructureDefinition.id",
       },      {
@@ -4342,24 +3370,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "StructureMap.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "StructureMap.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "StructureMap.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "StructureMap.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "StructureMap.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "StructureMap.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "StructureMap.meta.tag",
-      },      {
         Code: "context",
         Expression: "",
       },      {
@@ -4423,24 +3433,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "TerminologyCapabilities.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "TerminologyCapabilities.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "TerminologyCapabilities.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "TerminologyCapabilities.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "TerminologyCapabilities.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "TerminologyCapabilities.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "TerminologyCapabilities.meta.tag",
-      },      {
         Code: "context",
         Expression: "",
       },      {
@@ -4483,24 +3475,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "context-type-value",
         Expression: "",
       },    },    "ValueSet": {      {
-        Code: "_id",
-        Expression: "ValueSet.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "ValueSet.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "ValueSet.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "ValueSet.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "ValueSet.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "ValueSet.meta.tag",
-      },      {
         Code: "_id",
         Expression: "ValueSet.id",
       },      {
@@ -4591,24 +3565,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "ChargeItem.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "ChargeItem.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "ChargeItem.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "ChargeItem.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "ChargeItem.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "ChargeItem.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "ChargeItem.meta.tag",
-      },      {
         Code: "account",
         Expression: "ChargeItem.account",
       },      {
@@ -4678,24 +3634,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "ChargeItemDefinition.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "ChargeItemDefinition.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "ChargeItemDefinition.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "ChargeItemDefinition.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "ChargeItemDefinition.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "ChargeItemDefinition.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "ChargeItemDefinition.meta.tag",
-      },      {
         Code: "context",
         Expression: "(ChargeItemDefinition.useContext.value as CodeableConcept)",
       },      {
@@ -4741,24 +3679,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "context-type-value",
         Expression: "ChargeItemDefinition.useContext",
       },    },    "Claim": {      {
-        Code: "_id",
-        Expression: "Claim.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Claim.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Claim.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Claim.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Claim.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Claim.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Claim.id",
       },      {
@@ -4846,24 +3766,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "ClaimResponse.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "ClaimResponse.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "ClaimResponse.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "ClaimResponse.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "ClaimResponse.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "ClaimResponse.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "ClaimResponse.meta.tag",
-      },      {
         Code: "created",
         Expression: "ClaimResponse.created",
       },      {
@@ -4897,24 +3799,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "use",
         Expression: "ClaimResponse.use",
       },    },    "Communication": {      {
-        Code: "_id",
-        Expression: "Communication.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Communication.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Communication.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Communication.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Communication.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Communication.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Communication.id",
       },      {
@@ -4978,24 +3862,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "subject",
         Expression: "Communication.subject",
       },    },    "CommunicationRequest": {      {
-        Code: "_id",
-        Expression: "CommunicationRequest.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "CommunicationRequest.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "CommunicationRequest.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "CommunicationRequest.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "CommunicationRequest.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "CommunicationRequest.meta.tag",
-      },      {
         Code: "_id",
         Expression: "CommunicationRequest.id",
       },      {
@@ -5080,24 +3946,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "Contract.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "Contract.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Contract.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Contract.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Contract.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Contract.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Contract.meta.tag",
-      },      {
         Code: "authority",
         Expression: "Contract.authority",
       },      {
@@ -5128,24 +3976,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "url",
         Expression: "Contract.url",
       },    },    "Coverage": {      {
-        Code: "_id",
-        Expression: "Coverage.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Coverage.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Coverage.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Coverage.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Coverage.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Coverage.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Coverage.id",
       },      {
@@ -5215,24 +4045,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "CoverageEligibilityRequest.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "CoverageEligibilityRequest.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "CoverageEligibilityRequest.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "CoverageEligibilityRequest.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "CoverageEligibilityRequest.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "CoverageEligibilityRequest.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "CoverageEligibilityRequest.meta.tag",
-      },      {
         Code: "created",
         Expression: "CoverageEligibilityRequest.created",
       },      {
@@ -5254,24 +4066,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "status",
         Expression: "CoverageEligibilityRequest.status",
       },    },    "CoverageEligibilityResponse": {      {
-        Code: "_id",
-        Expression: "CoverageEligibilityResponse.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "CoverageEligibilityResponse.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "CoverageEligibilityResponse.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "CoverageEligibilityResponse.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "CoverageEligibilityResponse.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "CoverageEligibilityResponse.meta.tag",
-      },      {
         Code: "_id",
         Expression: "CoverageEligibilityResponse.id",
       },      {
@@ -5317,24 +4111,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "status",
         Expression: "CoverageEligibilityResponse.status",
       },    },    "Device": {      {
-        Code: "_id",
-        Expression: "Device.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Device.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Device.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Device.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Device.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Device.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Device.id",
       },      {
@@ -5407,24 +4183,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "DeviceDefinition.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "DeviceDefinition.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "DeviceDefinition.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "DeviceDefinition.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "DeviceDefinition.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "DeviceDefinition.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "DeviceDefinition.meta.tag",
-      },      {
         Code: "identifier",
         Expression: "DeviceDefinition.identifier",
       },      {
@@ -5434,24 +4192,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "type",
         Expression: "DeviceDefinition.type",
       },    },    "DeviceMetric": {      {
-        Code: "_id",
-        Expression: "DeviceMetric.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "DeviceMetric.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "DeviceMetric.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "DeviceMetric.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "DeviceMetric.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "DeviceMetric.meta.tag",
-      },      {
         Code: "_id",
         Expression: "DeviceMetric.id",
       },      {
@@ -5485,24 +4225,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "type",
         Expression: "DeviceMetric.type",
       },    },    "EffectEvidenceSynthesis": {      {
-        Code: "_id",
-        Expression: "EffectEvidenceSynthesis.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "EffectEvidenceSynthesis.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "EffectEvidenceSynthesis.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "EffectEvidenceSynthesis.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "EffectEvidenceSynthesis.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "EffectEvidenceSynthesis.meta.tag",
-      },      {
         Code: "_id",
         Expression: "EffectEvidenceSynthesis.id",
       },      {
@@ -5587,24 +4309,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "Endpoint.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "Endpoint.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Endpoint.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Endpoint.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Endpoint.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Endpoint.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Endpoint.meta.tag",
-      },      {
         Code: "connection-type",
         Expression: "Endpoint.connectionType",
       },      {
@@ -5623,24 +4327,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "status",
         Expression: "Endpoint.status",
       },    },    "EnrollmentRequest": {      {
-        Code: "_id",
-        Expression: "EnrollmentRequest.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "EnrollmentRequest.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "EnrollmentRequest.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "EnrollmentRequest.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "EnrollmentRequest.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "EnrollmentRequest.meta.tag",
-      },      {
         Code: "_id",
         Expression: "EnrollmentRequest.id",
       },      {
@@ -5689,24 +4375,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "EnrollmentResponse.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "EnrollmentResponse.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "EnrollmentResponse.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "EnrollmentResponse.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "EnrollmentResponse.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "EnrollmentResponse.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "EnrollmentResponse.meta.tag",
-      },      {
         Code: "identifier",
         Expression: "EnrollmentResponse.identifier",
       },      {
@@ -5716,24 +4384,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "status",
         Expression: "EnrollmentResponse.status",
       },    },    "EventDefinition": {      {
-        Code: "_id",
-        Expression: "EventDefinition.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "EventDefinition.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "EventDefinition.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "EventDefinition.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "EventDefinition.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "EventDefinition.meta.tag",
-      },      {
         Code: "_id",
         Expression: "EventDefinition.id",
       },      {
@@ -5836,24 +4486,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "Evidence.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "Evidence.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Evidence.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Evidence.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Evidence.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Evidence.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Evidence.meta.tag",
-      },      {
         Code: "composed-of",
         Expression: "Evidence.relatedArtifact.where(type='composed-of').resource",
       },      {
@@ -5920,24 +4552,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "context-type-value",
         Expression: "Evidence.useContext",
       },    },    "EvidenceVariable": {      {
-        Code: "_id",
-        Expression: "EvidenceVariable.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "EvidenceVariable.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "EvidenceVariable.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "EvidenceVariable.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "EvidenceVariable.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "EvidenceVariable.meta.tag",
-      },      {
         Code: "_id",
         Expression: "EvidenceVariable.id",
       },      {
@@ -6040,24 +4654,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "ExampleScenario.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "ExampleScenario.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "ExampleScenario.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "ExampleScenario.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "ExampleScenario.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "ExampleScenario.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "ExampleScenario.meta.tag",
-      },      {
         Code: "context",
         Expression: "(ExampleScenario.useContext.value as CodeableConcept)",
       },      {
@@ -6097,24 +4693,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "context-type-value",
         Expression: "ExampleScenario.useContext",
       },    },    "ExplanationOfBenefit": {      {
-        Code: "_id",
-        Expression: "ExplanationOfBenefit.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "ExplanationOfBenefit.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "ExplanationOfBenefit.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "ExplanationOfBenefit.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "ExplanationOfBenefit.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "ExplanationOfBenefit.meta.tag",
-      },      {
         Code: "_id",
         Expression: "ExplanationOfBenefit.id",
       },      {
@@ -6202,24 +4780,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "Group.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "Group.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Group.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Group.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Group.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Group.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Group.meta.tag",
-      },      {
         Code: "actual",
         Expression: "Group.actual",
       },      {
@@ -6268,24 +4828,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "GuidanceResponse.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "GuidanceResponse.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "GuidanceResponse.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "GuidanceResponse.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "GuidanceResponse.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "GuidanceResponse.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "GuidanceResponse.meta.tag",
-      },      {
         Code: "identifier",
         Expression: "GuidanceResponse.identifier",
       },      {
@@ -6298,24 +4840,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "subject",
         Expression: "GuidanceResponse.subject",
       },    },    "HealthcareService": {      {
-        Code: "_id",
-        Expression: "HealthcareService.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "HealthcareService.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "HealthcareService.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "HealthcareService.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "HealthcareService.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "HealthcareService.meta.tag",
-      },      {
         Code: "_id",
         Expression: "HealthcareService.id",
       },      {
@@ -6388,24 +4912,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "ImmunizationEvaluation.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "ImmunizationEvaluation.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "ImmunizationEvaluation.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "ImmunizationEvaluation.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "ImmunizationEvaluation.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "ImmunizationEvaluation.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "ImmunizationEvaluation.meta.tag",
-      },      {
         Code: "date",
         Expression: "ImmunizationEvaluation.date",
       },      {
@@ -6427,24 +4933,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "target-disease",
         Expression: "ImmunizationEvaluation.targetDisease",
       },    },    "ImmunizationRecommendation": {      {
-        Code: "_id",
-        Expression: "ImmunizationRecommendation.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "ImmunizationRecommendation.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "ImmunizationRecommendation.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "ImmunizationRecommendation.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "ImmunizationRecommendation.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "ImmunizationRecommendation.meta.tag",
-      },      {
         Code: "_id",
         Expression: "ImmunizationRecommendation.id",
       },      {
@@ -6487,24 +4975,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "vaccine-type",
         Expression: "ImmunizationRecommendation.recommendation.vaccineCode",
       },    },    "InsurancePlan": {      {
-        Code: "_id",
-        Expression: "InsurancePlan.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "InsurancePlan.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "InsurancePlan.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "InsurancePlan.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "InsurancePlan.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "InsurancePlan.meta.tag",
-      },      {
         Code: "_id",
         Expression: "InsurancePlan.id",
       },      {
@@ -6583,24 +5053,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "Invoice.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "Invoice.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Invoice.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Invoice.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Invoice.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Invoice.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Invoice.meta.tag",
-      },      {
         Code: "account",
         Expression: "Invoice.account",
       },      {
@@ -6640,24 +5092,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "type",
         Expression: "Invoice.type",
       },    },    "Library": {      {
-        Code: "_id",
-        Expression: "Library.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Library.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Library.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Library.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Library.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Library.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Library.id",
       },      {
@@ -6766,24 +5200,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "Linkage.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "Linkage.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Linkage.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Linkage.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Linkage.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Linkage.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Linkage.meta.tag",
-      },      {
         Code: "author",
         Expression: "Linkage.author",
       },      {
@@ -6793,24 +5209,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "source",
         Expression: "Linkage.item.resource",
       },    },    "Location": {      {
-        Code: "_id",
-        Expression: "Location.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Location.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Location.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Location.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Location.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Location.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Location.id",
       },      {
@@ -6874,24 +5272,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "type",
         Expression: "Location.type",
       },    },    "Measure": {      {
-        Code: "_id",
-        Expression: "Measure.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Measure.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Measure.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Measure.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Measure.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Measure.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Measure.id",
       },      {
@@ -6994,24 +5374,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "MeasureReport.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "MeasureReport.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "MeasureReport.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "MeasureReport.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "MeasureReport.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "MeasureReport.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "MeasureReport.meta.tag",
-      },      {
         Code: "date",
         Expression: "MeasureReport.date",
       },      {
@@ -7039,24 +5401,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "subject",
         Expression: "MeasureReport.subject",
       },    },    "Media": {      {
-        Code: "_id",
-        Expression: "Media.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Media.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Media.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Media.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Media.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Media.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Media.id",
       },      {
@@ -7132,24 +5476,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "MedicationKnowledge.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "MedicationKnowledge.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "MedicationKnowledge.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "MedicationKnowledge.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "MedicationKnowledge.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "MedicationKnowledge.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "MedicationKnowledge.meta.tag",
-      },      {
         Code: "classification",
         Expression: "MedicationKnowledge.medicineClassification.classification",
       },      {
@@ -7207,24 +5533,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "MedicinalProduct.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "MedicinalProduct.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "MedicinalProduct.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "MedicinalProduct.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "MedicinalProduct.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "MedicinalProduct.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "MedicinalProduct.meta.tag",
-      },      {
         Code: "identifier",
         Expression: "MedicinalProduct.identifier",
       },      {
@@ -7234,24 +5542,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "name-language",
         Expression: "MedicinalProduct.name.countryLanguage.language",
       },    },    "MedicinalProductAuthorization": {      {
-        Code: "_id",
-        Expression: "MedicinalProductAuthorization.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "MedicinalProductAuthorization.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "MedicinalProductAuthorization.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "MedicinalProductAuthorization.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "MedicinalProductAuthorization.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "MedicinalProductAuthorization.meta.tag",
-      },      {
         Code: "_id",
         Expression: "MedicinalProductAuthorization.id",
       },      {
@@ -7303,45 +5593,9 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "MedicinalProductContraindication.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "MedicinalProductContraindication.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "MedicinalProductContraindication.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "MedicinalProductContraindication.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "MedicinalProductContraindication.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "MedicinalProductContraindication.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "MedicinalProductContraindication.meta.tag",
-      },      {
         Code: "subject",
         Expression: "MedicinalProductContraindication.subject",
       },    },    "MedicinalProductIndication": {      {
-        Code: "_id",
-        Expression: "MedicinalProductIndication.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "MedicinalProductIndication.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "MedicinalProductIndication.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "MedicinalProductIndication.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "MedicinalProductIndication.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "MedicinalProductIndication.meta.tag",
-      },      {
         Code: "_id",
         Expression: "MedicinalProductIndication.id",
       },      {
@@ -7381,45 +5635,9 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "MedicinalProductInteraction.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "MedicinalProductInteraction.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "MedicinalProductInteraction.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "MedicinalProductInteraction.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "MedicinalProductInteraction.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "MedicinalProductInteraction.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "MedicinalProductInteraction.meta.tag",
-      },      {
         Code: "subject",
         Expression: "MedicinalProductInteraction.subject",
       },    },    "MedicinalProductPackaged": {      {
-        Code: "_id",
-        Expression: "MedicinalProductPackaged.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "MedicinalProductPackaged.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "MedicinalProductPackaged.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "MedicinalProductPackaged.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "MedicinalProductPackaged.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "MedicinalProductPackaged.meta.tag",
-      },      {
         Code: "_id",
         Expression: "MedicinalProductPackaged.id",
       },      {
@@ -7444,24 +5662,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "subject",
         Expression: "MedicinalProductPackaged.subject",
       },    },    "MedicinalProductPharmaceutical": {      {
-        Code: "_id",
-        Expression: "MedicinalProductPharmaceutical.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "MedicinalProductPharmaceutical.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "MedicinalProductPharmaceutical.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "MedicinalProductPharmaceutical.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "MedicinalProductPharmaceutical.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "MedicinalProductPharmaceutical.meta.tag",
-      },      {
         Code: "_id",
         Expression: "MedicinalProductPharmaceutical.id",
       },      {
@@ -7507,45 +5707,9 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "MedicinalProductUndesirableEffect.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "MedicinalProductUndesirableEffect.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "MedicinalProductUndesirableEffect.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "MedicinalProductUndesirableEffect.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "MedicinalProductUndesirableEffect.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "MedicinalProductUndesirableEffect.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "MedicinalProductUndesirableEffect.meta.tag",
-      },      {
         Code: "subject",
         Expression: "MedicinalProductUndesirableEffect.subject",
       },    },    "MessageHeader": {      {
-        Code: "_id",
-        Expression: "MessageHeader.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "MessageHeader.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "MessageHeader.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "MessageHeader.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "MessageHeader.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "MessageHeader.meta.tag",
-      },      {
         Code: "_id",
         Expression: "MessageHeader.id",
       },      {
@@ -7624,24 +5788,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "MolecularSequence.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "MolecularSequence.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "MolecularSequence.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "MolecularSequence.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "MolecularSequence.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "MolecularSequence.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "MolecularSequence.meta.tag",
-      },      {
         Code: "chromosome",
         Expression: "MolecularSequence.referenceSeq.chromosome",
       },      {
@@ -7681,24 +5827,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "referenceseqid-window-coordinate",
         Expression: "MolecularSequence.referenceSeq",
       },    },    "Organization": {      {
-        Code: "_id",
-        Expression: "Organization.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Organization.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Organization.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Organization.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Organization.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Organization.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Organization.id",
       },      {
@@ -7774,24 +5902,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "OrganizationAffiliation.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "OrganizationAffiliation.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "OrganizationAffiliation.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "OrganizationAffiliation.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "OrganizationAffiliation.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "OrganizationAffiliation.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "OrganizationAffiliation.meta.tag",
-      },      {
         Code: "active",
         Expression: "OrganizationAffiliation.active",
       },      {
@@ -7834,24 +5944,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "telecom",
         Expression: "OrganizationAffiliation.telecom",
       },    },    "Patient": {      {
-        Code: "_id",
-        Expression: "Patient.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Patient.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Patient.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Patient.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Patient.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Patient.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Patient.id",
       },      {
@@ -7957,24 +6049,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "Person.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "Person.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Person.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Person.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Person.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Person.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Person.meta.tag",
-      },      {
         Code: "address",
         Expression: "",
       },      {
@@ -8032,24 +6106,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "relatedperson",
         Expression: "Person.link.target.where(resolve() is RelatedPerson)",
       },    },    "Practitioner": {      {
-        Code: "_id",
-        Expression: "Practitioner.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Practitioner.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Practitioner.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Practitioner.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Practitioner.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Practitioner.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Practitioner.id",
       },      {
@@ -8137,24 +6193,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "RelatedPerson.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "RelatedPerson.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "RelatedPerson.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "RelatedPerson.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "RelatedPerson.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "RelatedPerson.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "RelatedPerson.meta.tag",
-      },      {
         Code: "address",
         Expression: "",
       },      {
@@ -8206,24 +6244,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "relationship",
         Expression: "RelatedPerson.relationship",
       },    },    "PractitionerRole": {      {
-        Code: "_id",
-        Expression: "PractitionerRole.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "PractitionerRole.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "PractitionerRole.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "PractitionerRole.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "PractitionerRole.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "PractitionerRole.meta.tag",
-      },      {
         Code: "_id",
         Expression: "PractitionerRole.id",
       },      {
@@ -8299,24 +6319,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "PaymentNotice.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "PaymentNotice.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "PaymentNotice.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "PaymentNotice.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "PaymentNotice.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "PaymentNotice.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "PaymentNotice.meta.tag",
-      },      {
         Code: "created",
         Expression: "PaymentNotice.created",
       },      {
@@ -8338,24 +6340,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "status",
         Expression: "PaymentNotice.status",
       },    },    "PaymentReconciliation": {      {
-        Code: "_id",
-        Expression: "PaymentReconciliation.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "PaymentReconciliation.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "PaymentReconciliation.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "PaymentReconciliation.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "PaymentReconciliation.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "PaymentReconciliation.meta.tag",
-      },      {
         Code: "_id",
         Expression: "PaymentReconciliation.id",
       },      {
@@ -8398,24 +6382,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "status",
         Expression: "PaymentReconciliation.status",
       },    },    "PlanDefinition": {      {
-        Code: "_id",
-        Expression: "PlanDefinition.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "PlanDefinition.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "PlanDefinition.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "PlanDefinition.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "PlanDefinition.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "PlanDefinition.meta.tag",
-      },      {
         Code: "_id",
         Expression: "PlanDefinition.id",
       },      {
@@ -8524,24 +6490,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "Provenance.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "Provenance.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Provenance.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Provenance.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Provenance.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Provenance.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Provenance.meta.tag",
-      },      {
         Code: "agent",
         Expression: "Provenance.agent.who",
       },      {
@@ -8572,24 +6520,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "when",
         Expression: "(Provenance.occurred as dateTime)",
       },    },    "Questionnaire": {      {
-        Code: "_id",
-        Expression: "Questionnaire.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Questionnaire.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Questionnaire.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Questionnaire.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Questionnaire.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Questionnaire.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Questionnaire.id",
       },      {
@@ -8683,24 +6613,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "QuestionnaireResponse.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "QuestionnaireResponse.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "QuestionnaireResponse.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "QuestionnaireResponse.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "QuestionnaireResponse.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "QuestionnaireResponse.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "QuestionnaireResponse.meta.tag",
-      },      {
         Code: "author",
         Expression: "QuestionnaireResponse.author",
       },      {
@@ -8734,24 +6646,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "subject",
         Expression: "QuestionnaireResponse.subject",
       },    },    "RequestGroup": {      {
-        Code: "_id",
-        Expression: "RequestGroup.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "RequestGroup.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "RequestGroup.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "RequestGroup.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "RequestGroup.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "RequestGroup.meta.tag",
-      },      {
         Code: "_id",
         Expression: "RequestGroup.id",
       },      {
@@ -8812,24 +6706,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "subject",
         Expression: "RequestGroup.subject",
       },    },    "ResearchDefinition": {      {
-        Code: "_id",
-        Expression: "ResearchDefinition.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "ResearchDefinition.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "ResearchDefinition.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "ResearchDefinition.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "ResearchDefinition.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "ResearchDefinition.meta.tag",
-      },      {
         Code: "_id",
         Expression: "ResearchDefinition.id",
       },      {
@@ -8932,24 +6808,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "ResearchElementDefinition.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "ResearchElementDefinition.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "ResearchElementDefinition.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "ResearchElementDefinition.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "ResearchElementDefinition.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "ResearchElementDefinition.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "ResearchElementDefinition.meta.tag",
-      },      {
         Code: "composed-of",
         Expression: "ResearchElementDefinition.relatedArtifact.where(type='composed-of').resource",
       },      {
@@ -9034,24 +6892,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "ResearchStudy.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "ResearchStudy.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "ResearchStudy.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "ResearchStudy.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "ResearchStudy.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "ResearchStudy.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "ResearchStudy.meta.tag",
-      },      {
         Code: "category",
         Expression: "ResearchStudy.category",
       },      {
@@ -9109,24 +6949,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "ResearchSubject.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "ResearchSubject.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "ResearchSubject.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "ResearchSubject.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "ResearchSubject.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "ResearchSubject.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "ResearchSubject.meta.tag",
-      },      {
         Code: "date",
         Expression: "ResearchSubject.period",
       },      {
@@ -9145,24 +6967,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "study",
         Expression: "ResearchSubject.study",
       },    },    "RiskEvidenceSynthesis": {      {
-        Code: "_id",
-        Expression: "RiskEvidenceSynthesis.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "RiskEvidenceSynthesis.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "RiskEvidenceSynthesis.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "RiskEvidenceSynthesis.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "RiskEvidenceSynthesis.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "RiskEvidenceSynthesis.meta.tag",
-      },      {
         Code: "_id",
         Expression: "RiskEvidenceSynthesis.id",
       },      {
@@ -9247,24 +7051,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "Schedule.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "Schedule.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Schedule.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Schedule.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Schedule.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Schedule.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Schedule.meta.tag",
-      },      {
         Code: "active",
         Expression: "Schedule.active",
       },      {
@@ -9286,24 +7072,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "specialty",
         Expression: "Schedule.specialty",
       },    },    "Slot": {      {
-        Code: "_id",
-        Expression: "Slot.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Slot.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Slot.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Slot.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Slot.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Slot.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Slot.id",
       },      {
@@ -9346,24 +7114,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "status",
         Expression: "Slot.status",
       },    },    "Specimen": {      {
-        Code: "_id",
-        Expression: "Specimen.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Specimen.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Specimen.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Specimen.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Specimen.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Specimen.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Specimen.id",
       },      {
@@ -9436,24 +7186,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "SpecimenDefinition.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "SpecimenDefinition.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "SpecimenDefinition.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "SpecimenDefinition.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "SpecimenDefinition.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "SpecimenDefinition.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "SpecimenDefinition.meta.tag",
-      },      {
         Code: "container",
         Expression: "SpecimenDefinition.typeTested.container.type",
       },      {
@@ -9463,24 +7195,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "type",
         Expression: "SpecimenDefinition.typeCollected",
       },    },    "Subscription": {      {
-        Code: "_id",
-        Expression: "Subscription.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Subscription.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Subscription.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Subscription.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Subscription.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Subscription.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Subscription.id",
       },      {
@@ -9517,24 +7231,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "url",
         Expression: "Subscription.channel.endpoint",
       },    },    "Substance": {      {
-        Code: "_id",
-        Expression: "Substance.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Substance.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Substance.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Substance.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Substance.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Substance.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Substance.id",
       },      {
@@ -9595,45 +7291,9 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "SubstanceSpecification.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "SubstanceSpecification.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "SubstanceSpecification.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "SubstanceSpecification.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "SubstanceSpecification.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "SubstanceSpecification.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "SubstanceSpecification.meta.tag",
-      },      {
         Code: "code",
         Expression: "SubstanceSpecification.code.code",
       },    },    "Task": {      {
-        Code: "_id",
-        Expression: "Task.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "Task.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "Task.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "Task.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "Task.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "Task.meta.tag",
-      },      {
         Code: "_id",
         Expression: "Task.id",
       },      {
@@ -9727,24 +7387,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "_tag",
         Expression: "TestReport.meta.tag",
       },      {
-        Code: "_id",
-        Expression: "TestReport.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "TestReport.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "TestReport.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "TestReport.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "TestReport.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "TestReport.meta.tag",
-      },      {
         Code: "identifier",
         Expression: "TestReport.identifier",
       },      {
@@ -9763,24 +7405,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "testscript",
         Expression: "TestReport.testScript",
       },    },    "TestScript": {      {
-        Code: "_id",
-        Expression: "TestScript.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "TestScript.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "TestScript.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "TestScript.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "TestScript.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "TestScript.meta.tag",
-      },      {
         Code: "_id",
         Expression: "TestScript.id",
       },      {
@@ -9847,24 +7471,6 @@ var searchParamsByResourceType = map[string][]SearchParameter{    "Account": {  
         Code: "context-type-value",
         Expression: "TestScript.useContext",
       },    },    "VerificationResult": {      {
-        Code: "_id",
-        Expression: "VerificationResult.id",
-      },      {
-        Code: "_lastUpdated",
-        Expression: "VerificationResult.meta.lastUpdated",
-      },      {
-        Code: "_profile",
-        Expression: "VerificationResult.meta.profile",
-      },      {
-        Code: "_security",
-        Expression: "VerificationResult.meta.security",
-      },      {
-        Code: "_source",
-        Expression: "VerificationResult.meta.source",
-      },      {
-        Code: "_tag",
-        Expression: "VerificationResult.meta.tag",
-      },      {
         Code: "_id",
         Expression: "VerificationResult.id",
       },      {

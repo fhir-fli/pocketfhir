@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:fhir_r5/fhir_r5.dart';
+import 'package:fhir_r4/fhir_r4.dart';
 
 Future<void> main() async {
   final searchMap = <String, List<Map<String, String>>>{};
@@ -43,9 +43,9 @@ Future<void> main() async {
       }
       return e;
     }).toList();
-    searchMap[key] = resourceEntries
-      // ..addAll(searchMap['DomainResource'] ?? [])
-      ..addAll(searchMap[key]!);
+    if (key != 'Resource') {
+      searchMap[key] = resourceEntries..addAll(searchMap[key]!);
+    }
   }
 
   searchMap.remove('Resource');

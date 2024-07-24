@@ -10,11 +10,6 @@ import (
 	"github.com/google/fhir/go/jsonformat"
 )
 
-type SearchParameter struct {
-	Code       string
-	Expression string
-}
-
 func evaluateFHIRPathExpressions(resourceData []byte, searchParams []SearchParameter) (map[string]interface{}, error) {
 	results := make(map[string]interface{})
 

@@ -62,7 +62,7 @@ func handleResourceCreation(app *pocketbase.PocketBase, e *core.ModelEvent) erro
 
 	resource.Set("resource", types.JsonRaw(updatedResourceBytes))
 
-	if err := storeFHIRData(app, resource, resourceData); err != nil {
+	if err := storeFHIRData(resource, resourceData); err != nil {
 		return fmt.Errorf("failed to store FHIR data: %w", err)
 	}
 
@@ -133,7 +133,7 @@ func handleResourceUpdate(app *pocketbase.PocketBase, e *core.ModelEvent) error 
 
 	newResourceVersion.Set("resource", types.JsonRaw(updatedResourceBytes))
 
-	if err := storeFHIRData(app, newResourceVersion, resourceData); err != nil {
+	if err := storeFHIRData(newResourceVersion, resourceData); err != nil {
 		return fmt.Errorf("failed to store FHIR data: %w", err)
 	}
 
@@ -143,11 +143,10 @@ func handleResourceUpdate(app *pocketbase.PocketBase, e *core.ModelEvent) error 
 }
 
 func getSearchParamsForResource(resourceType string) []SearchParameter {
-	// Implement this function to return the search parameters for the given resource type
-	// This is a placeholder implementation
-	return []SearchParameter{
-		{Code: "example-code", Expression: "example-expression"},
+	if params, exists := searchParamsByResourceType[resourceType]; exists {
+		return params
 	}
+	return []SearchParameter{}
 }
 
 func updateResourceJson(resourceData []byte, newVersionId int, id string, lastUpdated string) (updatedResourceBytes []byte, err error) {
@@ -210,29 +209,24 @@ func validateFHIRResource(resourceData []byte) error {
 	return nil
 }
 
-func storeFHIRData(app *pocketbase.PocketBase, resource *models.Record, resourceData []byte) error {
-	// Unmarshal the resource data to a map
+func storeFHIRData(resource *models.Record, resourceData []byte) error {
 	var resourceJson map[string]interface{}
 	if err := json.Unmarshal(resourceData, &resourceJson); err != nil {
 		return fmt.Errorf("failed to unmarshal resource JSON: %w", err)
 	}
 
-	// Create an unmarshaller
 	unmarshaller, err := jsonformat.NewUnmarshaller("r4", fhirversion.R4)
 	if err != nil {
 		return fmt.Errorf("failed to create unmarshaller: %w", err)
 	}
 
-	// Unmarshal the resource data into a FHIR proto message
 	unmarshalledResource, err := unmarshaller.Unmarshal(resourceData)
 	if err != nil {
 		return fmt.Errorf("failed to unmarshal resource to proto: %w", err)
 	}
 
-	// Wrap the proto message as a contained resource
 	containedResource := containedresource.Wrap(unmarshalledResource.(fhir.Resource))
 
-	// Evaluate the FHIRPath expressions and update the resource
 	searchParams := getSearchParamsForResource(resource.Collection().Name)
 	for _, param := range searchParams {
 		value, err := evaluateFHIRPath(containedResource, param.Expression)
