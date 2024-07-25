@@ -15,10 +15,10 @@ class HttpOverridesImpl extends HttpOverrides {
 Future<void> main() async {
   HttpOverrides.global = HttpOverridesImpl();
 
-  final PocketBase pb = PocketBase('https://localhost');
+  final PocketBase pb = PocketBase('http://127.0.0.1:8090');
 
   // Authenticate
-  await pb.admins.authWithPassword('grey@fhirfli.dev', '01 password');
+  await pb.admins.authWithPassword('grey@fhirfli.dev', 'VJN.rje-npy1teh5xqe');
 
   await assets(pb);
 }

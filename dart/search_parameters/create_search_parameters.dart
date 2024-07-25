@@ -1,22 +1,21 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:fhir_r4/fhir_r4.dart';
-
 Future<void> main() async {
   final searchMap = <String, List<Map<String, String>>>{};
-  final Bundle spBundle = Bundle.fromJsonString(
-      await File('search-parameters.json').readAsString());
+  final Map<String, dynamic> spBundle =
+      jsonDecode(await File('search-parameters.json').readAsString());
 
-  for (final BundleEntry entry in spBundle.entry ?? <BundleEntry>[]) {
-    final SearchParameter sp = entry.resource as SearchParameter;
-    final name = sp.name;
-    final code = sp.code?.toString();
-    final type = sp.type?.toString();
-    final expression = sp.expression;
+  for (final Map<String, dynamic> entry
+      in spBundle['entry'] ?? <Map<String, dynamic>>[]) {
+    final Map<String, dynamic>? sp = entry['resource'];
+    final name = sp?['name']?.toString();
+    final code = sp?['code']?.toString();
+    final type = sp?['type']?.toString();
+    final expression = sp?['expression'];
 
     if (name != null && code != null && type != null && expression != null) {
-      for (final base in sp.base ?? <FhirCode>[]) {
+      for (final base in sp?['base'] ?? <String>[]) {
         if (searchMap[base.toString()] == null) {
           searchMap[base.toString()] = <Map<String, String>>[];
         }
@@ -81,25 +80,32 @@ var collections = []map[string]interface{}{''';
 }
 
 String entries(String key, String value) {
+  if (['id', 'created', 'updated'].contains(key)) {
+    return '';
+  }
+  key = key.replaceAll('-', '_');
+  if (key == 'resource') {
+    key = 'resourceSearch';
+  }
   switch (value) {
     case 'number':
-      return '      {"name": "$key", "type": "REAL"},\n';
+      return '      {"name": "$key", "type": "number"},\n';
     case 'date':
-      return '      {"name": "$key", "type": "TEXT"},\n';
+      return '      {"name": "$key", "type": "date"},\n';
     case 'string':
-      return '      {"name": "$key", "type": "TEXT"},\n';
+      return '      {"name": "$key", "type": "text"},\n';
     case 'token':
-      return '      {"name": "$key", "type": "JSON"},\n';
+      return '      {"name": "$key", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}},\n';
     case 'reference':
-      return '      {"name": "$key", "type": "JSON"},\n';
+      return '      {"name": "$key", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}},\n';
     case 'composite':
-      return '      {"name": "$key", "type": "TEXT"},\n';
+      return '      {"name": "$key", "type": "text"},\n';
     case 'quantity':
-      return '      {"name": "$key", "type": "JSON"},\n';
+      return '      {"name": "$key", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}},\n';
     case 'uri':
-      return '      {"name": "$key", "type": "TEXT"},\n';
+      return '      {"name": "$key", "type": "url"},\n';
     case 'special':
-      return '      {"name": "$key", "type": "TEXT"},\n';
+      return '      {"name": "$key", "type": "text"},\n';
     default:
       return '';
   }
@@ -109,8 +115,7 @@ String mainClass(String className) => '''\n
   {
     "name": "$className",
     "schema": []map[string]interface{}{
-      {"name": "id", "type": "TEXT"},
-      {"name": "versionId", "type": "REAL"},
+      {"name": "versionId", "type": "number"},
       {"name": "resource", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}},
 ''';
 
@@ -119,8 +124,7 @@ String historyClass(String className, List<Map<String, String>> columns) {
   {
     "name": "${className}History",
     "schema": []map[string]interface{}{
-      {"name": "fhirId", "type": "TEXT"},
-      {"name": "versionId", "type": "REAL"},
+      {"name": "versionId", "type": "number"},
       {"name": "resource", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}},
 ''';
 
