@@ -89,23 +89,23 @@ String entries(String key, String value) {
   }
   switch (value) {
     case 'number':
-      return '      {"name": "$key", "type": "number"},\n';
+      return '      {"name": "$key", "type": "number", "required": false},\n';
     case 'date':
-      return '      {"name": "$key", "type": "date"},\n';
+      return '      {"name": "$key", "type": "date", "required": false},\n';
     case 'string':
-      return '      {"name": "$key", "type": "text"},\n';
+      return '      {"name": "$key", "type": "text", "required": false},\n';
     case 'token':
-      return '      {"name": "$key", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}},\n';
+      return '      {"name": "$key", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}, "required": false},\n';
     case 'reference':
-      return '      {"name": "$key", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}},\n';
+      return '      {"name": "$key", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}, "required": false},\n';
     case 'composite':
-      return '      {"name": "$key", "type": "text"},\n';
+      return '      {"name": "$key", "type": "text", "required": false},\n';
     case 'quantity':
-      return '      {"name": "$key", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}},\n';
+      return '      {"name": "$key", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}, "required": false},\n';
     case 'uri':
-      return '      {"name": "$key", "type": "url"},\n';
+      return '      {"name": "$key", "type": "url", "required": false},\n';
     case 'special':
-      return '      {"name": "$key", "type": "text"},\n';
+      return '      {"name": "$key", "type": "text", "required": false},\n';
     default:
       return '';
   }
@@ -115,8 +115,8 @@ String mainClass(String className) => '''\n
   {
     "name": "$className",
     "schema": []map[string]interface{}{
-      {"name": "versionId", "type": "number"},
-      {"name": "resource", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}},
+      {"name": "versionId", "type": "number", "required": true},
+      {"name": "resource", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}, "required": true},
 ''';
 
 String historyClass(String className, List<Map<String, String>> columns) {
@@ -124,8 +124,8 @@ String historyClass(String className, List<Map<String, String>> columns) {
   {
     "name": "${className}History",
     "schema": []map[string]interface{}{
-      {"name": "versionId", "type": "number"},
-      {"name": "resource", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}},
+      {"name": "versionId", "type": "number", "required": true},
+      {"name": "resource", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}, "required": true},
 ''';
 
   columns.forEach((entry) {

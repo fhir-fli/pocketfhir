@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-// import 'package:fhir_r5/fhir_r5.dart';
 import 'package:pocketbase/pocketbase.dart';
 
 class HttpOverridesImpl extends HttpOverrides {
@@ -20,25 +19,22 @@ Future<void> main() async {
 
   try {
     await pb.admins.authWithPassword('grey@fhirfli.dev', '01 password');
+    createOrUpdateRecord(pb, patient);
 
-    final String patientFile = File('assets/Patient.ndjson').readAsStringSync();
-    final List<String> patientStrings = patientFile.split('\n');
-    patientStrings.removeWhere((e) => e == '');
-    final List<dynamic> patients =
-        patientStrings.map((e) => jsonDecode(e)).toList();
-    for (final dynamic patient in patients) {
-      if (patient is Map<String, dynamic>) {
-        createOrUpdateRecord(pb, patient);
-      }
-    }
+    // final String patientFile = File('assets/Patient.ndjson').readAsStringSync();
+    // final List<String> patientStrings = patientFile.split('\n');
+    // patientStrings.removeWhere((e) => e == '');
+    // final List<dynamic> patients =
+    //     patientStrings.map((e) => jsonDecode(e)).toList();
+    // for (final dynamic patient in patients) {
+    //   if (patient is Map<String, dynamic>) {
+    //     createOrUpdateRecord(pb, patient);
+    //   }
+    // }
   } catch (e) {
     print(e);
   }
 }
-
-// Future<Resource> createOrUpdateFhirResource(
-//         PocketBase pb, Resource resource) async =>
-//     Resource.fromJson(await createOrUpdateRecord(pb, resource.toJson()));
 
 // Function to create or update a record
 Future<Map<String, dynamic>> createOrUpdateRecord(
@@ -73,6 +69,11 @@ Future<Map<String, dynamic>> createOrUpdateRecord(
     }
   }
 }
+
+Map<String, dynamic> patient = {
+  'resourceType': 'Patient',
+  'birthDate': '1981-09-18'
+};
 
 Map<String, dynamic> resourceMapToBody(Map<String, dynamic> resourceMap) => {
       "resourceType": resourceMap['resourceType'],
