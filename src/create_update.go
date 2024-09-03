@@ -52,7 +52,11 @@ func handleResourceCreation(app *pocketbase.PocketBase, e *core.ModelEvent) erro
 	}
 
 	for k, v := range results {
-		resource.Set(k, v)
+		if v != nil {
+			resource.Set(k, v)
+		} else {
+			resource.Set(k, nil) // Ensure that optional fields are explicitly set to null if they are empty
+		}
 	}
 
 	updatedResourceBytes, err := updateResourceJson(resourceData, 1, resource.Id, resource.Updated.Time().UTC().Format(time.RFC3339))
@@ -123,7 +127,11 @@ func handleResourceUpdate(app *pocketbase.PocketBase, e *core.ModelEvent) error 
 	}
 
 	for k, v := range results {
-		newResourceVersion.Set(k, v)
+		if v != nil {
+			newResourceVersion.Set(k, v)
+		} else {
+			newResourceVersion.Set(k, nil) // Ensure that optional fields are explicitly set to null if they are empty
+		}
 	}
 
 	updatedResourceBytes, err := updateResourceJson(resourceData, updatedVersionId, newResourceVersion.Id, newResourceVersion.Updated.Time().UTC().Format(time.RFC3339))
