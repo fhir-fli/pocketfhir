@@ -14,10 +14,6 @@ import (
 )
 
 func standard(app *pocketbase.PocketBase) {
-	// ---------------------------------------------------------------
-	// Optional plugin flags:
-	// ---------------------------------------------------------------
-
 	var hooksDir string
 	app.RootCmd.PersistentFlags().StringVar(
 		&hooksDir,
@@ -84,11 +80,7 @@ func standard(app *pocketbase.PocketBase) {
 
 	app.RootCmd.ParseFlags(os.Args[1:])
 
-	// ---------------------------------------------------------------
-	// Plugins and hooks:
-	// ---------------------------------------------------------------
-
-	// load jsvm (hooks and migrations)
+	// Plugins and hooks
 	jsvm.MustRegister(app, jsvm.Config{
 		MigrationsDir: migrationsDir,
 		HooksDir:      hooksDir,
@@ -96,14 +88,12 @@ func standard(app *pocketbase.PocketBase) {
 		HooksPoolSize: hooksPool,
 	})
 
-	// migrate command (with js templates)
 	migratecmd.MustRegister(app, app.RootCmd, migratecmd.Config{
 		TemplateLang: migratecmd.TemplateLangJS,
 		Automigrate:  automigrate,
 		Dir:          migrationsDir,
 	})
 
-	// GitHub selfupdate
 	ghupdate.MustRegister(app, app.RootCmd, ghupdate.Config{})
 
 	app.OnAfterBootstrap().PreAdd(func(e *core.BootstrapEvent) error {
@@ -112,10 +102,8 @@ func standard(app *pocketbase.PocketBase) {
 	})
 }
 
-// the default pb_public dir location is relative to the executable
 func defaultPublicDir() string {
 	if strings.HasPrefix(os.Args[0], os.TempDir()) {
-		// most likely ran with go run
 		return "./pb_public"
 	}
 

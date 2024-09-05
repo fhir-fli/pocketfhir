@@ -30,22 +30,22 @@ Future<void> main() async {
     }
   }
 
-  for (final key in searchMap.keys) {
-    final List<Map<String, String>> resourceEntries =
-        searchMap['Resource']!.map((e) {
-      if (e['expression']!.startsWith('Resource.')) {
-        return {
-          'name': e['name']!,
-          'type': e['type']!,
-          'expression': e['expression']!.replaceFirst('Resource.', '$key.')
-        };
-      }
-      return e;
-    }).toList();
-    if (key != 'Resource') {
-      searchMap[key] = resourceEntries..addAll(searchMap[key]!);
-    }
-  }
+  // for (final key in searchMap.keys) {
+  //   final List<Map<String, String>> resourceEntries =
+  //       searchMap['Resource']!.map((e) {
+  //     if (e['expression']!.startsWith('Resource.')) {
+  //       return {
+  //         'name': e['name']!,
+  //         'type': e['type']!,
+  //         'expression': e['expression']!.replaceFirst('Resource.', '$key.')
+  //       };
+  //     }
+  //     return e;
+  //   }).toList();
+  //   if (key != 'Resource') {
+  //     searchMap[key] = resourceEntries..addAll(searchMap[key]!);
+  //   }
+  // }
 
   searchMap.remove('Resource');
   searchMap.remove('DomainResource');
@@ -76,7 +76,7 @@ var collections = []map[string]interface{}{''';
   await File('collections.go').writeAsString(goString);
 
   // Generate search_parameters.go file
-  await generateSearchParametersFile(searchMap);
+  // await generateSearchParametersFile(searchMap);
 }
 
 String entries(String key, String value) {

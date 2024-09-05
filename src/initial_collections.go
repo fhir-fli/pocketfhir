@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"strings"
 
@@ -9,12 +8,15 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/forms"
 	"github.com/pocketbase/pocketbase/models"
-	"github.com/pocketbase/pocketbase/models/schema"
 	"github.com/pocketbase/pocketbase/tools/types"
 )
 
+var collections = []map[string]interface{}{
+	{"name": "Account", "schema": generateSchemaFields("Account")},
+	// Add more resources as needed
+}
+
 func initializeCollections(app *pocketbase.PocketBase) error {
-	// Create initial collections on BeforeServe event
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
 		return createInitialCollections(app)
 	})
@@ -29,13 +31,7 @@ func createInitialCollections(app *pocketbase.PocketBase) error {
 	}
 
 	for _, collection := range collections {
-		collectionName, ok := collection["name"].(string)
-		if !ok {
-			continue
-		}
-
-		// Convert the collection name to lowercase
-		collectionName = strings.ToLower(collectionName)
+		collectionName := strings.ToLower(collection["name"].(string))
 
 		existingCollection, err := app.Dao().FindCollectionByNameOrId(collectionName)
 		if err == nil && existingCollection != nil {
@@ -43,19 +39,13 @@ func createInitialCollections(app *pocketbase.PocketBase) error {
 			continue
 		}
 
-		schemaFields, ok := collection["schema"].([]map[string]interface{})
-		if !ok {
+		schemaFields := generateSchemaFields(collectionName)
+		if schemaFields == nil {
+			log.Printf("No schema fields found for collection '%s'. Skipping creation.", collectionName)
 			continue
 		}
 
-		var indexes []map[string]interface{}
-		if v, ok := collection["indexes"]; ok {
-			indexes, ok = v.([]map[string]interface{})
-			if !ok {
-				continue
-			}
-		}
-
+		indexes := indexesByResourceType[collectionName]
 		coll := &models.Collection{}
 		form := forms.NewCollectionUpsert(app, coll)
 		form.Name = collectionName
@@ -67,26 +57,11 @@ func createInitialCollections(app *pocketbase.PocketBase) error {
 		form.DeleteRule = nil
 
 		for _, field := range schemaFields {
-			fieldName, ok := field["name"].(string)
-			if !ok {
-				continue
-			}
-
-			fieldType, ok := field["type"].(string)
-			if !ok {
-				continue
-			}
-
-			fieldOptions, ok := field["options"].(map[string]interface{})
-			if !ok {
-				fieldOptions = map[string]interface{}{}
-			}
-
-			form.Schema.AddField(&schema.SchemaField{
-				Name:     fieldName,
-				Type:     fieldType,
-				Required: true,
-				Options:  fieldOptions,
+			form.Schema.AddField(&models.SchemaField{
+				Name:     field["name"].(string),
+				Type:     field["type"].(string),
+				Required: field["required"].(bool),
+				Options:  field["options"].(map[string]interface{}),
 			})
 		}
 
@@ -96,23 +71,11 @@ func createInitialCollections(app *pocketbase.PocketBase) error {
 		}
 
 		for _, index := range indexes {
-			indexName, ok := index["name"].(string)
-			if !ok {
-				continue
-			}
+			indexName := index["name"].(string)
+			indexType := index["type"].(string)
+			fields := strings.Join(index["fields"].([]string), ", ")
 
-			indexType, ok := index["type"].(string)
-			if !ok {
-				continue
-			}
-
-			fields, ok := index["fields"].([]string)
-			if !ok {
-				continue
-			}
-
-			fieldsStr := strings.Join(fields, ", ")
-			query := fmt.Sprintf("CREATE %s INDEX %s ON %s (%s);", indexType, indexName, collectionName, fieldsStr)
+			query := "CREATE " + indexType + " INDEX " + indexName + " ON " + collectionName + " (" + fields + ");"
 			if _, err := db.NewQuery(query).Execute(); err != nil {
 				log.Printf("Failed to create index '%s' on collection '%s': %v", indexName, collectionName, err)
 			} else {
