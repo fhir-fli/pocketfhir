@@ -17,10 +17,10 @@ func main() {
 
 	// Initialize collections only if necessary
 	if err := initializeCollections(app); err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to initialize collections: %v", err)
 	}
 
 	if err := app.Start(); err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to start the app: %v", err)
 	}
 }

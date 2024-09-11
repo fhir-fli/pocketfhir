@@ -3,16 +3,13 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"strings"
 	"time"
 
-	"github.com/fhir-fli/fhirpath-go/fhir"
-	"github.com/fhir-fli/fhirpath-go/pkg/containedresource"
-	"github.com/fhir-fli/fhirpath-go/pkg/fhirwrapper"
 	"github.com/google/fhir/go/fhirversion"
 	"github.com/google/fhir/go/jsonformat"
 	"github.com/google/fhir/go/jsonformat/fhirvalidate"
-	bcrpb "github.com/google/fhir/go/proto/google/fhir/proto/r4/core/resources/bundle_and_contained_resource_go_proto"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/models"
@@ -20,244 +17,332 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func handleResourceCreation(app *pocketbase.PocketBase, e *core.ModelEvent) error {
-	resource, ok := e.Model.(*models.Record)
+// Centralized function to update meta fields (lastUpdated and versionId)
+func updateMeta(resourceJson map[string]interface{}) map[string]interface{} {
+	meta, ok := resourceJson["meta"].(map[string]interface{})
 	if !ok {
-		return nil
+		meta = make(map[string]interface{})
 	}
 
+	// Set lastUpdated if missing
+	if meta["lastUpdated"] == nil {
+		now := time.Now().UTC().Format(time.RFC3339)
+		meta["lastUpdated"] = now
+	}
+
+	// Ensure versionId matches lastUpdated
+	lastUpdated := meta["lastUpdated"].(string)
+	meta["versionId"] = strings.ReplaceAll(lastUpdated, ":", ".")
+
+	resourceJson["meta"] = meta
+	return resourceJson
+}
+
+// Handle resource creation in the FHIR database
+func handleResourceCreation(app *pocketbase.PocketBase, e *core.RecordCreateEvent) error {
+	log.Println("Starting resource creation...")
+
+	resource := e.Record // Directly access the Record from the event
 	collectionName := resource.Collection().Name
+	log.Printf("Collection name: %s", collectionName)
+
+	// Skip history collections
 	if strings.HasSuffix(collectionName, "history") {
+		log.Println("Collection is a history collection. Skipping creation.")
 		return nil
 	}
 
 	if !isVersionedCollection(app, collectionName) {
+		log.Println("Collection is not versioned. Skipping.")
 		return nil
 	}
 
+	// Get resource data for validation and processing
 	resourceField := resource.Get("resource")
 	resourceData, err := getResourceData(resourceField)
 	if err != nil {
+		log.Printf("Failed to get resource data: %v", err)
 		return fmt.Errorf("failed to get resource data: %w", err)
 	}
 
+	// Validate the FHIR resource
 	if err := validateFHIRResource(resourceData); err != nil {
+		log.Printf("FHIR validation failed: %v", err)
 		return fmt.Errorf("validation error: %w", err)
 	}
 
-	searchParams := getSearchParamsForResource(collectionName)
-	results, err := evaluateFHIRPathExpressions(resourceData, searchParams)
+	// Check and update meta fields (lastUpdated and versionId)
+	resourceData, err = updateMetaFields(resourceData)
 	if err != nil {
-		return fmt.Errorf("failed to evaluate FHIRPath expressions: %w", err)
+		log.Printf("Failed to update meta fields: %v", err)
+		return fmt.Errorf("failed to update meta fields: %w", err)
 	}
 
-	for k, v := range results {
-		if v != nil {
-			resource.Set(k, v)
-		} else {
-			resource.Set(k, nil) // Ensure that optional fields are explicitly set to null if they are empty
-		}
-	}
-
-	updatedResourceBytes, err := updateResourceJson(resourceData, 1, resource.Id, resource.Updated.Time().UTC().Format(time.RFC3339))
+	// Re-serialize the resource and store it
+	resourceData, err = updateResourceJson(resourceData, e.Record.Id)
 	if err != nil {
-		return fmt.Errorf("failed to update resource meta: %w", err)
+		log.Printf("Failed to update resource JSON: %v", err)
+		return fmt.Errorf("failed to update resource JSON: %w", err)
 	}
 
-	resource.Set("resource", types.JsonRaw(updatedResourceBytes))
+	log.Printf("Updated resource JSON for record %s: %s", resource.Id, resourceData)
 
-	if err := storeFHIRData(resource, resourceData); err != nil {
-		return fmt.Errorf("failed to store FHIR data: %w", err)
+	// Set the updated resource JSON back into the record
+	resource.Set("resource", types.JsonRaw(resourceData))
+
+	// Explicitly save the updated record in PocketBase
+	if err := app.Dao().SaveRecord(resource); err != nil {
+		log.Printf("Failed to save updated resource: %v", err)
+		return fmt.Errorf("failed to save updated resource: %w", err)
 	}
 
-	resource.Set("versionId", 1)
-
+	log.Println("Resource creation completed successfully.")
 	return nil
 }
 
-func handleResourceUpdate(app *pocketbase.PocketBase, e *core.ModelEvent) error {
-	newResourceVersion, ok := e.Model.(*models.Record)
-	if !ok {
-		return nil
-	}
+// Handle resource update in the FHIR database
+func handleResourceUpdate(app *pocketbase.PocketBase, e *core.RecordUpdateEvent) error {
+	log.Println("Starting resource update...")
 
+	newResourceVersion := e.Record
 	collectionName := newResourceVersion.Collection().Name
-	if !isVersionedCollection(app, collectionName) {
+	log.Printf("Collection name: %s", collectionName)
+
+	// Skip history collections
+	if strings.HasSuffix(collectionName, "history") {
+		log.Println("Collection is a history collection. Skipping update.")
 		return nil
 	}
 
-	resourceField := newResourceVersion.Get("resource")
-	resourceData, err := getResourceData(resourceField)
-	if err != nil {
-		return fmt.Errorf("failed to get resource data: %w", err)
+	if !isVersionedCollection(app, collectionName) {
+		log.Println("Collection is not versioned. Skipping.")
+		return nil
 	}
 
-	if err := validateFHIRResource(resourceData); err != nil {
-		return fmt.Errorf("validation error: %w", err)
-	}
-
-	currentResourceVersion, err := app.Dao().FindRecordById(collectionName, newResourceVersion.Id)
+	// Fetch the current resource from the main table
+	currentResource, err := app.Dao().FindRecordById(collectionName, newResourceVersion.Id)
 	if err != nil {
+		log.Printf("Failed to fetch existing resource: %v", err)
 		return fmt.Errorf("failed to fetch existing resource: %w", err)
 	}
 
-	historyCollectionName := collectionName + "history"
-	historyCollection, err := app.Dao().FindCollectionByNameOrId(historyCollectionName)
+	// Get resource data for validation and processing
+	resourceField := newResourceVersion.Get("resource")
+	resourceData, err := getResourceData(resourceField)
 	if err != nil {
-		return fmt.Errorf("failed to create history collection: %w", err)
+		log.Printf("Failed to get resource data: %v", err)
+		return fmt.Errorf("failed to get resource data: %w", err)
 	}
 
-	historicalResourceVersion := models.NewRecord(historyCollection)
-	historicalResourceVersion.Set("fhirId", currentResourceVersion.Id)
-	historicalResourceVersion.Set("resourceType", currentResourceVersion.Get("resourceType"))
-	historicalResourceVersionId := currentResourceVersion.GetInt("versionId")
-	updatedVersionId := historicalResourceVersionId + 1
-	historicalResourceVersion.Set("versionId", historicalResourceVersionId)
-	historicalResourceVersion.Set("resource", currentResourceVersion.Get("resource"))
-
-	saveErr := app.Dao().SaveRecord(historicalResourceVersion)
-	if saveErr != nil {
-		return fmt.Errorf("failed to save resource to history table: %w", saveErr)
+	// Validate the FHIR resource
+	if err := validateFHIRResource(resourceData); err != nil {
+		log.Printf("FHIR validation failed: %v", err)
+		return fmt.Errorf("validation error: %w", err)
 	}
 
-	searchParams := getSearchParamsForResource(collectionName)
-	results, err := evaluateFHIRPathExpressions(resourceData, searchParams)
+	// Update meta fields (lastUpdated and versionId)
+	resourceData, err = updateMetaFields(resourceData)
 	if err != nil {
-		return fmt.Errorf("failed to evaluate FHIRPath expressions: %w", err)
+		log.Printf("Failed to update meta fields: %v", err)
+		return fmt.Errorf("failed to update meta fields: %w", err)
 	}
 
-	for k, v := range results {
-		if v != nil {
-			newResourceVersion.Set(k, v)
-		} else {
-			newResourceVersion.Set(k, nil) // Ensure that optional fields are explicitly set to null if they are empty
+	// Check if the meta.lastUpdated exists
+	meta := getMetaFromResource(resourceData)
+	if meta.LastUpdated == "" {
+		return fmt.Errorf("error: meta.lastUpdated is missing")
+	}
+
+	// Retrieve and assert current resource data as JsonRaw
+	currentResourceField := currentResource.Get("resource")
+	currentResourceData, ok := currentResourceField.(types.JsonRaw)
+	if !ok {
+		return fmt.Errorf("failed to assert current resource field as types.JsonRaw")
+	}
+
+	// Compare the lastUpdated fields between current and new resource
+	currentMeta := getMetaFromResource([]byte(currentResourceData))
+	if currentMeta.LastUpdated > meta.LastUpdated {
+		log.Println("New resource is older. Moving new resource to history.")
+		if err := moveResourceToHistory(app, collectionName, newResourceVersion); err != nil {
+			return err
+		}
+	} else {
+		log.Println("New resource is newer. Moving current resource to history.")
+		if err := moveResourceToHistory(app, collectionName, currentResource); err != nil {
+			return err
+		}
+
+		// Update the new resource with id and save it in the main table
+		resourceData, err = updateResourceJson(resourceData, newResourceVersion.Id)
+		if err != nil {
+			log.Printf("Failed to update resource JSON: %v", err)
+			return fmt.Errorf("failed to update resource JSON: %w", err)
+		}
+
+		newResourceVersion.Set("resource", types.JsonRaw(resourceData))
+
+		// Save the updated resource in the main table
+		if err := app.Dao().SaveRecord(newResourceVersion); err != nil {
+			log.Printf("Failed to save updated resource: %v", err)
+			return fmt.Errorf("failed to save updated resource: %w", err)
 		}
 	}
 
-	updatedResourceBytes, err := updateResourceJson(resourceData, updatedVersionId, newResourceVersion.Id, newResourceVersion.Updated.Time().UTC().Format(time.RFC3339))
-	if err != nil {
-		return fmt.Errorf("failed to update resource meta: %w", err)
-	}
-
-	newResourceVersion.Set("resource", types.JsonRaw(updatedResourceBytes))
-
-	if err := storeFHIRData(newResourceVersion, resourceData); err != nil {
-		return fmt.Errorf("failed to store FHIR data: %w", err)
-	}
-
-	newResourceVersion.Set("versionId", updatedVersionId)
-
+	log.Println("Resource update completed successfully.")
 	return nil
 }
 
-func getSearchParamsForResource(resourceType string) []SearchParameter {
-	if params, exists := searchParamsByResourceType[resourceType]; exists {
-		return params
-	}
-	return []SearchParameter{}
-}
+// Function to update the resource JSON and ID, along with meta fields
+func updateResourceJson(resourceData []byte, id string) ([]byte, error) {
+	log.Println("Updating resource JSON...")
 
-func updateResourceJson(resourceData []byte, newVersionId int, id string, lastUpdated string) (updatedResourceBytes []byte, err error) {
 	var resourceJson map[string]interface{}
 	if err := json.Unmarshal(resourceData, &resourceJson); err != nil {
+		log.Printf("Failed to unmarshal resource JSON: %v", err)
 		return nil, fmt.Errorf("failed to unmarshal resource JSON: %w", err)
 	}
 
 	resourceJson["id"] = id
+	resourceJson = updateMeta(resourceJson) // Update meta fields
 
-	if resourceJson["meta"] == nil {
-		resourceJson["meta"] = map[string]interface{}{}
+	updatedResourceBytes, err := json.Marshal(resourceJson)
+	if err != nil {
+		log.Printf("Failed to marshal updated resource JSON: %v", err)
+		return nil, fmt.Errorf("failed to marshal updated resource JSON: %w", err)
 	}
 
-	meta := resourceJson["meta"].(map[string]interface{})
-	meta["versionId"] = fmt.Sprintf("%d", newVersionId)
-	meta["lastUpdated"] = lastUpdated
-	return json.Marshal(resourceJson)
+	return updatedResourceBytes, nil
 }
 
+// Determine if the collection is versioned by checking for the "lastUpdated" field
 func isVersionedCollection(app *pocketbase.PocketBase, collectionName string) bool {
 	collection, err := app.Dao().FindCollectionByNameOrId(collectionName)
 	if err != nil {
+		log.Printf("Failed to find collection: %v", err)
 		return false
 	}
 
 	for _, field := range collection.Schema.Fields() {
-		if field.Name == "versionId" {
+		if field.Name == "lastUpdated" {
 			return true
 		}
 	}
 	return false
 }
 
+// Wrapper around updating meta fields for the resource
+func updateMetaFields(resourceData []byte) ([]byte, error) {
+	var resourceJson map[string]interface{}
+	if err := json.Unmarshal(resourceData, &resourceJson); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal resource JSON: %w", err)
+	}
+
+	resourceJson = updateMeta(resourceJson) // Update meta fields
+
+	return json.Marshal(resourceJson)
+}
+
+// Extract resource data
 func getResourceData(resourceField any) (resourceData []byte, err error) {
+	log.Println("Getting resource data...")
+
 	switch v := resourceField.(type) {
 	case types.JsonRaw:
 		resourceData = []byte(v)
 	default:
+		log.Println("Resource field is not of expected type")
 		return nil, fmt.Errorf("resource field is not of expected type")
 	}
+
+	log.Println("Resource data retrieved successfully.")
 	return resourceData, nil
 }
 
+// Validate the FHIR resource
 func validateFHIRResource(resourceData []byte) error {
-	unmarshaller, err := jsonformat.NewUnmarshaller("UTC", fhirversion.R4)
+	log.Println("Validating FHIR resource...")
+
+	unmarshaller, err := jsonformat.NewUnmarshaller("UTC", fhirversion.R4) // Use "UTC" as the time zone and fhirversion.R4 for the FHIR version
 	if err != nil {
+		log.Printf("Failed to create unmarshaller: %v", err)
 		return fmt.Errorf("failed to create unmarshaller: %w", err)
 	}
 
 	msg, err := unmarshaller.Unmarshal(resourceData)
 	if err != nil {
+		log.Printf("Failed to unmarshal FHIR resource: %v", err)
 		return fmt.Errorf("failed to unmarshal FHIR resource: %w", err)
 	}
 
 	if err := fhirvalidate.Validate(proto.Message(msg)); err != nil {
+		log.Printf("FHIR resource validation failed: %v", err)
 		return fmt.Errorf("FHIR resource validation failed: %w", err)
 	}
 
+	log.Println("FHIR resource validation successful.")
 	return nil
 }
 
-func storeFHIRData(resource *models.Record, resourceData []byte) error {
+// Extract meta from resource JSON
+func getMetaFromResource(resourceData []byte) *Meta {
 	var resourceJson map[string]interface{}
 	if err := json.Unmarshal(resourceData, &resourceJson); err != nil {
-		return fmt.Errorf("failed to unmarshal resource JSON: %w", err)
+		log.Printf("Failed to unmarshal resource data: %v", err)
+		return &Meta{}
 	}
 
-	unmarshaller, err := jsonformat.NewUnmarshaller("r4", fhirversion.R4)
+	meta, ok := resourceJson["meta"].(map[string]interface{})
+	if !ok {
+		log.Println("Meta field not found in resource")
+		return &Meta{}
+	}
+
+	return &Meta{
+		LastUpdated: meta["lastUpdated"].(string),
+		VersionId:   meta["versionId"].(string),
+	}
+}
+
+// Move resource to history table
+func moveResourceToHistory(app *pocketbase.PocketBase, collectionName string, resource *models.Record) error {
+	log.Printf("Moving resource with ID %s to history table...", resource.Id)
+
+	historyCollectionName := collectionName + "history"
+
+	historyCollection, err := app.Dao().FindCollectionByNameOrId(historyCollectionName)
 	if err != nil {
-		return fmt.Errorf("failed to create unmarshaller: %w", err)
+		log.Printf("Failed to find history collection: %v", err)
+		return fmt.Errorf("failed to find history collection: %w", err)
 	}
 
-	unmarshalledResource, err := unmarshaller.Unmarshal(resourceData)
-	if err != nil {
-		return fmt.Errorf("failed to unmarshal resource to proto: %w", err)
+	resourceField := resource.Get("resource")
+	resourceData, ok := resourceField.(types.JsonRaw)
+	if !ok {
+		log.Println("Failed to assert resource field as types.JsonRaw")
+		return fmt.Errorf("failed to assert resource field as types.JsonRaw")
 	}
 
-	containedResource := containedresource.Wrap(unmarshalledResource.(fhir.Resource))
+	historicalResource := models.NewRecord(historyCollection)
+	historicalResource.Set("fhirId", resource.Id)
+	historicalResource.Set("resourceType", resource.Get("resourceType"))
 
-	searchParams := getSearchParamsForResource(resource.Collection().Name)
-	for _, param := range searchParams {
-		value, err := evaluateFHIRPath(containedResource, param.Expression)
-		if err != nil {
-			return fmt.Errorf("failed to evaluate FHIRPath expression %s: %w", param.Expression, err)
-		}
+	meta := getMetaFromResource([]byte(resourceData))
+	historicalResource.Set("lastUpdated", meta.LastUpdated) // Use lastUpdated as lastUpdated for history
+	historicalResource.Set("resource", resourceData)
 
-		if len(value) > 0 {
-			resource.Set(param.Code, value[0])
-		}
+	log.Printf("Saving historical resource with lastUpdated %s to history table...", meta.LastUpdated)
+	if err := app.Dao().SaveRecord(historicalResource); err != nil {
+		log.Printf("Failed to save resource to history table: %v", err)
+		return fmt.Errorf("failed to save resource to history table: %w", err)
 	}
 
+	log.Printf("Resource moved to history table successfully.")
 	return nil
 }
 
-func evaluateFHIRPath(resource *bcrpb.ContainedResource, expression string) ([]interface{}, error) {
-	compiledExpr, err := fhirwrapper.CompileFHIRPath(expression)
-	if err != nil {
-		return nil, fmt.Errorf("failed to compile FHIRPath expression: %w", err)
-	}
-	result, err := fhirwrapper.EvaluateFHIRPath(compiledExpr, resource)
-	if err != nil {
-		return nil, fmt.Errorf("failed to evaluate FHIRPath expression: %w", err)
-	}
-	return result, nil
+// Meta struct to hold meta data fields
+type Meta struct {
+	LastUpdated string
+	VersionId   string
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
@@ -8,13 +9,9 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/forms"
 	"github.com/pocketbase/pocketbase/models"
+	"github.com/pocketbase/pocketbase/models/schema" // Import schema for SchemaField
 	"github.com/pocketbase/pocketbase/tools/types"
 )
-
-var collections = []map[string]interface{}{
-	{"name": "Account", "schema": generateSchemaFields("Account")},
-	// Add more resources as needed
-}
 
 func initializeCollections(app *pocketbase.PocketBase) error {
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
@@ -24,14 +21,18 @@ func initializeCollections(app *pocketbase.PocketBase) error {
 }
 
 func createInitialCollections(app *pocketbase.PocketBase) error {
-	db := app.Dao().DB()
-
 	if collections == nil {
-		return nil
+		return fmt.Errorf("no collections to initialize")
 	}
 
 	for _, collection := range collections {
-		collectionName := strings.ToLower(collection["name"].(string))
+		collectionName, ok := collection["name"].(string)
+		if !ok || collectionName == "" {
+			log.Printf("Invalid or missing collection name: %v", collection["name"])
+			continue
+		}
+
+		collectionName = strings.ToLower(collectionName)
 
 		existingCollection, err := app.Dao().FindCollectionByNameOrId(collectionName)
 		if err == nil && existingCollection != nil {
@@ -39,13 +40,13 @@ func createInitialCollections(app *pocketbase.PocketBase) error {
 			continue
 		}
 
-		schemaFields := generateSchemaFields(collectionName)
-		if schemaFields == nil {
-			log.Printf("No schema fields found for collection '%s'. Skipping creation.", collectionName)
+		// Ensure schema exists and is of the correct type
+		schemaFields, ok := collection["schema"].([]map[string]interface{})
+		if !ok || len(schemaFields) == 0 {
+			log.Printf("No valid schema fields found for collection '%s'. Skipping creation.", collectionName)
 			continue
 		}
 
-		indexes := indexesByResourceType[collectionName]
 		coll := &models.Collection{}
 		form := forms.NewCollectionUpsert(app, coll)
 		form.Name = collectionName
@@ -56,31 +57,35 @@ func createInitialCollections(app *pocketbase.PocketBase) error {
 		form.UpdateRule = types.Pointer("@request.auth.id != ''")
 		form.DeleteRule = nil
 
+		// Add fields to the schema based on the collection's schema definition
 		for _, field := range schemaFields {
-			form.Schema.AddField(&models.SchemaField{
-				Name:     field["name"].(string),
-				Type:     field["type"].(string),
-				Required: field["required"].(bool),
-				Options:  field["options"].(map[string]interface{}),
+			fieldName, ok := field["name"].(string)
+			if !ok || fieldName == "" {
+				log.Printf("Invalid field name in collection '%s'. Skipping field.", collectionName)
+				continue
+			}
+
+			fieldType, ok := field["type"].(string)
+			if !ok || fieldType == "" {
+				log.Printf("Invalid field type for field '%s' in collection '%s'. Skipping field.", fieldName, collectionName)
+				continue
+			}
+
+			required, _ := field["required"].(bool)
+			options, _ := field["options"].(map[string]interface{})
+
+			form.Schema.AddField(&schema.SchemaField{
+				Name:     fieldName,
+				Type:     fieldType,
+				Required: required,
+				Options:  options,
 			})
 		}
 
+		// Submit the form to create the collection
 		if err := form.Submit(); err != nil {
 			log.Printf("Failed to create collection '%s': %v", collectionName, err)
 			continue
-		}
-
-		for _, index := range indexes {
-			indexName := index["name"].(string)
-			indexType := index["type"].(string)
-			fields := strings.Join(index["fields"].([]string), ", ")
-
-			query := "CREATE " + indexType + " INDEX " + indexName + " ON " + collectionName + " (" + fields + ");"
-			if _, err := db.NewQuery(query).Execute(); err != nil {
-				log.Printf("Failed to create index '%s' on collection '%s': %v", indexName, collectionName, err)
-			} else {
-				log.Printf("Index '%s' created successfully on collection '%s'", indexName, collectionName)
-			}
 		}
 
 		log.Printf("Collection '%s' created successfully", collectionName)

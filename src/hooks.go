@@ -32,13 +32,14 @@ func registerRequestLoggingHook(app *pocketbase.PocketBase) {
 	})
 }
 
-// SetupHooks registers the hooks for the app
 func setupHooks(app *pocketbase.PocketBase) {
-	app.OnModelBeforeCreate().Add(func(e *core.ModelEvent) error {
+	// Hook for handling resource creation
+	app.OnRecordAfterCreateRequest().Add(func(e *core.RecordCreateEvent) error {
 		return handleResourceCreation(app, e)
 	})
 
-	app.OnModelBeforeUpdate().Add(func(e *core.ModelEvent) error {
+	// Hook for handling resource updates
+	app.OnRecordBeforeUpdateRequest().Add(func(e *core.RecordUpdateEvent) error {
 		return handleResourceUpdate(app, e)
 	})
 }
