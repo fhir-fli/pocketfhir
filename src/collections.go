@@ -2,7 +2,7 @@ package main
 
 // Common schema applied to multiple collections
 var commonSchema = []map[string]interface{}{
-	{"name": "versionId", "type": "date", "required": true},
+	{"name": "lastUpdated", "type": "date", "required": true},
 	{"name": "resource", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}, "required": true},
 }
 
@@ -16,7 +16,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "AccountHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "ActivityDefinition",
@@ -25,7 +25,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ActivityDefinitionHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "AdverseEvent",
@@ -34,7 +34,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "AdverseEventHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "AllergyIntolerance",
@@ -43,7 +43,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "AllergyIntoleranceHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Condition",
@@ -52,7 +52,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ConditionHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "DeviceRequest",
@@ -61,7 +61,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "DeviceRequestHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "DiagnosticReport",
@@ -70,7 +70,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "DiagnosticReportHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "List",
@@ -79,7 +79,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ListHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Medication",
@@ -88,7 +88,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MedicationHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "MedicationAdministration",
@@ -97,7 +97,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MedicationAdministrationHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "MedicationDispense",
@@ -106,7 +106,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MedicationDispenseHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "MedicationRequest",
@@ -115,7 +115,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MedicationRequestHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "MedicationStatement",
@@ -124,7 +124,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MedicationStatementHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Observation",
@@ -133,7 +133,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ObservationHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Procedure",
@@ -142,7 +142,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ProcedureHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "ServiceRequest",
@@ -151,7 +151,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ServiceRequestHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "CarePlan",
@@ -160,7 +160,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "CarePlanHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "CareTeam",
@@ -169,7 +169,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "CareTeamHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "ClinicalImpression",
@@ -178,7 +178,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ClinicalImpressionHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Consent",
@@ -187,7 +187,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ConsentHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Encounter",
@@ -196,7 +196,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "EncounterHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "EpisodeOfCare",
@@ -205,7 +205,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "EpisodeOfCareHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Flag",
@@ -214,7 +214,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "FlagHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Immunization",
@@ -223,7 +223,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ImmunizationHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "RiskAssessment",
@@ -232,7 +232,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "RiskAssessmentHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "SupplyRequest",
@@ -241,7 +241,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "SupplyRequestHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "DetectedIssue",
@@ -250,7 +250,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "DetectedIssueHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "DocumentManifest",
@@ -259,7 +259,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "DocumentManifestHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "DocumentReference",
@@ -268,7 +268,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "DocumentReferenceHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Goal",
@@ -277,7 +277,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "GoalHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "ImagingStudy",
@@ -286,7 +286,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ImagingStudyHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "NutritionOrder",
@@ -295,7 +295,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "NutritionOrderHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "SupplyDelivery",
@@ -304,7 +304,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "SupplyDeliveryHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "VisionPrescription",
@@ -313,7 +313,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "VisionPrescriptionHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "DeviceUseStatement",
@@ -322,7 +322,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "DeviceUseStatementHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Appointment",
@@ -331,7 +331,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "AppointmentHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "AppointmentResponse",
@@ -340,7 +340,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "AppointmentResponseHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "AuditEvent",
@@ -349,7 +349,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "AuditEventHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Basic",
@@ -358,7 +358,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "BasicHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "BodyStructure",
@@ -367,7 +367,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "BodyStructureHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Bundle",
@@ -376,7 +376,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "BundleHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "CapabilityStatement",
@@ -385,7 +385,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "CapabilityStatementHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "CodeSystem",
@@ -394,7 +394,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "CodeSystemHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "ConceptMap",
@@ -403,7 +403,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ConceptMapHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "GraphDefinition",
@@ -412,7 +412,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "GraphDefinitionHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "ImplementationGuide",
@@ -421,7 +421,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ImplementationGuideHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "MessageDefinition",
@@ -430,7 +430,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MessageDefinitionHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "NamingSystem",
@@ -439,7 +439,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "NamingSystemHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "OperationDefinition",
@@ -448,7 +448,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "OperationDefinitionHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "SearchParameter",
@@ -457,7 +457,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "SearchParameterHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "StructureDefinition",
@@ -466,7 +466,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "StructureDefinitionHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "StructureMap",
@@ -475,7 +475,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "StructureMapHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "TerminologyCapabilities",
@@ -484,7 +484,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "TerminologyCapabilitiesHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "ValueSet",
@@ -493,7 +493,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ValueSetHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "ChargeItem",
@@ -502,7 +502,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ChargeItemHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "ChargeItemDefinition",
@@ -511,7 +511,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ChargeItemDefinitionHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Claim",
@@ -520,7 +520,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ClaimHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "ClaimResponse",
@@ -529,7 +529,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ClaimResponseHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Communication",
@@ -538,7 +538,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "CommunicationHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "CommunicationRequest",
@@ -547,7 +547,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "CommunicationRequestHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Contract",
@@ -556,7 +556,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ContractHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Coverage",
@@ -565,7 +565,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "CoverageHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "CoverageEligibilityRequest",
@@ -574,7 +574,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "CoverageEligibilityRequestHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "CoverageEligibilityResponse",
@@ -583,7 +583,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "CoverageEligibilityResponseHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Device",
@@ -592,7 +592,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "DeviceHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "DeviceDefinition",
@@ -601,7 +601,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "DeviceDefinitionHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "DeviceMetric",
@@ -610,7 +610,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "DeviceMetricHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "EffectEvidenceSynthesis",
@@ -619,7 +619,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "EffectEvidenceSynthesisHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Endpoint",
@@ -628,7 +628,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "EndpointHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "EnrollmentRequest",
@@ -637,7 +637,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "EnrollmentRequestHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "EnrollmentResponse",
@@ -646,7 +646,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "EnrollmentResponseHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "EventDefinition",
@@ -655,7 +655,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "EventDefinitionHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Evidence",
@@ -664,7 +664,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "EvidenceHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "EvidenceVariable",
@@ -673,7 +673,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "EvidenceVariableHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "ExampleScenario",
@@ -682,7 +682,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ExampleScenarioHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "ExplanationOfBenefit",
@@ -691,7 +691,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ExplanationOfBenefitHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Group",
@@ -700,7 +700,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "GroupHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "GuidanceResponse",
@@ -709,7 +709,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "GuidanceResponseHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "HealthcareService",
@@ -718,7 +718,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "HealthcareServiceHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "ImmunizationEvaluation",
@@ -727,7 +727,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ImmunizationEvaluationHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "ImmunizationRecommendation",
@@ -736,7 +736,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ImmunizationRecommendationHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "InsurancePlan",
@@ -745,7 +745,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "InsurancePlanHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Invoice",
@@ -754,7 +754,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "InvoiceHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Library",
@@ -763,7 +763,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "LibraryHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Linkage",
@@ -772,7 +772,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "LinkageHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Location",
@@ -781,7 +781,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "LocationHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Measure",
@@ -790,7 +790,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MeasureHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "MeasureReport",
@@ -799,7 +799,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MeasureReportHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Media",
@@ -808,7 +808,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MediaHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "MedicationKnowledge",
@@ -817,7 +817,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MedicationKnowledgeHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "MedicinalProduct",
@@ -826,7 +826,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MedicinalProductHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "MedicinalProductAuthorization",
@@ -835,7 +835,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MedicinalProductAuthorizationHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "MedicinalProductContraindication",
@@ -844,7 +844,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MedicinalProductContraindicationHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "MedicinalProductIndication",
@@ -853,7 +853,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MedicinalProductIndicationHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "MedicinalProductInteraction",
@@ -862,7 +862,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MedicinalProductInteractionHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "MedicinalProductPackaged",
@@ -871,7 +871,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MedicinalProductPackagedHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "MedicinalProductPharmaceutical",
@@ -880,7 +880,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MedicinalProductPharmaceuticalHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "MedicinalProductUndesirableEffect",
@@ -889,7 +889,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MedicinalProductUndesirableEffectHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "MessageHeader",
@@ -898,7 +898,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MessageHeaderHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "MolecularSequence",
@@ -907,7 +907,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "MolecularSequenceHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Organization",
@@ -916,7 +916,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "OrganizationHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "OrganizationAffiliation",
@@ -925,7 +925,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "OrganizationAffiliationHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Patient",
@@ -934,7 +934,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "PatientHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Person",
@@ -943,7 +943,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "PersonHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Practitioner",
@@ -952,7 +952,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "PractitionerHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "RelatedPerson",
@@ -961,7 +961,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "RelatedPersonHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "PractitionerRole",
@@ -970,7 +970,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "PractitionerRoleHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "PaymentNotice",
@@ -979,7 +979,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "PaymentNoticeHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "PaymentReconciliation",
@@ -988,7 +988,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "PaymentReconciliationHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "PlanDefinition",
@@ -997,7 +997,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "PlanDefinitionHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Provenance",
@@ -1006,7 +1006,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ProvenanceHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Questionnaire",
@@ -1015,7 +1015,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "QuestionnaireHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "QuestionnaireResponse",
@@ -1024,7 +1024,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "QuestionnaireResponseHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "RequestGroup",
@@ -1033,7 +1033,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "RequestGroupHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "ResearchDefinition",
@@ -1042,7 +1042,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ResearchDefinitionHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "ResearchElementDefinition",
@@ -1051,7 +1051,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ResearchElementDefinitionHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "ResearchStudy",
@@ -1060,7 +1060,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ResearchStudyHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "ResearchSubject",
@@ -1069,7 +1069,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ResearchSubjectHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "RiskEvidenceSynthesis",
@@ -1078,7 +1078,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "RiskEvidenceSynthesisHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Schedule",
@@ -1087,7 +1087,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "ScheduleHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Slot",
@@ -1096,7 +1096,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "SlotHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Specimen",
@@ -1105,7 +1105,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "SpecimenHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "SpecimenDefinition",
@@ -1114,7 +1114,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "SpecimenDefinitionHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Subscription",
@@ -1123,7 +1123,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "SubscriptionHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Substance",
@@ -1132,7 +1132,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "SubstanceHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "SubstanceSpecification",
@@ -1141,7 +1141,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "SubstanceSpecificationHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "Task",
@@ -1150,7 +1150,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "TaskHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "TestReport",
@@ -1159,7 +1159,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "TestReportHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "TestScript",
@@ -1168,7 +1168,7 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "TestScriptHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 	{
 		"name":   "VerificationResult",
@@ -1177,6 +1177,6 @@ var collections = []map[string]interface{}{
 	{
 		"name":         "VerificationResultHistory",
 		"schema":       commonSchema,
-		"compositeKey": []string{"id", "versionId"},
+		"compositeKey": []string{"id", "lastUpdated"},
 	},
 }

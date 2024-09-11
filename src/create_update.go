@@ -97,7 +97,7 @@ func handleResourceUpdate(app *pocketbase.PocketBase, e *core.RecordUpdateEvent)
 	// Check if the meta.lastUpdated exists
 	meta := getMetaFromResource(resourceData)
 	if meta.LastUpdated == "" {
-		return fmt.Errorf("Error: meta.lastUpdated is missing")
+		return fmt.Errorf("error: meta.lastUpdated is missing")
 	}
 
 	// Fetch the current resource from the main table
@@ -182,7 +182,7 @@ func isVersionedCollection(app *pocketbase.PocketBase, collectionName string) bo
 	}
 
 	for _, field := range collection.Schema.Fields() {
-		if field.Name == "versionId" {
+		if field.Name == "lastUpdated" {
 			return true
 		}
 	}
@@ -272,16 +272,10 @@ func storeFHIRData(resourceData []byte) error {
 	return nil
 }
 
-func getMetaFromResource(resourceField any) *Meta {
-	// Type assertion to ensure it's of type types.JsonRaw
-	resourceData, ok := resourceField.(types.JsonRaw)
-	if !ok {
-		log.Println("Failed to assert resource field as types.JsonRaw")
-		return &Meta{}
-	}
-
+func getMetaFromResource(resourceData []byte) *Meta {
+	// Unmarshal the resource data directly from []byte
 	var resourceJson map[string]interface{}
-	if err := json.Unmarshal([]byte(resourceData), &resourceJson); err != nil {
+	if err := json.Unmarshal(resourceData, &resourceJson); err != nil {
 		log.Printf("Failed to unmarshal resource data: %v", err)
 		return &Meta{}
 	}
@@ -293,9 +287,13 @@ func getMetaFromResource(resourceField any) *Meta {
 		return &Meta{}
 	}
 
+	// Ensure that lastUpdated and versionId are present
+	lastUpdated, _ := meta["lastUpdated"].(string)
+	versionId, _ := meta["versionId"].(string)
+
 	return &Meta{
-		LastUpdated: meta["lastUpdated"].(string),
-		VersionId:   meta["versionId"].(string),
+		LastUpdated: lastUpdated,
+		VersionId:   versionId,
 	}
 }
 
@@ -322,13 +320,20 @@ func moveResourceToHistory(app *pocketbase.PocketBase, collectionName string, re
 	historicalResource.Set("fhirId", resource.Id)
 	historicalResource.Set("resourceType", resource.Get("resourceType"))
 
+	// Retrieve resource data and extract meta information
+	resourceData, ok := resource.Get("resource").(types.JsonRaw)
+	if !ok {
+		return fmt.Errorf("failed to assert resource field as types.JsonRaw")
+	}
+
+	meta := getMetaFromResource([]byte(resourceData))
+
 	// Set the versionId and resource fields for the historical record
-	meta := getMetaFromResource(resource.Get("resource"))
-	historicalResource.Set("versionId", meta.LastUpdated) // Use lastUpdated as versionId for history
+	historicalResource.Set("lastUpdated", meta.LastUpdated) // Use lastUpdated as lastUpdated for history
 	historicalResource.Set("resource", resource.Get("resource"))
 
 	// Save the historical record in the history table
-	log.Printf("Saving historical resource with versionId %s to history table...", meta.VersionId)
+	log.Printf("Saving historical resource with lastUpdated %s to history table...", meta.VersionId)
 	if err := app.Dao().SaveRecord(historicalResource); err != nil {
 		log.Printf("Failed to save resource to history table: %v", err)
 		return fmt.Errorf("failed to save resource to history table: %w", err)

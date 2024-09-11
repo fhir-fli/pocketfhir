@@ -48,6 +48,7 @@ Future<Map<String, dynamic>> createOrUpdateRecord(
       final RecordModel recordModel =
           await recordService.create(body: resourceMapToBody(resourceMap));
       if (recordModel.data['resource'] != null) {
+        print('resource returned');
         return recordModel.data['resource'];
       } else {
         return _operationOutcomes(e.toString());
@@ -60,6 +61,7 @@ Future<Map<String, dynamic>> createOrUpdateRecord(
 
 Map<String, dynamic> account = {
   "resourceType": "Account",
+  "id": "gja7wfxbcgpt82j",
   "status": "active",
   "name": "Patient billing account"
 };
@@ -71,7 +73,7 @@ Map<String, dynamic> resourceMapToBody(Map<String, dynamic> resourceMap) {
     "lastUpdated": lastUpdated,
   };
   return {
-    "versionId": lastUpdated,
+    "lastUpdated": lastUpdated,
     "resource": resourceMap,
   };
 }
