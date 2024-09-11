@@ -32,8 +32,8 @@ Future<Map<String, dynamic>> createOrUpdateRecord(
   final Map<String, dynamic> resource = resourceMapToBody(resourceMap);
   try {
     print('resource: $resource');
-    final RecordService recordService = pb.collection(
-        resource['resource']['resourceType'].toString().toLowerCase());
+    final RecordService recordService =
+        pb.collection(resource['resourceType'].toString().toLowerCase());
     print('RecordModel: ${recordService}');
     final RecordModel recordModel = await recordService.create(body: resource);
     if (recordModel.data['resource'] != null) {
@@ -66,11 +66,17 @@ Map<String, dynamic> account = {
   "name": "Patient billing account"
 };
 
-Map<String, dynamic> resourceMapToBody(Map<String, dynamic> resourceMap) => {
-      "resourceType": resourceMap['resourceType'],
-      "versionId": 1,
-      "resource": resourceMap,
-    };
+Map<String, dynamic> resourceMapToBody(Map<String, dynamic> resourceMap) {
+  final lastUpdated = DateTime.now().toUtc().toIso8601String();
+  resourceMap['meta'] = {
+    "versionId": lastUpdated.replaceAll(':', '.'),
+    "lastUpdated": lastUpdated,
+  };
+  return {
+    "versionId": lastUpdated,
+    "resource": resourceMap,
+  };
+}
 
 Map<String, dynamic> _operationOutcomes(String error) => <String, dynamic>{
       'resourceType': 'OperationOutcome',

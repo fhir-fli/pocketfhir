@@ -2,7 +2,7 @@ package main
 
 // Common schema applied to multiple collections
 var commonSchema = []map[string]interface{}{
-	{"name": "versionId", "type": "datetime", "required": true}, // Changed from "number" to "datetime"
+	{"name": "versionId", "type": "date", "required": true},
 	{"name": "resource", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}, "required": true},
 }
 

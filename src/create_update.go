@@ -17,18 +17,14 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func handleResourceCreation(app *pocketbase.PocketBase, e *core.ModelEvent) error {
+func handleResourceCreation(app *pocketbase.PocketBase, e *core.RecordCreateEvent) error {
 	log.Println("Starting resource creation...")
 
-	resource, ok := e.Model.(*models.Record)
-	if !ok {
-		log.Println("Failed to cast model to *models.Record")
-		return nil
-	}
-
+	resource := e.Record // Directly access the Record from the event
 	collectionName := resource.Collection().Name
 	log.Printf("Collection name: %s", collectionName)
 
+	// Skip history collections
 	if strings.HasSuffix(collectionName, "history") {
 		log.Println("Collection is a history collection. Skipping creation.")
 		return nil
@@ -79,15 +75,10 @@ func handleResourceCreation(app *pocketbase.PocketBase, e *core.ModelEvent) erro
 	return nil
 }
 
-func handleResourceUpdate(app *pocketbase.PocketBase, e *core.ModelEvent) error {
+func handleResourceUpdate(app *pocketbase.PocketBase, e *core.RecordUpdateEvent) error {
 	log.Println("Starting resource update...")
 
-	newResourceVersion, ok := e.Model.(*models.Record)
-	if !ok {
-		log.Println("Failed to cast model to *models.Record")
-		return nil
-	}
-
+	newResourceVersion := e.Record // Directly access the Record from the event
 	collectionName := newResourceVersion.Collection().Name
 	log.Printf("Collection name: %s", collectionName)
 
@@ -106,7 +97,7 @@ func handleResourceUpdate(app *pocketbase.PocketBase, e *core.ModelEvent) error 
 	// Check if the meta.lastUpdated exists
 	meta := getMetaFromResource(resourceData)
 	if meta.LastUpdated == "" {
-		return fmt.Errorf("error: meta.lastUpdated is missing")
+		return fmt.Errorf("Error: meta.lastUpdated is missing")
 	}
 
 	// Fetch the current resource from the main table
@@ -116,23 +107,15 @@ func handleResourceUpdate(app *pocketbase.PocketBase, e *core.ModelEvent) error 
 		return fmt.Errorf("failed to fetch existing resource: %w", err)
 	}
 
-	// Type assertion for current resource
-	currentResourceData, ok := currentResource.Get("resource").(types.JsonRaw)
-	if !ok {
-		log.Println("Failed to assert current resource field as types.JsonRaw")
-		return fmt.Errorf("error: current resource field is not of expected type")
-	}
-
-	// Compare the lastUpdated fields
-	currentMeta := getMetaFromResource([]byte(currentResourceData))
+	// Compare the lastUpdated fields and move the older one to history
+	currentResourceData := currentResource.Get("resource").([]byte)
+	currentMeta := getMetaFromResource(currentResourceData)
 	if currentMeta.LastUpdated > meta.LastUpdated {
-		// Move the new resource to history (keep current in main table)
 		log.Println("New resource is older. Moving new resource to history.")
 		if err := moveResourceToHistory(app, collectionName, newResourceVersion); err != nil {
 			return err
 		}
 	} else {
-		// Move the current resource to history (keep new resource in main table)
 		log.Println("New resource is newer. Moving current resource to history.")
 		if err := moveResourceToHistory(app, collectionName, currentResource); err != nil {
 			return err
@@ -152,6 +135,7 @@ func handleResourceUpdate(app *pocketbase.PocketBase, e *core.ModelEvent) error 
 			return fmt.Errorf("failed to store FHIR data: %w", err)
 		}
 	}
+
 	log.Println("Resource update completed successfully.")
 	return nil
 }
