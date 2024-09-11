@@ -43,16 +43,16 @@ Future<Map<String, dynamic>> createOrUpdateRecord(
   } catch (e) {
     print('Error creating or updating record: $e');
     if (e is ClientException && e.statusCode == 404) {
-      final RecordService recordService =
-          pb.collection(resourceMap['resourceType'].toString().toLowerCase());
-      final RecordModel recordModel =
-          await recordService.create(body: resourceMapToBody(resourceMap));
-      if (recordModel.data['resource'] != null) {
-        print('resource returned');
-        return recordModel.data['resource'];
-      } else {
-        return _operationOutcomes(e.toString());
-      }
+      // final RecordService recordService =
+      //     pb.collection(resourceMap['resourceType'].toString().toLowerCase());
+      // final RecordModel recordModel =
+      //     await recordService.create(body: resourceMapToBody(resourceMap));
+      // if (recordModel.data['resource'] != null) {
+      //   print('resource returned');
+      //   return recordModel.data['resource'];
+      // } else {
+      return _operationOutcomes(e.toString());
+      // }
     } else {
       return _operationOutcomes(e.toString());
     }
@@ -61,17 +61,17 @@ Future<Map<String, dynamic>> createOrUpdateRecord(
 
 Map<String, dynamic> account = {
   "resourceType": "Account",
-  "id": "gja7wfxbcgpt82j",
+  "id": "1rkf6gc5me9np9r",
   "status": "active",
   "name": "Patient billing account"
 };
 
 Map<String, dynamic> resourceMapToBody(Map<String, dynamic> resourceMap) {
   final lastUpdated = DateTime.now().toUtc().toIso8601String();
-  resourceMap['meta'] = {
-    "versionId": lastUpdated.replaceAll(':', '.'),
-    "lastUpdated": lastUpdated,
-  };
+  // resourceMap['meta'] = {
+  //   "versionId": lastUpdated.replaceAll(':', '.'),
+  //   "lastUpdated": lastUpdated,
+  // };
   return {
     "lastUpdated": lastUpdated,
     "resource": resourceMap,
