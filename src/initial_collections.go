@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
@@ -21,11 +22,17 @@ func initializeCollections(app *pocketbase.PocketBase) error {
 
 func createInitialCollections(app *pocketbase.PocketBase) error {
 	if collections == nil {
-		return nil
+		return fmt.Errorf("no collections to initialize")
 	}
 
 	for _, collection := range collections {
-		collectionName := strings.ToLower(collection["name"].(string))
+		collectionName, ok := collection["name"].(string)
+		if !ok || collectionName == "" {
+			log.Printf("Invalid or missing collection name: %v", collection["name"])
+			continue
+		}
+
+		collectionName = strings.ToLower(collectionName)
 
 		existingCollection, err := app.Dao().FindCollectionByNameOrId(collectionName)
 		if err == nil && existingCollection != nil {
@@ -33,10 +40,10 @@ func createInitialCollections(app *pocketbase.PocketBase) error {
 			continue
 		}
 
-		// Assuming schemaFields are inside the collection map itself
+		// Ensure schema exists and is of the correct type
 		schemaFields, ok := collection["schema"].([]map[string]interface{})
-		if !ok {
-			log.Printf("No schema fields found for collection '%s'. Skipping creation.", collectionName)
+		if !ok || len(schemaFields) == 0 {
+			log.Printf("No valid schema fields found for collection '%s'. Skipping creation.", collectionName)
 			continue
 		}
 
@@ -52,11 +59,26 @@ func createInitialCollections(app *pocketbase.PocketBase) error {
 
 		// Add fields to the schema based on the collection's schema definition
 		for _, field := range schemaFields {
+			fieldName, ok := field["name"].(string)
+			if !ok || fieldName == "" {
+				log.Printf("Invalid field name in collection '%s'. Skipping field.", collectionName)
+				continue
+			}
+
+			fieldType, ok := field["type"].(string)
+			if !ok || fieldType == "" {
+				log.Printf("Invalid field type for field '%s' in collection '%s'. Skipping field.", fieldName, collectionName)
+				continue
+			}
+
+			required, _ := field["required"].(bool)
+			options, _ := field["options"].(map[string]interface{})
+
 			form.Schema.AddField(&schema.SchemaField{
-				Name:     field["name"].(string),
-				Type:     field["type"].(string),
-				Required: field["required"].(bool),
-				Options:  field["options"].(map[string]interface{}),
+				Name:     fieldName,
+				Type:     fieldType,
+				Required: required,
+				Options:  options,
 			})
 		}
 
