@@ -17,9 +17,7 @@ Future<void> main() async {
   final PocketBase pb = PocketBase('http://127.0.0.1:8090');
 
   try {
-    final adminAuth =
-        await pb.admins.authWithPassword('grey@fhirfli.dev', '01 password');
-    print(adminAuth.admin?.email);
+    await pb.admins.authWithPassword('grey@fhirfli.dev', '01 password');
     createOrUpdateRecord(pb, account);
   } catch (e) {
     print(e);
@@ -29,13 +27,13 @@ Future<void> main() async {
 // Function to create or update a record
 Future<Map<String, dynamic>> createOrUpdateRecord(
     PocketBase pb, Map<String, dynamic> resourceMap) async {
-  final Map<String, dynamic> resource = resourceMapToBody(resourceMap);
   try {
-    print('resource: $resource');
     final RecordService recordService =
-        pb.collection(resource['resourceType'].toString().toLowerCase());
-    print('RecordModel: ${recordService}');
-    final RecordModel recordModel = await recordService.create(body: resource);
+        pb.collection(resourceMap['resourceType'].toString().toLowerCase());
+    final RecordModel recordModel = await (resourceMap['id'] != null
+        ? recordService.update(resourceMap['id'].toString(),
+            body: resourceMapToBody(resourceMap))
+        : recordService.create(body: resourceMapToBody(resourceMap)));
     if (recordModel.data['resource'] != null) {
       print('resource returned');
       return recordModel.data['resource'];
@@ -45,10 +43,10 @@ Future<Map<String, dynamic>> createOrUpdateRecord(
   } catch (e) {
     print('Error creating or updating record: $e');
     if (e is ClientException && e.statusCode == 404) {
-      final RecordModel recordModel = await pb
-          .collection(
-              resource['resource']['resourceType'].toString().toLowerCase())
-          .create(body: resource);
+      final RecordService recordService =
+          pb.collection(resourceMap['resourceType'].toString().toLowerCase());
+      final RecordModel recordModel =
+          await recordService.create(body: resourceMapToBody(resourceMap));
       if (recordModel.data['resource'] != null) {
         return recordModel.data['resource'];
       } else {
