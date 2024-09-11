@@ -8,13 +8,9 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/forms"
 	"github.com/pocketbase/pocketbase/models"
+	"github.com/pocketbase/pocketbase/models/schema" // Import schema for SchemaField
 	"github.com/pocketbase/pocketbase/tools/types"
 )
-
-var collections = []map[string]interface{}{
-	{"name": "Account", "schema": generateSchemaFields("Account")},
-	// Add more resources as needed
-}
 
 func initializeCollections(app *pocketbase.PocketBase) error {
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
@@ -24,8 +20,6 @@ func initializeCollections(app *pocketbase.PocketBase) error {
 }
 
 func createInitialCollections(app *pocketbase.PocketBase) error {
-	db := app.Dao().DB()
-
 	if collections == nil {
 		return nil
 	}
@@ -39,13 +33,13 @@ func createInitialCollections(app *pocketbase.PocketBase) error {
 			continue
 		}
 
-		schemaFields := generateSchemaFields(collectionName)
-		if schemaFields == nil {
+		// Assuming schemaFields are inside the collection map itself
+		schemaFields, ok := collection["schema"].([]map[string]interface{})
+		if !ok {
 			log.Printf("No schema fields found for collection '%s'. Skipping creation.", collectionName)
 			continue
 		}
 
-		indexes := indexesByResourceType[collectionName]
 		coll := &models.Collection{}
 		form := forms.NewCollectionUpsert(app, coll)
 		form.Name = collectionName
@@ -56,8 +50,9 @@ func createInitialCollections(app *pocketbase.PocketBase) error {
 		form.UpdateRule = types.Pointer("@request.auth.id != ''")
 		form.DeleteRule = nil
 
+		// Add fields to the schema based on the collection's schema definition
 		for _, field := range schemaFields {
-			form.Schema.AddField(&models.SchemaField{
+			form.Schema.AddField(&schema.SchemaField{
 				Name:     field["name"].(string),
 				Type:     field["type"].(string),
 				Required: field["required"].(bool),
@@ -65,22 +60,10 @@ func createInitialCollections(app *pocketbase.PocketBase) error {
 			})
 		}
 
+		// Submit the form to create the collection
 		if err := form.Submit(); err != nil {
 			log.Printf("Failed to create collection '%s': %v", collectionName, err)
 			continue
-		}
-
-		for _, index := range indexes {
-			indexName := index["name"].(string)
-			indexType := index["type"].(string)
-			fields := strings.Join(index["fields"].([]string), ", ")
-
-			query := "CREATE " + indexType + " INDEX " + indexName + " ON " + collectionName + " (" + fields + ");"
-			if _, err := db.NewQuery(query).Execute(); err != nil {
-				log.Printf("Failed to create index '%s' on collection '%s': %v", indexName, collectionName, err)
-			} else {
-				log.Printf("Index '%s' created successfully on collection '%s'", indexName, collectionName)
-			}
 		}
 
 		log.Printf("Collection '%s' created successfully", collectionName)

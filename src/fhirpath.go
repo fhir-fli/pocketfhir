@@ -10,7 +10,7 @@ import (
 	"github.com/google/fhir/go/jsonformat"
 )
 
-func evaluateFHIRPathExpressions(resourceData []byte, searchParams []SearchParameter) (map[string]interface{}, error) {
+func evaluateFHIRPathExpressions(resourceData []byte, expressions []string) (map[string]interface{}, error) {
 	results := make(map[string]interface{})
 
 	unmarshaller, err := jsonformat.NewUnmarshaller("UTC", fhirversion.R4)
@@ -26,8 +26,8 @@ func evaluateFHIRPathExpressions(resourceData []byte, searchParams []SearchParam
 	cr := containedresource.Wrap(msg.(fhir.Resource))
 	unwrappedResource := containedresource.Unwrap(cr)
 
-	for _, param := range searchParams {
-		compiledExpr, err := fhirpath.Compile(param.Expression)
+	for _, expr := range expressions {
+		compiledExpr, err := fhirpath.Compile(expr)
 		if err != nil {
 			return nil, fmt.Errorf("failed to compile FHIRPath expression: %w", err)
 		}
@@ -36,9 +36,9 @@ func evaluateFHIRPathExpressions(resourceData []byte, searchParams []SearchParam
 			return nil, fmt.Errorf("failed to evaluate FHIRPath expression: %w", err)
 		}
 		if len(result) > 0 {
-			results[param.Code] = result[0]
+			results[expr] = result[0]
 		} else {
-			results[param.Code] = nil
+			results[expr] = nil
 		}
 	}
 	return results, nil

@@ -106,6 +106,5 @@ func defaultPublicDir() string {
 	if strings.HasPrefix(os.Args[0], os.TempDir()) {
 		return "./pb_public"
 	}
-
 	return filepath.Join(os.Args[0], "../pb_public")
 }

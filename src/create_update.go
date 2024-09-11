@@ -45,18 +45,16 @@ func handleResourceCreation(app *pocketbase.PocketBase, e *core.ModelEvent) erro
 		return fmt.Errorf("validation error: %w", err)
 	}
 
-	searchParams := getSearchParamsForResource(collectionName)
-	results, err := evaluateFHIRPathExpressions(resourceData, searchParams)
+	// Assuming predefined FHIRPath expressions instead of SearchParameters
+	expressions := []string{"Patient.name.given", "Patient.name.family"} // Update these expressions as needed
+
+	results, err := evaluateFHIRPathExpressions(resourceData, expressions)
 	if err != nil {
 		return fmt.Errorf("failed to evaluate FHIRPath expressions: %w", err)
 	}
 
-	for k, v := range results {
-		if v != nil {
-			resource.Set(k, v)
-		} else {
-			resource.Set(k, nil) // Ensure that optional fields are explicitly set to null if they are empty
-		}
+	for expr, value := range results {
+		resource.Set(expr, value)
 	}
 
 	updatedResourceBytes, err := updateResourceJson(resourceData, 1, resource.Id, resource.Updated.Time().UTC().Format(time.RFC3339))
@@ -120,18 +118,16 @@ func handleResourceUpdate(app *pocketbase.PocketBase, e *core.ModelEvent) error 
 		return fmt.Errorf("failed to save resource to history table: %w", saveErr)
 	}
 
-	searchParams := getSearchParamsForResource(collectionName)
-	results, err := evaluateFHIRPathExpressions(resourceData, searchParams)
+	// Assuming predefined FHIRPath expressions instead of SearchParameters
+	expressions := []string{"Patient.name.given", "Patient.name.family"} // Update these expressions as needed
+
+	results, err := evaluateFHIRPathExpressions(resourceData, expressions)
 	if err != nil {
 		return fmt.Errorf("failed to evaluate FHIRPath expressions: %w", err)
 	}
 
-	for k, v := range results {
-		if v != nil {
-			newResourceVersion.Set(k, v)
-		} else {
-			newResourceVersion.Set(k, nil) // Ensure that optional fields are explicitly set to null if they are empty
-		}
+	for expr, value := range results {
+		newResourceVersion.Set(expr, value)
 	}
 
 	updatedResourceBytes, err := updateResourceJson(resourceData, updatedVersionId, newResourceVersion.Id, newResourceVersion.Updated.Time().UTC().Format(time.RFC3339))
@@ -148,13 +144,6 @@ func handleResourceUpdate(app *pocketbase.PocketBase, e *core.ModelEvent) error 
 	newResourceVersion.Set("versionId", updatedVersionId)
 
 	return nil
-}
-
-func getSearchParamsForResource(resourceType string) []SearchParameter {
-	if params, exists := searchParamsByResourceType[resourceType]; exists {
-		return params
-	}
-	return []SearchParameter{}
 }
 
 func updateResourceJson(resourceData []byte, newVersionId int, id string, lastUpdated string) (updatedResourceBytes []byte, err error) {
@@ -235,15 +224,16 @@ func storeFHIRData(resource *models.Record, resourceData []byte) error {
 
 	containedResource := containedresource.Wrap(unmarshalledResource.(fhir.Resource))
 
-	searchParams := getSearchParamsForResource(resource.Collection().Name)
-	for _, param := range searchParams {
-		value, err := evaluateFHIRPath(containedResource, param.Expression)
+	expressions := []string{"Patient.name.given", "Patient.name.family"} // Update these expressions as needed
+
+	for _, expr := range expressions {
+		value, err := evaluateFHIRPath(containedResource, expr)
 		if err != nil {
-			return fmt.Errorf("failed to evaluate FHIRPath expression %s: %w", param.Expression, err)
+			return fmt.Errorf("failed to evaluate FHIRPath expression %s: %w", expr, err)
 		}
 
 		if len(value) > 0 {
-			resource.Set(param.Code, value[0])
+			resource.Set(expr, value[0])
 		}
 	}
 

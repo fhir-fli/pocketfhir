@@ -61,7 +61,9 @@ var collections = []map[string]interface{}{''';
     searchMap[key]!.forEach((entry) {
       final type = entry['type']!;
       final name = entry['name']!;
-      if (name != '_id' && name != '_content') {
+      if (name != '_id' &&
+          name != '_content' &&
+          (name == 'resource' || name == 'versionId')) {
         goString += entries(name, type);
       }
     });
@@ -131,7 +133,9 @@ String historyClass(String className, List<Map<String, String>> columns) {
   columns.forEach((entry) {
     final name = entry['name']!;
     final type = entry['type']!;
-    if (name != '_id' && name != '_content') {
+    if (name != '_id' &&
+        name != '_content' &&
+        (name == 'resource' || name == 'versionId')) {
       historySchema += entries(name, type);
     }
   });
