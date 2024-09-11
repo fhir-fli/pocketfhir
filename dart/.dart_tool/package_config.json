@@ -39,15 +39,15 @@
     },
     {
       "name": "fhir_primitives",
-      "rootUri": "../../../new_fhir/fhir_primitives",
+      "rootUri": "../../../../fhir_primitives",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
-      "name": "fhir_r5",
-      "rootUri": "../../../new_fhir/fhir_r5",
+      "name": "fhir_r4",
+      "rootUri": "../../../../fhir_r4",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.4"
     },
     {
       "name": "fixnum",
@@ -81,7 +81,7 @@
     },
     {
       "name": "freezed_annotation",
-      "rootUri": "file:///home/grey/.pub-cache/hosted/pub.dev/freezed_annotation-2.4.2",
+      "rootUri": "file:///home/grey/.pub-cache/hosted/pub.dev/freezed_annotation-2.4.4",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -129,7 +129,7 @@
     },
     {
       "name": "http",
-      "rootUri": "file:///home/grey/.pub-cache/hosted/pub.dev/http-1.2.1",
+      "rootUri": "file:///home/grey/.pub-cache/hosted/pub.dev/http-1.2.2",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -159,7 +159,7 @@
     },
     {
       "name": "material_color_utilities",
-      "rootUri": "file:///home/grey/.pub-cache/hosted/pub.dev/material_color_utilities-0.8.0",
+      "rootUri": "file:///home/grey/.pub-cache/hosted/pub.dev/material_color_utilities-0.11.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -327,7 +327,7 @@
     },
     {
       "name": "uuid",
-      "rootUri": "file:///home/grey/.pub-cache/hosted/pub.dev/uuid-4.4.0",
+      "rootUri": "file:///home/grey/.pub-cache/hosted/pub.dev/uuid-4.4.2",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -368,10 +368,10 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2024-07-13T21:06:13.408734Z",
+  "generated": "2024-09-04T17:00:08.317776Z",
   "generator": "pub",
-  "generatorVersion": "3.4.1",
+  "generatorVersion": "3.5.1",
   "flutterRoot": "file:///home/grey/dev/flutter",
-  "flutterVersion": "3.22.1",
+  "flutterVersion": "3.24.1",
   "pubCache": "file:///home/grey/.pub-cache"
 }

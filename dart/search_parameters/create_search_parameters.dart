@@ -1,33 +1,51 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:fhir_r5/fhir_r5.dart';
-
 Future<void> main() async {
-  final searchMap = <String, Map<String, String>>{};
-  final Bundle spBundle = Bundle.fromJsonString(
-      await File('search-parameters.json').readAsString());
+  final searchMap = <String, List<Map<String, String>>>{};
+  final Map<String, dynamic> spBundle =
+      jsonDecode(await File('search-parameters.json').readAsString());
 
-  for (final BundleEntry entry in spBundle.entry ?? <BundleEntry>[]) {
-    final SearchParameter sp = entry.resource as SearchParameter;
-    final name = sp.name;
-    final code = sp.code?.toString();
-    final type = sp.type?.toString();
-    if (name != null && code != null && type != null) {
-      for (final base in sp.base ?? <FhirCode>[]) {
+  for (final Map<String, dynamic> entry
+      in spBundle['entry'] ?? <Map<String, dynamic>>[]) {
+    final Map<String, dynamic>? sp = entry['resource'];
+    final name = sp?['name']?.toString();
+    final code = sp?['code']?.toString();
+    final type = sp?['type']?.toString();
+    final expression = sp?['expression'];
+
+    if (name != null && code != null && type != null && expression != null) {
+      for (final base in sp?['base'] ?? <String>[]) {
         if (searchMap[base.toString()] == null) {
-          searchMap[base.toString()] = <String, String>{};
+          searchMap[base.toString()] = <Map<String, String>>[];
         }
-        searchMap[base.toString()]![name] = type;
+        if (expression.contains('|')) {
+          searchMap[base.toString()]!
+              .add({'name': name, 'type': type, 'expression': ''});
+        } else {
+          searchMap[base.toString()]!
+              .add({'name': name, 'type': type, 'expression': expression});
+        }
       }
     }
   }
-  for (final key in searchMap.keys) {
-    searchMap[key] = {}
-      ..addEntries(searchMap['Resource']!.entries)
-      ..addEntries(searchMap['DomainResource']!.entries)
-      ..addEntries(searchMap[key]!.entries);
-  }
+
+  // for (final key in searchMap.keys) {
+  //   final List<Map<String, String>> resourceEntries =
+  //       searchMap['Resource']!.map((e) {
+  //     if (e['expression']!.startsWith('Resource.')) {
+  //       return {
+  //         'name': e['name']!,
+  //         'type': e['type']!,
+  //         'expression': e['expression']!.replaceFirst('Resource.', '$key.')
+  //       };
+  //     }
+  //     return e;
+  //   }).toList();
+  //   if (key != 'Resource') {
+  //     searchMap[key] = resourceEntries..addAll(searchMap[key]!);
+  //   }
+  // }
 
   searchMap.remove('Resource');
   searchMap.remove('DomainResource');
@@ -40,16 +58,11 @@ var collections = []map[string]interface{}{''';
 
   for (final key in searchMap.keys) {
     goString += mainClass(key);
-    final fieldMap = fhirFieldMap[key];
-    searchMap[key]!.forEach((k, v) {
-      final entry = fieldMap?[k];
-      if (entry?.isList ?? false) {
-        if (v != 'token' && v != 'reference') {
-          print('$key $k $v');
-        }
-      }
-      if (k != '_id' && k != '_content') {
-        goString += entries(k, v);
+    searchMap[key]!.forEach((entry) {
+      final type = entry['type']!;
+      final name = entry['name']!;
+      if (name != '_id' && name != '_content') {
+        goString += entries(name, type);
       }
     });
     goString += '''    },
@@ -61,28 +74,38 @@ var collections = []map[string]interface{}{''';
 
   // Write to collections.go instead of search_parameters_map.go
   await File('collections.go').writeAsString(goString);
+
+  // Generate search_parameters.go file
+  // await generateSearchParametersFile(searchMap);
 }
 
 String entries(String key, String value) {
+  if (['id', 'created', 'updated'].contains(key)) {
+    return '';
+  }
+  key = key.replaceAll('-', '_');
+  if (key == 'resource') {
+    key = 'resourceSearch';
+  }
   switch (value) {
     case 'number':
-      return '      {"name": "$key", "type": "REAL"},\n';
+      return '      {"name": "$key", "type": "number", "required": false},\n';
     case 'date':
-      return '      {"name": "$key", "type": "TEXT"},\n';
+      return '      {"name": "$key", "type": "date", "required": false},\n';
     case 'string':
-      return '      {"name": "$key", "type": "TEXT"},\n';
+      return '      {"name": "$key", "type": "text", "required": false},\n';
     case 'token':
-      return '      {"name": "$key", "type": "JSON"},\n';
+      return '      {"name": "$key", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}, "required": false},\n';
     case 'reference':
-      return '      {"name": "$key", "type": "JSON"},\n';
+      return '      {"name": "$key", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}, "required": false},\n';
     case 'composite':
-      return '      {"name": "$key", "type": "TEXT"},\n';
+      return '      {"name": "$key", "type": "text", "required": false},\n';
     case 'quantity':
-      return '      {"name": "$key", "type": "JSON"},\n';
+      return '      {"name": "$key", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}, "required": false},\n';
     case 'uri':
-      return '      {"name": "$key", "type": "TEXT"},\n';
+      return '      {"name": "$key", "type": "url", "required": false},\n';
     case 'special':
-      return '      {"name": "$key", "type": "TEXT"},\n';
+      return '      {"name": "$key", "type": "text", "required": false},\n';
     default:
       return '';
   }
@@ -92,24 +115,24 @@ String mainClass(String className) => '''\n
   {
     "name": "$className",
     "schema": []map[string]interface{}{
-      {"name": "id", "type": "TEXT"},
-      {"name": "versionId", "type": "REAL"},
-      {"name": "resource", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}},
+      {"name": "versionId", "type": "number", "required": true},
+      {"name": "resource", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}, "required": true},
 ''';
 
-String historyClass(String className, Map<String, String> columns) {
+String historyClass(String className, List<Map<String, String>> columns) {
   String historySchema = '''\n
   {
     "name": "${className}History",
     "schema": []map[string]interface{}{
-      {"name": "fhirId", "type": "TEXT"},
-      {"name": "versionId", "type": "REAL"},
-      {"name": "resource", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}},
+      {"name": "versionId", "type": "number", "required": true},
+      {"name": "resource", "type": "json", "options": map[string]interface{}{"maxSize": 5242880}, "required": true},
 ''';
 
-  columns.forEach((k, v) {
-    if (k != '_id' && k != '_content') {
-      historySchema += entries(k, v);
+  columns.forEach((entry) {
+    final name = entry['name']!;
+    final type = entry['type']!;
+    if (name != '_id' && name != '_content') {
+      historySchema += entries(name, type);
     }
   });
 
@@ -117,6 +140,42 @@ String historyClass(String className, Map<String, String> columns) {
   },''';
 
   return historySchema;
+}
+
+Future<void> generateSearchParametersFile(
+    Map<String, List<Map<String, String>>> searchMap) async {
+  String searchParamsGoString = '''// search_parameters.go
+package main
+
+type SearchParameter struct {
+	Code       string
+	Expression string
+}
+
+var searchParamsByResourceType = map[string][]SearchParameter{''';
+
+  searchMap.forEach((resourceType, params) {
+    searchParamsGoString += '''
+    "$resourceType": {''';
+    params.forEach((entry) {
+      final name = entry['name']!;
+      final expression = entry['expression']!;
+      searchParamsGoString += '''
+      {
+        Code: "$name",
+        Expression: "$expression",
+      },''';
+    });
+    searchParamsGoString += '''
+    },''';
+  });
+
+  searchParamsGoString += '''
+}
+''';
+
+  // Write to search_parameters.go
+  await File('search_parameters.go').writeAsString(searchParamsGoString);
 }
 
 JsonEncoder encoder = JsonEncoder.withIndent('  ');
