@@ -83,8 +83,18 @@ func loadFhirResourcesFromNDJSON(app *pocketbase.PocketBase, filePath string, co
 			continue
 		}
 
+		// Ensure the FHIR resource contains an "id" field
+		resourceID, ok := resource["id"].(string)
+		if !ok || resourceID == "" {
+			log.Printf("Resource does not contain a valid ID in '%s', skipping...", filePath)
+			continue
+		}
+
 		// Create a new record for the resource in the specified collection
 		record := models.NewRecord(collection)
+
+		// Set the resource ID explicitly (this overrides PocketBase's random ID generation)
+		record.Set("id", resourceID)
 
 		// Set necessary fields (like resourceType and the resource itself)
 		record.Set("resourceType", resource["resourceType"])
@@ -96,7 +106,7 @@ func loadFhirResourcesFromNDJSON(app *pocketbase.PocketBase, filePath string, co
 			continue
 		}
 
-		log.Printf("Successfully loaded resource into collection '%s' from NDJSON file '%s'", collectionName, filePath)
+		log.Printf("Successfully loaded resource with ID '%s' into collection '%s' from NDJSON file '%s'", resourceID, collectionName, filePath)
 	}
 
 	return nil

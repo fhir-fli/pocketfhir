@@ -15,6 +15,9 @@ func main() {
 	// Register hooks from hooks.go
 	registerHooks(app)
 
+	// Register your FHIR routes
+	registerFHIRRoutes(app)
+
 	// Initialize collections only if necessary
 	if err := initializeCollections(app); err != nil {
 		log.Fatalf("Failed to initialize collections: %v", err)

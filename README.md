@@ -71,3 +71,8 @@ pocketfhir-caddy | └─ Admin UI: http://0.0.0.0:8090/_/
 - Set secrets: ```$ flyctl secrets set PB_ENCRYPTION_KEY=y5E69SptuHgUzspVNipzjl9ZmsKVPkIH --app pocketfhir```
 - Deploy: ```$ flyctl deploy --app pocketfhir```
 - May need to deploy a second time: ```$ flyctl deploy --app pocketfhir --wait-timeout 300```
+
+## FHIR Definitions
+- put all ```.json``` files in this directory from the FHIR downloads except for the main FHIR json schema itself
+- in the fhir_definitions directory is a dart file
+- cd into fhir_definitions and run the dart file, this will organize all of the downloads into ```.ndjson``` files, by resourceType, which are included in PocketFHIR the first time it is run
