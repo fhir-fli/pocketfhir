@@ -20,6 +20,11 @@ Future<void> main() async {
         if (entry['resource'] != null) {
           final resource = entry['resource'];
           if (maps.keys.contains(resource['resourceType'])) {
+            String id = resource['id'].replaceAll(RegExp(r'[^a-zA-Z0-9]'), '');
+            if (id.length > 15) {
+              id = id.substring(0, 15);
+            }
+            resource['id'] = id;
             maps[resource['resourceType']]!.add(resource);
           } else {
             print(resource['resourceType']);
