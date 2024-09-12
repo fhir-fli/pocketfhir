@@ -15,9 +15,65 @@ import (
 
 func initializeCollections(app *pocketbase.PocketBase) error {
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
-		return createInitialCollections(app)
+		// Step 1: Create necessary collections
+		if err := createInitialCollections(app); err != nil {
+			log.Printf("Failed to create initial collections: %v", err)
+			return err
+		}
+
+		// Step 2: Check if FHIR spec has been initialized
+		if !isFhirSpecInitialized(app) {
+			// Load the FHIR spec into the database
+			if err := loadFhirSpec(app); err != nil {
+				log.Printf("Failed to load FHIR spec: %v", err)
+				return err
+			}
+
+			// Set the FHIR spec as initialized
+			setFhirSpecInitialized(app)
+		} else {
+			log.Println("FHIR spec already initialized.")
+		}
+
+		return nil
 	})
 	return nil
+}
+
+// Check if the FHIR spec is already initialized
+func isFhirSpecInitialized(app *pocketbase.PocketBase) bool {
+	metadataCollection, err := app.Dao().FindCollectionByNameOrId("metadata")
+	if err != nil {
+		log.Printf("Metadata collection not found: %v", err)
+		return false
+	}
+
+	// Check for a record indicating FHIR spec initialization
+	record, err := app.Dao().FindFirstRecordByData(metadataCollection.Id, "fhirSpecInitialized", true)
+	if err != nil || record == nil {
+		return false
+	}
+
+	return true
+}
+
+// Mark the FHIR spec as initialized in the "metadata" collection
+func setFhirSpecInitialized(app *pocketbase.PocketBase) {
+	metadataCollection, err := app.Dao().FindCollectionByNameOrId("metadata")
+	if err != nil {
+		log.Printf("Metadata collection not found: %v", err)
+		return
+	}
+
+	// Create a new record in the metadata collection
+	record := models.NewRecord(metadataCollection)
+	record.Set("fhirSpecInitialized", true)
+
+	if err := app.Dao().SaveRecord(record); err != nil {
+		log.Printf("Failed to save metadata record: %v", err)
+	} else {
+		log.Println("FHIR spec initialization marked as complete.")
+	}
 }
 
 func createInitialCollections(app *pocketbase.PocketBase) error {
