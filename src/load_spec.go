@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -14,76 +13,78 @@ import (
 	"github.com/pocketbase/pocketbase/tools/types"
 )
 
-// Load the FHIR spec (e.g., StructureDefinitions, CapabilityStatements) from NDJSON files
-func loadFhirSpec(app *pocketbase.PocketBase) error {
-	log.Println("Loading FHIR resources...")
-
-	// Define paths to the NDJSON files
-	ndjsonFiles := []string{
-		"./fhir_definitions/capabilitystatement.ndjson",
-		"./fhir_definitions/codesystem.ndjson",
-		"./fhir_definitions/compartmentdefinition.ndjson",
-		"./fhir_definitions/conceptmap.ndjson",
-		"./fhir_definitions/operationdefinition.ndjson",
-		"./fhir_definitions/searchparameter.ndjson",
-		"./fhir_definitions/structuredefinition.ndjson",
-		"./fhir_definitions/valueset.ndjson",
+// Load the FHIR spec (e.g., StructureDefinitions, CapabilityStatements) from JSON files only once
+func loadFhirSpecOnce(app *pocketbase.PocketBase) error {
+	// Check if the FHIR spec has already been loaded
+	if isFhirSpecInitialized(app) {
+		log.Println("FHIR resources already initialized, skipping.")
+		return nil
 	}
 
-	// Iterate over NDJSON file paths and load resources into the appropriate collections
-	for _, ndjsonFilePath := range ndjsonFiles {
-		collectionName := extractCollectionNameFromFile(ndjsonFilePath)
-		if err := loadFhirResourcesFromNDJSON(app, ndjsonFilePath, collectionName); err != nil {
-			return fmt.Errorf("failed to load resources from %s: %v", ndjsonFilePath, err)
+	log.Println("Loading FHIR resources for the first time...")
+
+	// Define paths to the JSON files
+	jsonFiles := []string{
+		"./assets/fhir_spec/capabilitystatement.json",
+		"./assets/fhir_spec/codesystem.json",
+		"./assets/fhir_spec/compartmentdefinition.json",
+		"./assets/fhir_spec/conceptmap.json",
+		"./assets/fhir_spec/operationdefinition.json",
+		"./assets/fhir_spec/searchparameter.json",
+		"./assets/fhir_spec/structuredefinition.json",
+		"./assets/fhir_spec/valueset.json",
+	}
+
+	// Iterate over JSON file paths and load resources into the appropriate collections
+	for _, jsonFilePath := range jsonFiles {
+		collectionName := extractCollectionNameFromFile(jsonFilePath)
+		if err := loadFhirResourcesFromJSON(app, jsonFilePath, collectionName); err != nil {
+			return fmt.Errorf("failed to load resources from %s: %v", jsonFilePath, err)
 		}
 	}
+
+	// Mark FHIR spec as initialized
+	setFhirSpecInitialized(app)
 
 	log.Println("FHIR resources loaded successfully.")
 	return nil
 }
 
-// Extract the collection name from the NDJSON filename (e.g., 'codesystem.ndjson' -> 'codesystem')
-func extractCollectionNameFromFile(filePath string) string {
-	fileName := filepath.Base(filePath)
-	return strings.TrimSuffix(fileName, ".ndjson")
-}
-
-// Load FHIR resources from an NDJSON file and insert them into the specified collection
-func loadFhirResourcesFromNDJSON(app *pocketbase.PocketBase, filePath string, collectionName string) error {
+// Load FHIR resources from a JSON file and insert them into the specified collection
+func loadFhirResourcesFromJSON(app *pocketbase.PocketBase, filePath string, collectionName string) error {
 	// Check if the collection exists
 	collection, err := app.Dao().FindCollectionByNameOrId(collectionName)
 	if err != nil {
 		return fmt.Errorf("collection '%s' not found: %v", collectionName, err)
 	}
 
-	// Open the NDJSON file
+	// Open the JSON file
 	file, err := os.Open(filePath)
 	if err != nil {
-		return fmt.Errorf("failed to open NDJSON file '%s': %v", filePath, err)
+		return fmt.Errorf("failed to open JSON file '%s': %v", filePath, err)
 	}
 	defer file.Close()
 
-	// Use bufio.Reader with a larger buffer
-	reader := bufio.NewReader(file)
+	// Parse the JSON file
+	var fileData map[string]interface{}
+	if err := json.NewDecoder(file).Decode(&fileData); err != nil {
+		return fmt.Errorf("failed to decode JSON file '%s': %v", filePath, err)
+	}
 
-	for {
-		// Read each line (which is a JSON object in NDJSON format)
-		line, err := reader.ReadString('\n')
-		if err != nil {
-			if err.Error() == "EOF" {
-				break // End of file
-			}
-			return fmt.Errorf("error reading NDJSON file '%s': %v", filePath, err)
-		}
+	// Process each resource entry
+	entries, ok := fileData["entry"].([]interface{})
+	if !ok {
+		return fmt.Errorf("no 'entry' array found in JSON file '%s'", filePath)
+	}
 
-		// Parse each line as a JSON object (FHIR resource)
-		var resource map[string]interface{}
-		if err := json.Unmarshal([]byte(line), &resource); err != nil {
-			log.Printf("Failed to parse JSON from NDJSON file '%s': %v", filePath, err)
+	for _, entry := range entries {
+		resource, ok := entry.(map[string]interface{})["resource"].(map[string]interface{})
+		if !ok {
+			log.Printf("Invalid resource format in JSON file '%s', skipping entry.", filePath)
 			continue
 		}
 
-		// Ensure the FHIR resource contains an "id" field
+		// Ensure the resource contains an "id" field
 		resourceID, ok := resource["id"].(string)
 		if !ok || resourceID == "" {
 			log.Printf("Resource does not contain a valid ID in '%s', skipping...", filePath)
@@ -98,16 +99,23 @@ func loadFhirResourcesFromNDJSON(app *pocketbase.PocketBase, filePath string, co
 
 		// Set necessary fields (like resourceType and the resource itself)
 		record.Set("resourceType", resource["resourceType"])
-		record.Set("resource", types.JsonRaw([]byte(line)))
+		resourceJSON, _ := json.Marshal(resource)
+		record.Set("resource", types.JsonRaw(resourceJSON))
 
 		// Save the record in the collection
 		if err := app.Dao().SaveRecord(record); err != nil {
-			log.Printf("Failed to save resource from NDJSON line in '%s': %v", filePath, err)
+			log.Printf("Failed to save resource with ID '%s' from JSON file '%s': %v", resourceID, filePath, err)
 			continue
 		}
 
-		log.Printf("Successfully loaded resource with ID '%s' into collection '%s' from NDJSON file '%s'", resourceID, collectionName, filePath)
+		log.Printf("Successfully loaded resource with ID '%s' into collection '%s' from JSON file '%s'", resourceID, collectionName, filePath)
 	}
 
 	return nil
+}
+
+// Extract the collection name from the JSON filename (e.g., 'codesystem.json' -> 'codesystem')
+func extractCollectionNameFromFile(filePath string) string {
+	fileName := filepath.Base(filePath)
+	return strings.TrimSuffix(fileName, ".json")
 }

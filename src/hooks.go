@@ -8,18 +8,16 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 )
 
-// registerHooks registers any custom hooks for the application.
+// Register custom hooks
 func registerHooks(app *pocketbase.PocketBase) {
 	// Register middleware to log each request
 	registerRequestLoggingHook(app)
 
 	// Setup versioning and history hooks
 	setupHooks(app)
-
-	// Add more hooks as needed
 }
 
-// registerRequestLoggingHook logs each request to the server
+// Log each request
 func registerRequestLoggingHook(app *pocketbase.PocketBase) {
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
 		e.Router.Use(func(next echo.HandlerFunc) echo.HandlerFunc {

@@ -9,7 +9,7 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/forms"
 	"github.com/pocketbase/pocketbase/models"
-	"github.com/pocketbase/pocketbase/models/schema" // Import schema for SchemaField
+	"github.com/pocketbase/pocketbase/models/schema"
 	"github.com/pocketbase/pocketbase/tools/types"
 )
 
@@ -24,7 +24,7 @@ func initializeCollections(app *pocketbase.PocketBase) error {
 		// Step 2: Check if FHIR spec has been initialized
 		if !isFhirSpecInitialized(app) {
 			// Load the FHIR spec into the database
-			if err := loadFhirSpec(app); err != nil {
+			if err := loadFhirSpecOnce(app); err != nil {
 				log.Printf("Failed to load FHIR spec: %v", err)
 				return err
 			}
@@ -38,42 +38,6 @@ func initializeCollections(app *pocketbase.PocketBase) error {
 		return nil
 	})
 	return nil
-}
-
-// Check if the FHIR spec is already initialized
-func isFhirSpecInitialized(app *pocketbase.PocketBase) bool {
-	metadataCollection, err := app.Dao().FindCollectionByNameOrId("metadata")
-	if err != nil {
-		log.Printf("Metadata collection not found: %v", err)
-		return false
-	}
-
-	// Check for a record indicating FHIR spec initialization
-	record, err := app.Dao().FindFirstRecordByData(metadataCollection.Id, "fhirSpecInitialized", true)
-	if err != nil || record == nil {
-		return false
-	}
-
-	return true
-}
-
-// Mark the FHIR spec as initialized in the "metadata" collection
-func setFhirSpecInitialized(app *pocketbase.PocketBase) {
-	metadataCollection, err := app.Dao().FindCollectionByNameOrId("metadata")
-	if err != nil {
-		log.Printf("Metadata collection not found: %v", err)
-		return
-	}
-
-	// Create a new record in the metadata collection
-	record := models.NewRecord(metadataCollection)
-	record.Set("fhirSpecInitialized", true)
-
-	if err := app.Dao().SaveRecord(record); err != nil {
-		log.Printf("Failed to save metadata record: %v", err)
-	} else {
-		log.Println("FHIR spec initialization marked as complete.")
-	}
 }
 
 func createInitialCollections(app *pocketbase.PocketBase) error {

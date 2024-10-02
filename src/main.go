@@ -15,7 +15,7 @@ func main() {
 	// Register hooks from hooks.go
 	registerHooks(app)
 
-	// Register your FHIR routes
+	// Register FHIR routes
 	registerFHIRRoutes(app)
 
 	// Initialize collections only if necessary

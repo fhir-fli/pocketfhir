@@ -43,7 +43,7 @@ func standard(app *pocketbase.PocketBase) {
 		&migrationsDir,
 		"migrationsDir",
 		"",
-		"the directory with the user defined migrations",
+		"the directory with the user-defined migrations",
 	)
 
 	var automigrate bool
@@ -67,7 +67,7 @@ func standard(app *pocketbase.PocketBase) {
 		&indexFallback,
 		"indexFallback",
 		true,
-		"fallback the request to index.html on missing static path (eg. when pretty urls are used with SPA)",
+		"fallback to index.html on missing static path",
 	)
 
 	var queryTimeout int
