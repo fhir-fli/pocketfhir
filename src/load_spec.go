@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/pocketbase/pocketbase"
@@ -13,7 +12,7 @@ import (
 	"github.com/pocketbase/pocketbase/tools/types"
 )
 
-// Load the FHIR spec (e.g., StructureDefinitions, CapabilityStatements) from JSON Bundle files only once
+// Load the FHIR spec (e.g., StructureDefinitions, CapabilityStatements) from JSON files only once
 func loadFhirSpecOnce(app *pocketbase.PocketBase) error {
 	// Check if the FHIR spec has already been loaded
 	if isFhirSpecInitialized(app) {
@@ -25,20 +24,19 @@ func loadFhirSpecOnce(app *pocketbase.PocketBase) error {
 
 	// Define paths to the JSON files
 	jsonFiles := []string{
-		"./assets/fhir_spec/conceptmaps.json",
-		"./assets/fhir_spec/dataelements.json",
-		"./assets/fhir_spec/extension-definitions.json",
-		"./assets/fhir_spec/profiles-others.json",
-		"./assets/fhir_spec/profiles-resources.json",
-		"./assets/fhir_spec/profiles-types.json",
-		"./assets/fhir_spec/search-parameters.json",
-		"./assets/fhir_spec/valuesets.json",
+		"./assets/fhir_spec/capabilitystatement.json",
+		"./assets/fhir_spec/codesystem.json",
+		"./assets/fhir_spec/compartmentdefinition.json",
+		"./assets/fhir_spec/conceptmap.json",
+		"./assets/fhir_spec/operationdefinition.json",
+		"./assets/fhir_spec/searchparameter.json",
+		"./assets/fhir_spec/structuredefinition.json",
+		"./assets/fhir_spec/valueset.json",
 	}
 
 	// Iterate over JSON file paths and load resources into the appropriate collections
 	for _, jsonFilePath := range jsonFiles {
-		collectionName := extractCollectionNameFromFile(jsonFilePath)
-		if err := loadFhirResourcesFromJSON(app, jsonFilePath, collectionName); err != nil {
+		if err := loadFhirResourcesFromJSON(app, jsonFilePath); err != nil {
 			return fmt.Errorf("failed to load resources from %s: %v", jsonFilePath, err)
 		}
 	}
@@ -50,14 +48,8 @@ func loadFhirSpecOnce(app *pocketbase.PocketBase) error {
 	return nil
 }
 
-// Load FHIR resources from a JSON Bundle file and insert them into the specified collection
-func loadFhirResourcesFromJSON(app *pocketbase.PocketBase, filePath string, collectionName string) error {
-	// Check if the collection exists
-	collection, err := app.Dao().FindCollectionByNameOrId(collectionName)
-	if err != nil {
-		return fmt.Errorf("collection '%s' not found: %v", collectionName, err)
-	}
-
+// Load FHIR resources from a JSON file and insert them into the corresponding collections
+func loadFhirResourcesFromJSON(app *pocketbase.PocketBase, filePath string) error {
 	// Open the JSON file
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -71,57 +63,55 @@ func loadFhirResourcesFromJSON(app *pocketbase.PocketBase, filePath string, coll
 		return fmt.Errorf("failed to decode JSON file '%s': %v", filePath, err)
 	}
 
-	// Ensure the file is a FHIR Bundle
-	if fileData["resourceType"] != "Bundle" {
-		return fmt.Errorf("file '%s' is not a valid FHIR Bundle", filePath)
-	}
-
 	// Process each resource entry in the Bundle
 	entries, ok := fileData["entry"].([]interface{})
 	if !ok {
-		return fmt.Errorf("no 'entry' array found in Bundle file '%s'", filePath)
+		return fmt.Errorf("no 'entry' array found in JSON file '%s'", filePath)
 	}
 
 	for _, entry := range entries {
-		// Extract the 'resource' field from each entry in the Bundle
 		resource, ok := entry.(map[string]interface{})["resource"].(map[string]interface{})
 		if !ok {
-			log.Printf("Invalid resource format in Bundle file '%s', skipping entry.", filePath)
+			log.Printf("Invalid resource format in JSON file '%s', skipping entry.", filePath)
 			continue
 		}
+
+		// Determine the collection name based on the resourceType (converted to lowercase)
+		resourceType, ok := resource["resourceType"].(string)
+		if !ok || resourceType == "" {
+			log.Printf("Resource missing 'resourceType', skipping entry.")
+			continue
+		}
+		collectionName := strings.ToLower(resourceType)
 
 		// Ensure the resource contains an "id" field
 		resourceID, ok := resource["id"].(string)
 		if !ok || resourceID == "" {
-			log.Printf("Resource does not contain a valid ID in '%s', skipping...", filePath)
+			log.Printf("Resource does not contain a valid ID, skipping entry.")
 			continue
 		}
 
-		// Create a new record for the resource in the specified collection
+		// Check if the collection exists
+		collection, err := app.Dao().FindCollectionByNameOrId(collectionName)
+		if err != nil {
+			log.Printf("Collection '%s' not found for resourceType '%s', skipping entry.", collectionName, resourceType)
+			continue
+		}
+
+		// Create a new record for the resource in the corresponding collection
 		record := models.NewRecord(collection)
-
-		// Set the resource ID explicitly (this overrides PocketBase's random ID generation)
-		record.Set("id", resourceID)
-
-		// Set necessary fields (like resourceType and the resource itself)
-		record.Set("resourceType", resource["resourceType"])
+		record.Set("id", resourceID) // Set the resource ID
 		resourceJSON, _ := json.Marshal(resource)
-		record.Set("resource", types.JsonRaw(resourceJSON))
+		record.Set("resource", types.JsonRaw(resourceJSON)) // Set the resource JSON
 
 		// Save the record in the collection
 		if err := app.Dao().SaveRecord(record); err != nil {
-			log.Printf("Failed to save resource with ID '%s' from Bundle file '%s': %v", resourceID, filePath, err)
+			log.Printf("Failed to save resource with ID '%s' to collection '%s': %v", resourceID, collectionName, err)
 			continue
 		}
 
-		log.Printf("Successfully loaded resource with ID '%s' into collection '%s' from Bundle file '%s'", resourceID, collectionName, filePath)
+		log.Printf("Successfully loaded resource with ID '%s' into collection '%s' from JSON file '%s'", resourceID, collectionName, filePath)
 	}
 
 	return nil
-}
-
-// Extract the collection name from the JSON filename (e.g., 'codesystem.json' -> 'codesystem')
-func extractCollectionNameFromFile(filePath string) string {
-	fileName := filepath.Base(filePath)
-	return strings.TrimSuffix(fileName, ".json")
 }
