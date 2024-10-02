@@ -16,7 +16,10 @@ go mod tidy
 
 # Build the PocketFHIR server for desktop and place the executable in the root directory
 echo "Building PocketFHIR for regular platform..."
-CGO_ENABLED=0 go build -o pocketfhir_server ./src
+if ! CGO_ENABLED=0 go build -o pocketfhir_server ./main.go; then
+    echo "Build failed!"
+    exit 1
+fi
 echo "Regular PocketFHIR build completed."
 
 # Start the PocketFHIR server in the background (for the regular platform)
