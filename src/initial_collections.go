@@ -35,6 +35,12 @@ func initializeCollections(app *pocketbase.PocketBase) error {
 			log.Println("FHIR spec already initialized.")
 		}
 
+		// Step 3: Load MIMIC-IV dataset (optional step)
+		if err := loadMimicIVData(app); err != nil {
+			log.Printf("Failed to load MIMIC-IV dataset: %v", err)
+			return err
+		}
+
 		return nil
 	})
 	return nil
