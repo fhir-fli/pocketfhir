@@ -25,14 +25,14 @@ func loadFhirSpecOnce(app *pocketbase.PocketBase) error {
 
 	// Define paths to the JSON files
 	jsonFiles := []string{
-		"./assets/fhir_spec/capabilitystatement.json",
-		"./assets/fhir_spec/codesystem.json",
-		"./assets/fhir_spec/compartmentdefinition.json",
-		"./assets/fhir_spec/conceptmap.json",
-		"./assets/fhir_spec/operationdefinition.json",
-		"./assets/fhir_spec/searchparameter.json",
-		"./assets/fhir_spec/structuredefinition.json",
-		"./assets/fhir_spec/valueset.json",
+		"./assets/fhir_spec/conceptmaps.json",
+		"./assets/fhir_spec/dataelements.json",
+		"./assets/fhir_spec/extension-definitions.json",
+		"./assets/fhir_spec/profiles-others.json",
+		"./assets/fhir_spec/profiles-resources.json",
+		"./assets/fhir_spec/profiles-types.json",
+		"./assets/fhir_spec/search-parameters.json",
+		"./assets/fhir_spec/valuesets.json",
 	}
 
 	// Iterate over JSON file paths and load resources into the appropriate collections
