@@ -13,7 +13,7 @@ import (
 	"github.com/pocketbase/pocketbase/tools/types"
 )
 
-// Load the FHIR spec (e.g., StructureDefinitions, CapabilityStatements) from JSON files only once
+// Load the FHIR spec (e.g., StructureDefinitions, CapabilityStatements) from JSON Bundle files only once
 func loadFhirSpecOnce(app *pocketbase.PocketBase) error {
 	// Check if the FHIR spec has already been loaded
 	if isFhirSpecInitialized(app) {
@@ -50,7 +50,7 @@ func loadFhirSpecOnce(app *pocketbase.PocketBase) error {
 	return nil
 }
 
-// Load FHIR resources from a JSON file and insert them into the specified collection
+// Load FHIR resources from a JSON Bundle file and insert them into the specified collection
 func loadFhirResourcesFromJSON(app *pocketbase.PocketBase, filePath string, collectionName string) error {
 	// Check if the collection exists
 	collection, err := app.Dao().FindCollectionByNameOrId(collectionName)
@@ -71,16 +71,22 @@ func loadFhirResourcesFromJSON(app *pocketbase.PocketBase, filePath string, coll
 		return fmt.Errorf("failed to decode JSON file '%s': %v", filePath, err)
 	}
 
-	// Process each resource entry
+	// Ensure the file is a FHIR Bundle
+	if fileData["resourceType"] != "Bundle" {
+		return fmt.Errorf("file '%s' is not a valid FHIR Bundle", filePath)
+	}
+
+	// Process each resource entry in the Bundle
 	entries, ok := fileData["entry"].([]interface{})
 	if !ok {
-		return fmt.Errorf("no 'entry' array found in JSON file '%s'", filePath)
+		return fmt.Errorf("no 'entry' array found in Bundle file '%s'", filePath)
 	}
 
 	for _, entry := range entries {
+		// Extract the 'resource' field from each entry in the Bundle
 		resource, ok := entry.(map[string]interface{})["resource"].(map[string]interface{})
 		if !ok {
-			log.Printf("Invalid resource format in JSON file '%s', skipping entry.", filePath)
+			log.Printf("Invalid resource format in Bundle file '%s', skipping entry.", filePath)
 			continue
 		}
 
@@ -104,11 +110,11 @@ func loadFhirResourcesFromJSON(app *pocketbase.PocketBase, filePath string, coll
 
 		// Save the record in the collection
 		if err := app.Dao().SaveRecord(record); err != nil {
-			log.Printf("Failed to save resource with ID '%s' from JSON file '%s': %v", resourceID, filePath, err)
+			log.Printf("Failed to save resource with ID '%s' from Bundle file '%s': %v", resourceID, filePath, err)
 			continue
 		}
 
-		log.Printf("Successfully loaded resource with ID '%s' into collection '%s' from JSON file '%s'", resourceID, collectionName, filePath)
+		log.Printf("Successfully loaded resource with ID '%s' into collection '%s' from Bundle file '%s'", resourceID, collectionName, filePath)
 	}
 
 	return nil
