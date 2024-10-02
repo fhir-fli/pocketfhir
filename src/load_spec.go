@@ -137,12 +137,9 @@ func loadMimicIVData(app *pocketbase.PocketBase) error {
 			continue // Skip non-NDJSON files
 		}
 
-		// Get the collection name from the file name (minus the .ndjson extension)
-		collectionName := strings.TrimSuffix(file.Name(), ".ndjson")
-
 		// Process the NDJSON file and load the resources
 		ndjsonFilePath := filepath.Join(mimicIVDir, file.Name())
-		if err := loadNDJSONFile(app, ndjsonFilePath, collectionName); err != nil {
+		if err := loadNDJSONFile(app, ndjsonFilePath); err != nil {
 			return fmt.Errorf("failed to load resources from %s: %v", ndjsonFilePath, err)
 		}
 	}
@@ -151,14 +148,8 @@ func loadMimicIVData(app *pocketbase.PocketBase) error {
 	return nil
 }
 
-// Load resources from a specific NDJSON file and insert them into the specified collection
-func loadNDJSONFile(app *pocketbase.PocketBase, filePath string, collectionName string) error {
-	// Check if the collection exists
-	collection, err := app.Dao().FindCollectionByNameOrId(collectionName)
-	if err != nil {
-		return fmt.Errorf("collection '%s' not found: %v", collectionName, err)
-	}
-
+// Load resources from a specific NDJSON file and insert them into the appropriate collection
+func loadNDJSONFile(app *pocketbase.PocketBase, filePath string) error {
 	// Open the NDJSON file
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -175,6 +166,23 @@ func loadNDJSONFile(app *pocketbase.PocketBase, filePath string, collectionName 
 		var resource map[string]interface{}
 		if err := json.Unmarshal([]byte(line), &resource); err != nil {
 			log.Printf("Failed to parse JSON line in '%s': %v", filePath, err)
+			continue
+		}
+
+		// Ensure the resource contains a "resourceType" field
+		resourceType, ok := resource["resourceType"].(string)
+		if !ok || resourceType == "" {
+			log.Printf("Resource does not contain a valid 'resourceType' in '%s', skipping entry.", filePath)
+			continue
+		}
+
+		// Convert the resourceType to lowercase to determine the collection name
+		collectionName := strings.ToLower(resourceType)
+
+		// Check if the collection exists
+		collection, err := app.Dao().FindCollectionByNameOrId(collectionName)
+		if err != nil {
+			log.Printf("Collection '%s' not found for resourceType '%s', skipping entry.", collectionName, resourceType)
 			continue
 		}
 
