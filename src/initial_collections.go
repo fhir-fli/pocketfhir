@@ -36,10 +36,10 @@ func initializeCollections(app *pocketbase.PocketBase) error {
 		}
 
 		// Step 3: Load MIMIC-IV dataset (optional step)
-		if err := loadMimicIVData(app); err != nil {
-			log.Printf("Failed to load MIMIC-IV dataset: %v", err)
-			return err
-		}
+		// if err := loadMimicIVData(app); err != nil {
+		// 	log.Printf("Failed to load MIMIC-IV dataset: %v", err)
+		// 	return err
+		// }
 
 		return nil
 	})

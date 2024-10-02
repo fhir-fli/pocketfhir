@@ -14,10 +14,12 @@ fi
 # Tidy up Go modules in the root directory
 go mod tidy
 
-# Build the PocketBase server and place the executable in the root directory
+# Build the PocketFHIR server for desktop and place the executable in the root directory
+echo "Building PocketFHIR for regular platform..."
 CGO_ENABLED=0 go build -o pocketfhir ./src
+echo "Regular PocketFHIR build completed."
 
-# Start the PocketBase server in the background
+# Start the PocketFHIR server in the background (for the regular platform)
 ./pocketfhir serve
 
-echo "PocketFHIR build completed successfully."
+echo "PocketFHIR server started."
