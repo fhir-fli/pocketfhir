@@ -1,6 +1,6 @@
 package main
 
-import "pocketfhir/pocketfhir"
+import "github.com/fhir-fli/pocketfhir/pocketfhir"
 
 func main() {
 	pocketfhir.RunServer()
