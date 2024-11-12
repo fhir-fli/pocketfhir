@@ -36,7 +36,7 @@ packages:
   fhir_r4:
     dependency: "direct main"
     description:
-      path: "../../fhir/fhir_r4"
+      path: "../../../fhir_r4"
       relative: true
     source: path
     version: "0.3.0-1"
