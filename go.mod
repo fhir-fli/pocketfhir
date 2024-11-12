@@ -1,4 +1,4 @@
-module pocketfhir
+module github.com/fhir-fli/pocketfhir
 
 go 1.22.2
 
