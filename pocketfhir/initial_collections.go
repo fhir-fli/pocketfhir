@@ -24,13 +24,13 @@ func initializeCollections(app *pocketbase.PocketBase) error {
 		// Step 2: Check if FHIR spec has been initialized
 		if !isFhirSpecInitialized(app) {
 			// Load the FHIR spec into the database
-			if err := loadFhirSpecOnce(app); err != nil {
-				log.Printf("Failed to load FHIR spec: %v", err)
-				return err
-			}
+			// if err := loadFhirSpecOnce(app); err != nil {
+			// 	log.Printf("Failed to load FHIR spec: %v", err)
+			// 	return err
+			// }
 
 			// Set the FHIR spec as initialized
-			setFhirSpecInitialized(app)
+			// setFhirSpecInitialized(app)
 		} else {
 			log.Println("FHIR spec already initialized.")
 		}
