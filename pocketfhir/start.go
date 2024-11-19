@@ -6,9 +6,11 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+
+	_ "github.com/caddyserver/caddy/v2/modules/standard"
 )
 
-func StartPocketFHIR(dataDir string, hostname string, port string, getApiLogs bool, caddyPort string, caddyStoragePath string) {
+func StartPocketFHIR(dataDir string, hostname string, port string, getApiLogs bool, caddyPort string, caddyStoragePath string, certFile string, keyFile string) {
 	// Set environment variables for PocketBase configuration
 	log.Println("[DEBUG] Setting environment variables...")
 	if err := os.Setenv("POCKETBASE_DATA_DIR", dataDir); err != nil {
@@ -28,8 +30,8 @@ func StartPocketFHIR(dataDir string, hostname string, port string, getApiLogs bo
 
 	// Start the Caddy server in a separate goroutine
 	go func() {
-		log.Println("[DEBUG] Starting Caddy server...")
-		StartCaddy(caddyPort, fmt.Sprintf("http://%s:%s", hostname, port), caddyStoragePath)
+		log.Println("[DEBUG] Starting Caddy server with HTTPS...")
+		StartCaddy(caddyPort, fmt.Sprintf("http://%s:%s", hostname, port), caddyStoragePath, certFile, keyFile)
 	}()
 
 	// Wait for interrupt signal to gracefully shut down the server
