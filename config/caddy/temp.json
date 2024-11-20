@@ -1,0 +1,212 @@
+{
+    "logging": {
+        "logs": {
+            "default": {
+                "exclude": [
+                    "http.log.access.log0",
+                    "http.log.access.log1"
+                ]
+            },
+            "log0": {
+                "writer": {
+                    "filename": "/absolute/path/to/storage/caddy_debug.log",
+                    "output": "file",
+                    "roll_keep": 10,
+                    "roll_keep_days": 30,
+                    "roll_size_mb": 5
+                },
+                "encoder": {
+                    "format": "json"
+                },
+                "include": [
+                    "http.log.access.log0"
+                ]
+            },
+            "log1": {
+                "writer": {
+                    "filename": "/absolute/path/to/storage/caddy_https_debug.log",
+                    "output": "file",
+                    "roll_keep": 10,
+                    "roll_keep_days": 30,
+                    "roll_size_mb": 5
+                },
+                "encoder": {
+                    "format": "json"
+                },
+                "include": [
+                    "http.log.access.log1"
+                ]
+            }
+        }
+    },
+    "apps": {
+        "http": {
+            "servers": {
+                "srv0": {
+                    "listen": [
+                        ":8081"
+                    ],
+                    "routes": [
+                        {
+                            "match": [
+                                {
+                                    "host": [
+                                        "10.0.0.16"
+                                    ]
+                                }
+                            ],
+                            "handle": [
+                                {
+                                    "handler": "subroute",
+                                    "routes": [
+                                        {
+                                            "handle": [
+                                                {
+                                                    "handler": "vars",
+                                                    "root": "/absolute/path/to/storage/pki/authorities/local"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "group": "group2",
+                                            "handle": [
+                                                {
+                                                    "handler": "subroute",
+                                                    "routes": [
+                                                        {
+                                                            "handle": [
+                                                                {
+                                                                    "handler": "rewrite",
+                                                                    "strip_path_prefix": "/certs"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "handle": [
+                                                                {
+                                                                    "browse": {},
+                                                                    "handler": "file_server",
+                                                                    "hide": [
+                                                                        "./Caddyfile.fhirant"
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "match": [
+                                                {
+                                                    "path": [
+                                                        "/certs/*"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "group": "group2",
+                                            "handle": [
+                                                {
+                                                    "handler": "subroute",
+                                                    "routes": [
+                                                        {
+                                                            "handle": [
+                                                                {
+                                                                    "handler": "reverse_proxy",
+                                                                    "transport": {
+                                                                        "protocol": "http",
+                                                                        "read_timeout": 360000000000
+                                                                    },
+                                                                    "upstreams": [
+                                                                        {
+                                                                            "dial": "127.0.0.1:8090"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "terminal": true
+                        }
+                    ],
+                    "logs": {
+                        "logger_names": {
+                            "10.0.0.16": [
+                                "log0"
+                            ]
+                        }
+                    }
+                },
+                "srv1": {
+                    "listen": [
+                        ":8443"
+                    ],
+                    "routes": [
+                        {
+                            "match": [
+                                {
+                                    "host": [
+                                        "10.0.2.16"
+                                    ]
+                                }
+                            ],
+                            "handle": [
+                                {
+                                    "handler": "subroute",
+                                    "routes": [
+                                        {
+                                            "handle": [
+                                                {
+                                                    "handler": "reverse_proxy",
+                                                    "transport": {
+                                                        "protocol": "http",
+                                                        "read_timeout": 360000000000
+                                                    },
+                                                    "upstreams": [
+                                                        {
+                                                            "dial": "127.0.0.1:8090"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "terminal": true
+                        }
+                    ],
+                    "logs": {
+                        "logger_names": {
+                            "10.0.2.16": [
+                                "log1"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "tls": {
+            "automation": {
+                "policies": [
+                    {
+                        "subjects": [
+                            "10.0.2.16"
+                        ],
+                        "issuers": [
+                            {
+                                "module": "internal"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}

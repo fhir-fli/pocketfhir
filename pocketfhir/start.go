@@ -11,6 +11,7 @@ import (
 
 func StartPocketFHIR(
 	pbPort string, httpPort string, httpsPort string, pbUrl string, ipAddress string, dataDir string, enableApiLogs bool, storagePath string) {
+
 	// Set environment variables for PocketBase configuration
 	log.Println("[DEBUG] Setting environment variables...")
 	if err := os.Setenv("POCKETBASE_DATA_DIR", dataDir); err != nil {
@@ -31,7 +32,7 @@ func StartPocketFHIR(
 	// Start the Caddy server in a separate goroutine
 	go func() {
 		log.Println("[DEBUG] Starting Caddy server with HTTPS...")
-		StartCaddy(pbPort, httpPort, httpsPort, pbUrl, storagePath)
+		StartCaddy(pbPort, httpPort, httpsPort, pbUrl, storagePath, ipAddress)
 	}()
 
 	// Wait for interrupt signal to gracefully shut down the server

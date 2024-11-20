@@ -1,0 +1,52 @@
+# Listen on port 8081 for HTTP requests
+10.0.0.16:8081 {
+	# Set the root directory for serving files, such as certificates
+	root * /absolute/path/to/storage/pki/authorities/local
+
+	# Enable file server to serve static files like root.crt
+	handle_path /certs/* {
+		file_server browse
+	}
+
+	# Reverse proxy configuration for PocketBase
+	handle {
+		reverse_proxy 127.0.0.1:8090 {
+			transport http {
+				read_timeout 360s
+			}
+		}
+	}
+
+	# Logging setup
+	log {
+		output file /absolute/path/to/storage/caddy_debug.log {
+			roll_size 5MiB
+			roll_keep 10
+			roll_keep_for 720h
+		}
+		format json
+	}
+}
+
+# HTTPS server block for serving PocketBase via HTTPS
+10.0.2.16:8443 {
+	# Enable TLS with automatic certificates (use internal certificates for testing)
+	tls internal
+
+	# Set up reverse proxy for HTTPS
+	reverse_proxy 127.0.0.1:8090 {
+		transport http {
+			read_timeout 360s
+		}
+	}
+
+	# Logging setup for HTTPS server
+	log {
+		output file /absolute/path/to/storage/caddy_https_debug.log {
+			roll_size 5MiB
+			roll_keep 10
+			roll_keep_for 720h
+		}
+		format json
+	}
+}
