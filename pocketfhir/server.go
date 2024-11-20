@@ -22,16 +22,16 @@ func RegisterNativeBridgeCallback(c NativeBridge) {
 }
 
 // RunServer starts the PocketFHIR server
-func RunServer(dataDir string, hostname string, port string, getApiLogs bool) {
+func RunServer(dataDir string, ipAddress string, pbPort string, enableApiLogs bool) {
 	// Set CLI-like arguments for PocketBase to specify server address and port
-	log.Printf("[DEBUG] Setting CLI arguments for server address and port: %s:%s\n", hostname, port)
-	os.Args = append(os.Args[:1], "serve", "--http", fmt.Sprintf("%s:%s", hostname, port))
+	log.Printf("[DEBUG] Setting CLI arguments for server address and port: %s:%s\n", ipAddress, pbPort)
+	os.Args = append(os.Args[:1], "serve", "--http", fmt.Sprintf("%s:%s", ipAddress, pbPort))
 
 	// Create a configuration object with custom settings
 	log.Println("[DEBUG] Creating PocketBase configuration object...")
 	config := pocketbase.Config{
 		DefaultDataDir:  dataDir,
-		DefaultDev:      getApiLogs, // Enabling dev mode for detailed logging
+		DefaultDev:      enableApiLogs, // Enabling dev mode for detailed logging
 		HideStartBanner: false,
 	}
 
@@ -62,7 +62,7 @@ func RunServer(dataDir string, hostname string, port string, getApiLogs bool) {
 
 	// Setup additional native callbacks and routes
 	log.Println("[DEBUG] Setting up PocketBase callbacks and routes...")
-	setupPocketbaseCallbacks(app, getApiLogs)
+	setupPocketbaseCallbacks(app, enableApiLogs)
 	log.Println("[DEBUG] PocketBase callbacks and routes set up.")
 
 	// Initialize collections if necessary
@@ -107,13 +107,13 @@ func sendCommand(command string, data string) string {
 }
 
 // setupPocketbaseCallbacks sets up additional callbacks and native routes for PocketBase
-func setupPocketbaseCallbacks(app *pocketbase.PocketBase, getApiLogs bool) {
+func setupPocketbaseCallbacks(app *pocketbase.PocketBase, enableApiLogs bool) {
 	// Setup callbacks
 	log.Println("[DEBUG] Setting up OnBeforeServe callback...")
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
 		log.Println("[DEBUG] OnBeforeServe triggered.")
 		sendCommand("OnBeforeServe", "")
-		if getApiLogs {
+		if enableApiLogs {
 			log.Println("[DEBUG] Adding API logs middleware...")
 			e.Router.Use(ApiLogsMiddleWare(app))
 		}

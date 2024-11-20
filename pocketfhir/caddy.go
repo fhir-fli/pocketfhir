@@ -11,79 +11,89 @@ import (
 )
 
 // CreateConfig generates a basic Caddy configuration to run a reverse proxy with HTTPS.
-func CreateConfig(port, upstreamURL, storagePath, certFile, keyFile string) *caddy.Config {
+func CreateConfig(pbPort, httpPort, httpsPort, pbUrl, storagePath string) *caddy.Config {
 	// Use storagePath for the log file paths
 	caddyDebugLogPath := fmt.Sprintf("%s/caddy_debug.log", storagePath)
 	accessLogPath := fmt.Sprintf("%s/access_log.log", storagePath)
+	// Define where certificates should be stored
+	certificateStoragePath := fmt.Sprintf("%s/caddy_certs", storagePath)
 
-	// JSON Configuration with dynamically inserted paths and certificates
+	// JSON Configuration with dynamically inserted paths
 	jsonConfig := fmt.Sprintf(`{
-		"logging": {
-			"logs": {
-				"default": {
-					"level": "DEBUG",
-					"writer": {
-						"output": "file",
-						"filename": "%s"
-					}
-				},
-				"http.access": {
-					"level": "DEBUG",
-					"writer": {
-						"output": "file",
-						"filename": "%s"
-					},
-					"encoder": {
-						"format": "json"
-					}
-				}
-			}
-		},
-		"apps": {
-			"http": {
-				"servers": {
-					"srv0": {
-						"listen": [
-							":%s"
-						],
-						"routes": [
-							{
-								"handle": [
-									{
-										"handler": "request_body",
-										"max_size": 10000000
-									},
-									{
-										"handler": "reverse_proxy",
-										"transport": {
-											"protocol": "http",
-											"read_timeout": 360000000000
-										},
-										"upstreams": [
-											{
-												"dial": "127.0.0.1:8090"
-											}
-										]
-									}
-								]
-							}
-						]
-					}
-				}
-			}
-		},
-		"tls": {
-			"certificates": {
-				"automate": ["*"],
-				"load_files": [
-					{
-						"certificate": "%s",
-						"key": "%s"
-					}
-				]
-			}
-		}
-	}`, caddyDebugLogPath, accessLogPath, port, certFile, keyFile)
+        "logging": {
+            "logs": {
+                "default": {
+                    "level": "DEBUG",
+                    "writer": {
+                        "output": "file",
+                        "filename": "%s"
+                    }
+                },
+                "http.access": {
+                    "level": "DEBUG",
+                    "writer": {
+                        "output": "file",
+                        "filename": "%s"
+                    },
+                    "encoder": {
+                        "format": "json"
+                    }
+                }
+            }
+        },
+         "storage": {
+            "module": "file_system",
+            "root": "%s"
+        },
+        "apps": {
+            "http": {
+                "http_port": %s,
+                "https_port": %s,
+                "servers": {
+                    "srv0": {
+                        "listen": [
+                            ":%s"
+                        ],
+                        "routes": [
+                            {
+                                "handle": [
+                                    {
+                                        "handler": "request_body",
+                                        "max_size": 10000000
+                                    },
+                                    {
+                                        "handler": "reverse_proxy",
+                                        "transport": {
+                                            "protocol": "http",
+                                            "read_timeout": 360000000000
+                                        },
+                                        "upstreams": [
+                                            {
+                                                "dial": "%s:%s"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+            "tls": {
+                "automation": {
+                    "policies": [
+                        {
+                            "issuers": [
+                                {
+                                    "module": "internal"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    }`, caddyDebugLogPath, accessLogPath, certificateStoragePath, httpPort, httpsPort, httpsPort, pbUrl, pbPort)
 
 	// Parse the JSON into a caddy.Config struct
 	var caddyConfig caddy.Config
@@ -98,17 +108,22 @@ func CreateConfig(port, upstreamURL, storagePath, certFile, keyFile string) *cad
 }
 
 // StartCaddy starts the Caddy server with the provided configuration.
-func StartCaddy(port, upstreamURL, storagePath, certFile, keyFile string) {
+func StartCaddy(pbPort, httpPort, httpsPort, pbUrl, storagePath string) {
 	// Change working directory
 	if err := os.Chdir(storagePath); err != nil {
 		log.Fatalf("Failed to change working directory to %s: %v", storagePath, err)
 	}
 
 	// Log configuration for transparency
-	log.Printf("Starting Caddy with configuration:\nPort: %s\nUpstreamURL: %s\nStoragePath: %s\nCertFile: %s\nKeyFile: %s\n", port, upstreamURL, storagePath, certFile, keyFile)
+	log.Printf("Starting Caddy server with the following configuration:")
+	log.Printf("PocketBase Port: %s", pbPort)
+	log.Printf("HTTP Port: %s", httpPort)
+	log.Printf("HTTPS Port: %s", httpsPort)
+	log.Printf("Upstream URL: %s", pbUrl)
+	log.Printf("Storage Path: %s", storagePath)
 
 	// Generate Caddy config
-	cfg := CreateConfig(port, upstreamURL, storagePath, certFile, keyFile)
+	cfg := CreateConfig(pbPort, httpPort, httpsPort, pbUrl, storagePath)
 
 	// Serialize for debugging
 	configJSON, err := json.MarshalIndent(cfg, "", "  ")
