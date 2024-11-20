@@ -127,7 +127,7 @@ func generateStorageConfig(storagePath string) string {
 
 // Generates the HTTP application configuration section
 func generateHttpAppConfig(pbPort, httpPort, httpsPort, pbUrl, rootCertPath, ipAddress string) string {
-	httpServerConfig := generateHttpServerConfig(httpPort, ipAddress, rootCertPath)
+	httpServerConfig := generateHttpServerConfig(httpPort, ipAddress)
 	httpsServerConfig := generateHttpsServerConfig(httpsPort, ipAddress, pbUrl, pbPort)
 	return fmt.Sprintf(`"http": {
             "http_port": %s,
@@ -138,8 +138,8 @@ func generateHttpAppConfig(pbPort, httpPort, httpsPort, pbUrl, rootCertPath, ipA
         }`, httpPort, httpServerConfig, httpsServerConfig)
 }
 
-// Generates the HTTP server configuration
-func generateHttpServerConfig(httpPort, ipAddress, rootCertPath string) string {
+// Generates the HTTP server configuration without static file server handling
+func generateHttpServerConfig(httpPort, ipAddress string) string {
 	return fmt.Sprintf(`"srv1": {
             "listen": [":%s"],
             "routes": [
@@ -147,63 +147,13 @@ func generateHttpServerConfig(httpPort, ipAddress, rootCertPath string) string {
                     "match": [{"host": ["%s"]}],
                     "handle": [
                         {
-                            "handler": "subroute",
-                            "routes": [
-                                {
-                                    "handle": [
-                                        {
-                                            "handler": "vars",
-                                            "root": "%s"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "handle": [
-                                        {
-                                            "handler": "subroute",
-                                            "routes": [
-                                                {
-                                                    "handle": [
-                                                        {
-                                                            "handler": "rewrite",
-                                                            "strip_path_prefix": "/certs"
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    "handle": [
-                                                        {
-                                                            "browse": {},
-                                                            "handler": "file_server",
-                                                            "hide": [
-                                                                "./Caddyfile.fhirant"
-                                                            ]
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    ],
-                                    "match": [
-                                        {
-                                            "path": ["/certs/*"]
-                                        }
-                                    ]
-                                }
-                            ]
+                            "handler": "subroute"
                         }
                     ],
                     "terminal": true
                 }
-            ],
-            "logs": {
-                "logger_names": {
-                    "%s": [
-                        "certs"
-                    ]
-                }
-            }
-        }`, httpPort, ipAddress, rootCertPath, ipAddress)
+            ]
+        }`, httpPort, ipAddress)
 }
 
 // Generates the HTTPS server configuration
@@ -236,13 +186,8 @@ func generateHttpsServerConfig(httpsPort, ipAddress, pbUrl, pbPort string) strin
                         }
                     ]
                 }
-            ],
-            "logs": {
-                "logger_names": {
-                    "%s": ["log1"]
-                }
-            }
-        }`, httpsPort, ipAddress, pbUrl, pbPort, ipAddress)
+            ]
+        }`, httpsPort, ipAddress, pbUrl, pbPort)
 }
 
 // Generates the TLS automation configuration
