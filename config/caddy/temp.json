@@ -1,40 +1,34 @@
 {
     "logging": {
         "logs": {
+            "certs": {
+                "writer": {
+                    "filename": "/path/to/logs/certs_access.log",
+                    "output": "file"
+                },
+                "encoder": {
+                    "format": "json"
+                },
+                "include": [
+                    "http.log.access.certs"
+                ]
+            },
             "default": {
                 "exclude": [
-                    "http.log.access.log0",
-                    "http.log.access.log1"
+                    "http.log.access.certs",
+                    "http.log.access.pb_proxy"
                 ]
             },
-            "log0": {
+            "pb_proxy": {
                 "writer": {
-                    "filename": "/absolute/path/to/storage/caddy_debug.log",
-                    "output": "file",
-                    "roll_keep": 10,
-                    "roll_keep_days": 30,
-                    "roll_size_mb": 5
+                    "filename": "/path/to/logs/proxy_access.log",
+                    "output": "file"
                 },
                 "encoder": {
                     "format": "json"
                 },
                 "include": [
-                    "http.log.access.log0"
-                ]
-            },
-            "log1": {
-                "writer": {
-                    "filename": "/absolute/path/to/storage/caddy_https_debug.log",
-                    "output": "file",
-                    "roll_keep": 10,
-                    "roll_keep_days": 30,
-                    "roll_size_mb": 5
-                },
-                "encoder": {
-                    "format": "json"
-                },
-                "include": [
-                    "http.log.access.log1"
+                    "http.log.access.pb_proxy"
                 ]
             }
         }
@@ -44,6 +38,56 @@
             "servers": {
                 "srv0": {
                     "listen": [
+                        ":55000"
+                    ],
+                    "routes": [
+                        {
+                            "match": [
+                                {
+                                    "host": [
+                                        "10.0.2.16"
+                                    ]
+                                }
+                            ],
+                            "handle": [
+                                {
+                                    "handler": "subroute",
+                                    "routes": [
+                                        {
+                                            "handle": [
+                                                {
+                                                    "handler": "reverse_proxy",
+                                                    "health_checks": {
+                                                        "active": {
+                                                            "interval": 10000000000,
+                                                            "timeout": 2000000000,
+                                                            "uri": "/health"
+                                                        }
+                                                    },
+                                                    "upstreams": [
+                                                        {
+                                                            "dial": "127.0.0.1:8090"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "terminal": true
+                        }
+                    ],
+                    "logs": {
+                        "logger_names": {
+                            "10.0.2.16": [
+                                "pb_proxy"
+                            ]
+                        }
+                    }
+                },
+                "srv1": {
+                    "listen": [
                         ":8081"
                     ],
                     "routes": [
@@ -51,7 +95,7 @@
                             "match": [
                                 {
                                     "host": [
-                                        "10.0.0.16"
+                                        "10.0.2.16"
                                     ]
                                 }
                             ],
@@ -68,7 +112,6 @@
                                             ]
                                         },
                                         {
-                                            "group": "group2",
                                             "handle": [
                                                 {
                                                     "handler": "subroute",
@@ -102,79 +145,6 @@
                                                     ]
                                                 }
                                             ]
-                                        },
-                                        {
-                                            "group": "group2",
-                                            "handle": [
-                                                {
-                                                    "handler": "subroute",
-                                                    "routes": [
-                                                        {
-                                                            "handle": [
-                                                                {
-                                                                    "handler": "reverse_proxy",
-                                                                    "transport": {
-                                                                        "protocol": "http",
-                                                                        "read_timeout": 360000000000
-                                                                    },
-                                                                    "upstreams": [
-                                                                        {
-                                                                            "dial": "127.0.0.1:8090"
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ]
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ],
-                            "terminal": true
-                        }
-                    ],
-                    "logs": {
-                        "logger_names": {
-                            "10.0.0.16": [
-                                "log0"
-                            ]
-                        }
-                    }
-                },
-                "srv1": {
-                    "listen": [
-                        ":8443"
-                    ],
-                    "routes": [
-                        {
-                            "match": [
-                                {
-                                    "host": [
-                                        "10.0.2.16"
-                                    ]
-                                }
-                            ],
-                            "handle": [
-                                {
-                                    "handler": "subroute",
-                                    "routes": [
-                                        {
-                                            "handle": [
-                                                {
-                                                    "handler": "reverse_proxy",
-                                                    "transport": {
-                                                        "protocol": "http",
-                                                        "read_timeout": 360000000000
-                                                    },
-                                                    "upstreams": [
-                                                        {
-                                                            "dial": "127.0.0.1:8090"
-                                                        }
-                                                    ]
-                                                }
-                                            ]
                                         }
                                     ]
                                 }
@@ -185,7 +155,7 @@
                     "logs": {
                         "logger_names": {
                             "10.0.2.16": [
-                                "log1"
+                                "certs"
                             ]
                         }
                     }
