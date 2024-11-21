@@ -47,12 +47,10 @@ func StartCaddy(pbPort, httpPort, httpsPort, pbUrl, storagePath, ipAddress strin
 // CreateConfig generates a basic Caddy configuration to run a reverse proxy with HTTP and a static file server.
 func createConfig(pbPort, httpPort, httpsPort, pbUrl, storagePath, ipAddress string) *caddy.Config {
 	// Define paths for certs and proxy logs
-	certsPath := fmt.Sprintf("%s/certs_access.log", storagePath)
 	pbProxyPath := fmt.Sprintf("%s/proxy_access.log", storagePath)
-	rootCertPath := fmt.Sprintf("%s/pki/authorities/local", storagePath)
 
 	// Generate the JSON configuration
-	jsonConfig := jsonConfig(pbPort, httpPort, httpsPort, pbUrl, storagePath, ipAddress, certsPath, pbProxyPath, rootCertPath)
+	jsonConfig := jsonConfig(pbPort, httpPort, httpsPort, pbUrl, storagePath, ipAddress, pbProxyPath)
 	log.Printf("Generated JSON Configuration: %s", jsonConfig)
 
 	// Parse the JSON into a caddy.Config struct
@@ -67,11 +65,11 @@ func createConfig(pbPort, httpPort, httpsPort, pbUrl, storagePath, ipAddress str
 	return &caddyConfig
 }
 
-func jsonConfig(pbPort, httpPort, httpsPort, pbUrl, storagePath, ipAddress, certsPath, pbProxyPath, rootCertPath string) string {
+func jsonConfig(pbPort, httpPort, httpsPort, pbUrl, storagePath, ipAddress, pbProxyPath string) string {
 	// Construct each part individually and combine them
-	loggingConfig := generateLoggingConfig(certsPath, pbProxyPath)
+	loggingConfig := generateLoggingConfig(pbProxyPath)
 	storageConfig := generateStorageConfig(storagePath)
-	httpAppConfig := generateHttpAppConfig(pbPort, httpPort, httpsPort, pbUrl, rootCertPath, ipAddress)
+	httpAppConfig := generateHttpAppConfig(pbPort, httpPort, httpsPort, pbUrl, ipAddress)
 	tlsConfig := generateTlsConfig(ipAddress)
 
 	// Combine the parts into the final JSON configuration
@@ -86,21 +84,9 @@ func jsonConfig(pbPort, httpPort, httpsPort, pbUrl, storagePath, ipAddress, cert
 }
 
 // Generates the logging configuration section
-func generateLoggingConfig(certsPath, pbProxyPath string) string {
+func generateLoggingConfig(pbProxyPath string) string {
 	return fmt.Sprintf(`"logging": {
             "logs": {
-                "certs": {
-                    "writer": {
-                        "output": "file",
-                        "filename": "%s"
-                    },
-                    "encoder": {
-                        "format": "json"
-                    },
-                    "include": [
-                        "http.log.access.certs"
-                    ]
-                },
                 "pb_proxy": {
                     "writer": {
                         "output": "file",
@@ -114,7 +100,7 @@ func generateLoggingConfig(certsPath, pbProxyPath string) string {
                     ]
                 }
             }
-        }`, certsPath, pbProxyPath)
+        }`, pbProxyPath)
 }
 
 // Generates the storage configuration section
@@ -126,37 +112,16 @@ func generateStorageConfig(storagePath string) string {
 }
 
 // Generates the HTTP application configuration section
-func generateHttpAppConfig(pbPort, httpPort, httpsPort, pbUrl, rootCertPath, ipAddress string) string {
-	httpServerConfig := generateHttpServerConfig(httpPort, ipAddress)
+func generateHttpAppConfig(pbPort, httpPort, httpsPort, pbUrl, ipAddress string) string {
 	httpsServerConfig := generateHttpsServerConfig(httpsPort, ipAddress, pbUrl, pbPort)
 	return fmt.Sprintf(`"http": {
             "http_port": %s,
             "servers": {
-                %s,
                 %s
             }
-        }`, httpPort, httpServerConfig, httpsServerConfig)
+        }`, httpPort, httpsServerConfig)
 }
 
-// Generates the HTTP server configuration without static file server handling
-func generateHttpServerConfig(httpPort, ipAddress string) string {
-	return fmt.Sprintf(`"srv1": {
-            "listen": [":%s"],
-            "routes": [
-                {
-                    "match": [{"host": ["%s"]}],
-                    "handle": [
-                        {
-                            "handler": "subroute"
-                        }
-                    ],
-                    "terminal": true
-                }
-            ]
-        }`, httpPort, ipAddress)
-}
-
-// Generates the HTTPS server configuration
 // Generates the HTTP server configuration for reverse proxy with health checks
 func generateHttpsServerConfig(httpsPort, ipAddress, pbUrl, pbPort string) string {
 	return fmt.Sprintf(`"srv_https": {
