@@ -3,11 +3,16 @@ package main
 import "github.com/fhir-fli/pocketfhir/pocketfhir"
 
 func main() {
-	// Use the string wrapper for local development
-	dataDir := "./assets"
-	ipAddress := "127.0.0.1"
-	port := "8080" // Changed from 443 to 8080 to avoid permission issues
-	enableApiLogs := false
+	// Configuration for local development
+	dataDir := "./assets"         // The directory to use for PocketBase data
+	pbIpAddress := "127.0.0.1"    // PocketBase IP address for local development
+	caddyIpAddress := "127.0.0.1" // Caddy server loopback IP address to prevent conflict
+	pbPort := "8090"              // PocketBase port set to 8080
+	httpPort := "8081"            // Caddy HTTP traffic port
+	httpsPort := "8443"           // Caddy HTTPS traffic port
+	enableApiLogs := true         // Enable API logs for detailed local debugging
+	storagePath := "./storage"    // Local storage path for Caddy
 
-	pocketfhir.RunServer(dataDir, ipAddress, port, enableApiLogs)
+	// Start PocketFHIR server with local development configuration
+	pocketfhir.StartPocketFHIR(pbPort, httpPort, httpsPort, pbIpAddress, caddyIpAddress, dataDir, enableApiLogs, storagePath)
 }

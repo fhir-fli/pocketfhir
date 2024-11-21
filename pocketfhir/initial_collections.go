@@ -21,26 +21,6 @@ func initializeCollections(app *pocketbase.PocketBase) error {
 			return err
 		}
 
-		// Step 2: Check if FHIR spec has been initialized
-		if !isFhirSpecInitialized(app) {
-			// Load the FHIR spec into the database
-			// if err := loadFhirSpecOnce(app); err != nil {
-			// 	log.Printf("Failed to load FHIR spec: %v", err)
-			// 	return err
-			// }
-
-			// Set the FHIR spec as initialized
-			// setFhirSpecInitialized(app)
-		} else {
-			log.Println("FHIR spec already initialized.")
-		}
-
-		// Step 3: Load MIMIC-IV dataset (optional step)
-		// if err := loadMimicIVData(app); err != nil {
-		// 	log.Printf("Failed to load MIMIC-IV dataset: %v", err)
-		// 	return err
-		// }
-
 		return nil
 	})
 	return nil

@@ -3,6 +3,7 @@ package pocketfhir
 import (
 	"log"
 	"sync"
+	"time"
 
 	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/pocketbase"
@@ -34,7 +35,7 @@ func registerRequestLoggingHook(app *pocketbase.PocketBase) {
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
 		e.Router.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 			return func(c echo.Context) error {
-				log.Printf("Request: %s %s", c.Request().Method, c.Request().URL.Path)
+				log.Printf("[INFO] Request: %s %s", c.Request().Method, c.Request().URL.Path)
 				return next(c)
 			}
 		})
@@ -82,13 +83,31 @@ func registerWebSocketEndpoint(app *pocketbase.PocketBase) {
 					clientsMu.Lock()
 					delete(clients, ws)
 					clientsMu.Unlock()
-					ws.Close()
+					_ = ws.Close()
+					log.Println("[INFO] WebSocket connection closed")
 				}()
 
-				// Keep the connection alive
+				log.Println("[INFO] New WebSocket connection established")
+
+				// Heartbeat mechanism to keep the connection alive
+				heartbeatTicker := time.NewTicker(30 * time.Second)
+				defer heartbeatTicker.Stop()
+
 				for {
-					if _, err := ws.Read(nil); err != nil {
-						break
+					select {
+					case <-heartbeatTicker.C:
+						if err := ws.SetDeadline(time.Now().Add(35 * time.Second)); err != nil {
+							log.Printf("[ERROR] Failed to set deadline for WebSocket: %v", err)
+							return
+						}
+						if _, err := ws.Write([]byte("ping")); err != nil {
+							log.Printf("[ERROR] Failed to send heartbeat: %v", err)
+							return
+						}
+					case <-c.Request().Context().Done():
+						// Handle client disconnection gracefully
+						log.Println("[INFO] WebSocket client disconnected")
+						return
 					}
 				}
 			}).ServeHTTP(c.Response(), c.Request())
@@ -101,7 +120,11 @@ func registerWebSocketEndpoint(app *pocketbase.PocketBase) {
 // Broadcast a message to all connected WebSocket clients
 func broadcastWebSocketMessage(eventType string, record *models.Record) {
 	clientsMu.Lock()
-	defer clientsMu.Unlock()
+	clientsSnapshot := make([]*websocket.Conn, 0, len(clients))
+	for client := range clients {
+		clientsSnapshot = append(clientsSnapshot, client)
+	}
+	clientsMu.Unlock()
 
 	message := map[string]interface{}{
 		"type":     eventType,
@@ -109,11 +132,15 @@ func broadcastWebSocketMessage(eventType string, record *models.Record) {
 		"resource": record.Get("resource"),
 	}
 
-	for client := range clients {
-		if err := websocket.JSON.Send(client, message); err != nil {
-			log.Printf("Failed to send WebSocket message: %v", err)
-			client.Close()
-			delete(clients, client)
-		}
+	for _, client := range clientsSnapshot {
+		go func(client *websocket.Conn) {
+			if err := websocket.JSON.Send(client, message); err != nil {
+				log.Printf("[ERROR] Failed to send WebSocket message: %v", err)
+				clientsMu.Lock()
+				delete(clients, client)
+				clientsMu.Unlock()
+				_ = client.Close()
+			}
+		}(client)
 	}
 }

@@ -32,13 +32,31 @@ func StartPocketFHIR(
 	// Start the Caddy server in a separate goroutine
 	go func() {
 		log.Println("[DEBUG] Starting Caddy server with HTTPS...")
-		StartCaddy(pbPort, httpPort, httpsPort, pbUrl, storagePath, ipAddress)
+		caddyConfig := CaddyConfig{
+			PbPort:      pbPort,
+			HttpPort:    httpPort,
+			HttpsPort:   httpsPort,
+			PbUrl:       pbUrl,
+			StoragePath: storagePath,
+			IpAddress:   ipAddress,
+		}
+		StartCaddy(caddyConfig)
 	}()
 
 	// Wait for interrupt signal to gracefully shut down the server
 	log.Println("[DEBUG] Waiting for interrupt signal to shut down the servers...")
 	<-stop
 	log.Println("Shutting down PocketFHIR and Caddy servers...")
-	StopServer() // PocketFHIR shutdown
+	StopPocketFHIR() // PocketFHIR shutdown
 	log.Println("PocketFHIR and Caddy servers shut down gracefully.")
+}
+
+// StopPocketFHIR gracefully stops both PocketFHIR and Caddy servers
+func StopPocketFHIR() {
+	log.Println("Stopping PocketFHIR server and Caddy...")
+	// Sending SIGTERM to ensure graceful shutdown for both services
+	signal.Ignore(syscall.SIGTERM) // Avoid receiving the same signal again during shutdown
+	if err := syscall.Kill(syscall.Getpid(), syscall.SIGTERM); err != nil {
+		log.Printf("Failed to stop servers: %v", err)
+	}
 }

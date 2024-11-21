@@ -10,70 +10,58 @@ import (
 	_ "github.com/caddyserver/caddy/v2/modules/standard"
 )
 
+// CaddyConfig is a struct that contains the configuration parameters for starting the Caddy server.
+type CaddyConfig struct {
+	PbPort      string
+	HttpPort    string
+	HttpsPort   string
+	PbUrl       string
+	StoragePath string
+	IpAddress   string
+}
+
 // StartCaddy starts the Caddy server with the provided configuration.
-func StartCaddy(pbPort, httpPort, httpsPort, pbUrl, storagePath, ipAddress string) {
+func StartCaddy(config CaddyConfig) {
 	// Change working directory
-	if err := os.Chdir(storagePath); err != nil {
-		log.Fatalf("Failed to change working directory to %s: %v", storagePath, err)
+	if err := os.Chdir(config.StoragePath); err != nil {
+		log.Fatalf("Failed to change working directory to %s: %v", config.StoragePath, err)
 	}
 
-	// Log configuration for transparency
-	log.Printf("Starting Caddy server with the following configuration:")
-	log.Printf("PocketBase Port: %s", pbPort)
-	log.Printf("HTTP Port: %s", httpPort)
-	log.Printf("HTTPS Port: %s", httpsPort)
-	log.Printf("Upstream URL: %s", pbUrl)
-	log.Printf("Storage Path: %s", storagePath)
+	// Log consolidated configuration details
+	log.Printf("Starting Caddy server with configuration: %+v", config)
 
 	// Generate Caddy config
-	cfg := createConfig(pbPort, httpPort, httpsPort, pbUrl, storagePath, ipAddress)
+	caddyCfg := createConfig(config)
 
 	// Serialize for debugging
-	configJSON, err := json.MarshalIndent(cfg, "", "  ")
+	configJSON, err := json.MarshalIndent(caddyCfg, "", "  ")
 	if err != nil {
 		log.Fatalf("Failed to serialize Caddy config: %v", err)
 	}
 	log.Printf("Generated Caddy config: %s", string(configJSON))
 
-	// Initialize Caddy
+	// Initialize and run Caddy
 	log.Println("Initializing Caddy...")
-	if err := caddy.Run(cfg); err != nil {
+	if err := caddy.Run(caddyCfg); err != nil {
 		log.Fatalf("Error running Caddy: %v", err)
 	}
 
 	log.Println("Caddy server started successfully.")
 }
 
-// CreateConfig generates a basic Caddy configuration to run a reverse proxy with HTTP and a static file server.
-func createConfig(pbPort, httpPort, httpsPort, pbUrl, storagePath, ipAddress string) *caddy.Config {
+// createConfig generates a basic Caddy configuration to run a reverse proxy with HTTP and a static file server.
+func createConfig(config CaddyConfig) *caddy.Config {
 	// Define paths for certs and proxy logs
-	pbProxyPath := fmt.Sprintf("%s/proxy_access.log", storagePath)
+	pbProxyPath := fmt.Sprintf("%s/proxy_access.log", config.StoragePath)
 
-	// Generate the JSON configuration
-	jsonConfig := jsonConfig(pbPort, httpPort, httpsPort, pbUrl, storagePath, ipAddress, pbProxyPath)
-	log.Printf("Generated JSON Configuration: %s", jsonConfig)
-
-	// Parse the JSON into a caddy.Config struct
-	var caddyConfig caddy.Config
-	err := json.Unmarshal([]byte(jsonConfig), &caddyConfig)
-	if err != nil {
-		log.Fatalf("Failed to parse JSON configuration: %v", err)
-	}
-
-	log.Printf("Generated Caddy Configuration: %s", jsonConfig)
-
-	return &caddyConfig
-}
-
-func jsonConfig(pbPort, httpPort, httpsPort, pbUrl, storagePath, ipAddress, pbProxyPath string) string {
-	// Construct each part individually and combine them
+	// Generate the full configuration using helpers
 	loggingConfig := generateLoggingConfig(pbProxyPath)
-	storageConfig := generateStorageConfig(storagePath)
-	httpAppConfig := generateHttpAppConfig(pbPort, httpPort, httpsPort, pbUrl, ipAddress)
-	tlsConfig := generateTlsConfig(ipAddress)
+	storageConfig := generateStorageConfig(config.StoragePath)
+	httpAppConfig := generateHttpAppConfig(config)
+	tlsConfig := generateTlsConfig(config.IpAddress)
 
-	// Combine the parts into the final JSON configuration
-	return fmt.Sprintf(`{
+	// Combine all configurations into the final JSON
+	combinedConfig := fmt.Sprintf(`{
         %s,
         %s,
         "apps": {
@@ -81,6 +69,14 @@ func jsonConfig(pbPort, httpPort, httpsPort, pbUrl, storagePath, ipAddress, pbPr
             %s
         }
     }`, loggingConfig, storageConfig, httpAppConfig, tlsConfig)
+
+	var caddyConfig caddy.Config
+	err := json.Unmarshal([]byte(combinedConfig), &caddyConfig)
+	if err != nil {
+		log.Fatalf("Failed to parse JSON configuration: %v", err)
+	}
+
+	return &caddyConfig
 }
 
 // Generates the logging configuration section
@@ -112,18 +108,18 @@ func generateStorageConfig(storagePath string) string {
 }
 
 // Generates the HTTP application configuration section
-func generateHttpAppConfig(pbPort, httpPort, httpsPort, pbUrl, ipAddress string) string {
-	httpsServerConfig := generateHttpsServerConfig(httpsPort, ipAddress, pbUrl, pbPort)
+func generateHttpAppConfig(config CaddyConfig) string {
+	httpsServerConfig := generateHttpsServerConfig(config)
 	return fmt.Sprintf(`"http": {
             "http_port": %s,
             "servers": {
                 %s
             }
-        }`, httpPort, httpsServerConfig)
+        }`, config.HttpPort, httpsServerConfig)
 }
 
 // Generates the HTTP server configuration for reverse proxy with health checks
-func generateHttpsServerConfig(httpsPort, ipAddress, pbUrl, pbPort string) string {
+func generateHttpsServerConfig(config CaddyConfig) string {
 	return fmt.Sprintf(`"srv_https": {
             "listen": [":%s"],
             "routes": [
@@ -152,7 +148,7 @@ func generateHttpsServerConfig(httpsPort, ipAddress, pbUrl, pbPort string) strin
                     ]
                 }
             ]
-        }`, httpsPort, ipAddress, pbUrl, pbPort)
+        }`, config.HttpsPort, config.IpAddress, config.PbUrl, config.PbPort)
 }
 
 // Generates the TLS automation configuration

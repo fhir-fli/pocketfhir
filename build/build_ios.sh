@@ -1,25 +1,24 @@
 #!/bin/bash
 
-# Navigate to the root directory of the project
-cd "$(dirname "$0")/.."
-
-# Clean up previous builds
-rm -f pocketfhir_ios
-
-# Initialize Go modules in the root directory if go.mod does not exist
+# Ensure Go modules are initialized
 if [ ! -f go.mod ]; then
     go mod init pocketfhir
 fi
 
-# Tidy up Go modules in the root directory
-go mod tidy
+# Install necessary tools
+go get -u golang.org/x/mobile/bind
+go install golang.org/x/mobile/cmd/gomobile@latest
+gomobile init
 
-# Build the PocketFHIR server for iOS (arm64 architecture)
-echo "Building PocketFHIR for iOS..."
-GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -o pocketfhir_ios ./src
-echo "iOS PocketFHIR build completed."
+# Build PocketFHIR .framework for iOS
+echo "Building PocketFHIR .framework for iOS..."
+gomobile bind -target=ios -o pocketfhir.framework ./pocketfhir
+if [ $? -ne 0 ]; then
+    echo "iOS build failed!"
+    exit 1
+fi
 
-# Start the PocketFHIR server in the background (for the regular platform)
-./pocketfhir serve &
+# Move the framework to the appropriate iOS directory
+mv pocketfhir.framework ../fhir_ant/ios/libs/pocketfhir.framework
 
-echo "PocketFHIR server started."
+echo "PocketFHIR iOS build completed successfully."

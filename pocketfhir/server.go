@@ -5,7 +5,8 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"syscall"
+	"sync"
+	"time"
 
 	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/pocketbase"
@@ -25,7 +26,7 @@ func RegisterNativeBridgeCallback(c NativeBridge) {
 func RunServer(dataDir string, ipAddress string, pbPort string, enableApiLogs bool) {
 	// Set CLI-like arguments for PocketBase to specify server address and port
 	log.Printf("[DEBUG] Setting CLI arguments for server address and port: %s:%s\n", ipAddress, pbPort)
-	os.Args = append(os.Args[:1], "serve", "--http", fmt.Sprintf("%s:%s", ipAddress, pbPort))
+	os.Args = []string{os.Args[0], "serve", "--http", fmt.Sprintf("%s:%s", ipAddress, pbPort)}
 
 	// Create a configuration object with custom settings
 	log.Println("[DEBUG] Creating PocketBase configuration object...")
@@ -68,25 +69,27 @@ func RunServer(dataDir string, ipAddress string, pbPort string, enableApiLogs bo
 	// Initialize collections if necessary
 	log.Println("[DEBUG] Initializing collections...")
 	if err := initializeCollections(app); err != nil {
-		log.Fatalf("Failed to initialize collections: %v", err)
-	} else {
-		log.Println("[DEBUG] Collections initialized successfully.")
+		log.Printf("[ERROR] Failed to initialize collections: %v", err)
+		return
 	}
+	log.Println("[DEBUG] Collections initialized successfully.")
 
-	// Start the server (no need to wait on anything here)
-	log.Println("[DEBUG] Calling app.Start() to start the server...")
-	if err := app.Start(); err != nil {
-		sendCommand("error", fmt.Sprintf("Error: Failed to start PocketBase server: %v", err))
-		log.Fatalf("Failed to start the app: %v", err)
-	} else {
-		log.Println("[DEBUG] PocketFHIR server started successfully.")
-	}
-}
+	// Start the server in a separate goroutine
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		log.Println("[DEBUG] Calling app.Start() to start the server...")
+		if err := app.Start(); err != nil {
+			sendCommand("error", fmt.Sprintf("Error: Failed to start PocketBase server: %v", err))
+			log.Printf("[ERROR] Failed to start the app: %v", err)
+		} else {
+			log.Println("[DEBUG] PocketFHIR server started successfully.")
+		}
+	}()
 
-// StopServer gracefully stops the running PocketFHIR server
-func StopServer() {
-	log.Println("Stopping PocketFHIR server...")
-	syscall.Kill(syscall.Getpid(), syscall.SIGINT)
+	// Wait for server to complete
+	wg.Wait()
 }
 
 // Helper methods
@@ -108,7 +111,13 @@ func sendCommand(command string, data string) string {
 
 // setupPocketbaseCallbacks sets up additional callbacks and native routes for PocketBase
 func setupPocketbaseCallbacks(app *pocketbase.PocketBase, enableApiLogs bool) {
-	// Setup callbacks
+	setupOnBeforeServe(app, enableApiLogs)
+	setupOnBeforeBootstrap(app)
+	setupOnAfterBootstrap(app)
+	setupOnTerminate(app)
+}
+
+func setupOnBeforeServe(app *pocketbase.PocketBase, enableApiLogs bool) {
 	log.Println("[DEBUG] Setting up OnBeforeServe callback...")
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
 		log.Println("[DEBUG] OnBeforeServe triggered.")
@@ -118,53 +127,62 @@ func setupPocketbaseCallbacks(app *pocketbase.PocketBase, enableApiLogs bool) {
 			e.Router.Use(ApiLogsMiddleWare(app))
 		}
 
-		// Setup a native GET request handler
-		log.Println("[DEBUG] Adding native GET request handler...")
-		e.Router.AddRoute(echo.Route{
-			Method: http.MethodGet,
-			Path:   "/api/nativeGet",
-			Handler: func(context echo.Context) error {
-				log.Println("[DEBUG] Handling native GET request...")
-				var data = sendCommand("nativeGetRequest", context.QueryParams().Encode())
-				return context.JSON(http.StatusOK, map[string]string{
-					"success": data,
-				})
-			},
-		})
-
-		// Setup a native POST request handler
-		log.Println("[DEBUG] Adding native POST request handler...")
-		e.Router.AddRoute(echo.Route{
-			Method: http.MethodPost,
-			Path:   "/api/nativePost",
-			Handler: func(context echo.Context) error {
-				log.Println("[DEBUG] Handling native POST request...")
-				form, err := context.FormValues()
-				if err != nil {
-					return context.JSON(http.StatusBadRequest, map[string]string{
-						"error": err.Error(),
-					})
-				}
-				var data = sendCommand("nativePostRequest", form.Encode())
-				return context.JSON(http.StatusOK, map[string]string{
-					"success": data,
-				})
-			},
-		})
-
+		setupNativeGetHandler(e.Router)
+		setupNativePostHandler(e.Router)
 		return nil
 	})
+}
 
+func setupNativeGetHandler(router *echo.Echo) {
+	log.Println("[DEBUG] Adding native GET request handler...")
+	router.AddRoute(echo.Route{
+		Method: http.MethodGet,
+		Path:   "/api/nativeGet",
+		Handler: func(context echo.Context) error {
+			log.Println("[DEBUG] Handling native GET request...")
+			data := sendCommand("nativeGetRequest", context.QueryParams().Encode())
+			return context.JSON(http.StatusOK, map[string]string{"success": data})
+		},
+	})
+}
+
+func setupNativePostHandler(router *echo.Echo) {
+	log.Println("[DEBUG] Adding native POST request handler...")
+	router.AddRoute(echo.Route{
+		Method: http.MethodPost,
+		Path:   "/api/nativePost",
+		Handler: func(context echo.Context) error {
+			log.Println("[DEBUG] Handling native POST request...")
+			form, err := context.FormValues()
+			if err != nil {
+				return context.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+			}
+			data := sendCommand("nativePostRequest", form.Encode())
+			return context.JSON(http.StatusOK, map[string]string{"success": data})
+		},
+	})
+}
+
+func setupOnBeforeBootstrap(app *pocketbase.PocketBase) {
+	log.Println("[DEBUG] Setting up OnBeforeBootstrap callback...")
 	app.OnBeforeBootstrap().Add(func(e *core.BootstrapEvent) error {
 		log.Println("[DEBUG] OnBeforeBootstrap triggered.")
 		sendCommand("OnBeforeBootstrap", "")
 		return nil
 	})
+}
+
+func setupOnAfterBootstrap(app *pocketbase.PocketBase) {
+	log.Println("[DEBUG] Setting up OnAfterBootstrap callback...")
 	app.OnAfterBootstrap().Add(func(e *core.BootstrapEvent) error {
 		log.Println("[DEBUG] OnAfterBootstrap triggered.")
 		sendCommand("OnAfterBootstrap", "")
 		return nil
 	})
+}
+
+func setupOnTerminate(app *pocketbase.PocketBase) {
+	log.Println("[DEBUG] Setting up OnTerminate callback...")
 	app.OnTerminate().Add(func(e *core.TerminateEvent) error {
 		log.Println("[DEBUG] OnTerminate triggered.")
 		sendCommand("OnTerminate", "")
@@ -173,13 +191,32 @@ func setupPocketbaseCallbacks(app *pocketbase.PocketBase, enableApiLogs bool) {
 }
 
 // ApiLogsMiddleWare logs all API calls for PocketBase
+var requestLogBuffer []string
+var mu sync.Mutex
+
+func init() {
+	// Background goroutine to batch log requests
+	go func() {
+		for {
+			time.Sleep(1 * time.Second)
+			mu.Lock()
+			if len(requestLogBuffer) > 0 {
+				log.Println("[DEBUG] Batch API request logs:", requestLogBuffer)
+				requestLogBuffer = []string{} // Clear the buffer
+			}
+			mu.Unlock()
+		}
+	}()
+}
+
 func ApiLogsMiddleWare(app core.App) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			request := c.Request()
 			fullPath := request.URL.Host + request.URL.Path + "?" + request.URL.RawQuery
-			log.Printf("[DEBUG] API request made to: %s", fullPath)
-			sendCommand("apiLogs", fullPath)
+			mu.Lock()
+			requestLogBuffer = append(requestLogBuffer, fullPath)
+			mu.Unlock()
 			return next(c)
 		}
 	}
