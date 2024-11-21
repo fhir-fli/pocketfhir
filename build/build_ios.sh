@@ -12,13 +12,13 @@ gomobile init
 
 # Build PocketFHIR .framework for iOS
 echo "Building PocketFHIR .framework for iOS..."
-gomobile bind -target=ios -o pocketfhir.framework ./pocketfhir
+gomobile bind -target=ios -o pocketfhir.xcframework ./pocketfhir
 if [ $? -ne 0 ]; then
     echo "iOS build failed!"
     exit 1
 fi
 
 # Move the framework to the appropriate iOS directory
-mv pocketfhir.framework ../fhir_ant/ios/libs/pocketfhir.framework
+mv pocketfhir.xcframework ../fhir_ant/ios/libs/pocketfhir.xcframework
 
 echo "PocketFHIR iOS build completed successfully."

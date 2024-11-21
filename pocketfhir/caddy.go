@@ -20,8 +20,8 @@ type CaddyConfig struct {
 	IpAddress   string
 }
 
-// StartCaddy starts the Caddy server with the provided configuration.
-func StartCaddy(config CaddyConfig) {
+// startCaddyInstance initializes and starts the Caddy server instance.
+func startCaddyInstance(config CaddyConfig) {
 	// Change working directory
 	if err := os.Chdir(config.StoragePath); err != nil {
 		log.Fatalf("Failed to change working directory to %s: %v", config.StoragePath, err)
@@ -30,7 +30,7 @@ func StartCaddy(config CaddyConfig) {
 	// Log consolidated configuration details
 	log.Printf("Starting Caddy server with configuration: %+v", config)
 
-	// Generate Caddy config
+	// Generate the Caddy config
 	caddyCfg := createConfig(config)
 
 	// Serialize for debugging
@@ -40,12 +40,12 @@ func StartCaddy(config CaddyConfig) {
 	}
 	log.Printf("Generated Caddy config: %s", string(configJSON))
 
-	// Initialize and run Caddy
-	log.Println("Initializing Caddy...")
-	if err := caddy.Run(caddyCfg); err != nil {
-		log.Fatalf("Error running Caddy: %v", err)
+	// Load Caddy with the generated config JSON
+	log.Println("Loading Caddy configuration...")
+	err = caddy.Load(configJSON, true)
+	if err != nil {
+		log.Fatalf("[ERROR] Failed to load Caddy configuration: %v", err)
 	}
-
 	log.Println("Caddy server started successfully.")
 }
 

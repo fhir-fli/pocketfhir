@@ -13,100 +13,34 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 )
 
-// Java Callbacks, make sure to register them before starting pocketbase
-// to expose any method to java, add that with FirstLetterCapital
-var nativeBridge NativeBridge
-
-// RegisterNativeBridgeCallback allows setting the NativeBridge interface for callbacks
-func RegisterNativeBridgeCallback(c NativeBridge) {
-	nativeBridge = c
-}
-
-// RunServer starts the PocketFHIR server
-func RunServer(dataDir string, ipAddress string, pbPort string, enableApiLogs bool) {
+// runServerInstance handles the setup and running of the PocketBase server instance.
+func runServerInstance(app *pocketbase.PocketBase, ipAddress, pbPort string, enableApiLogs bool) {
 	// Set CLI-like arguments for PocketBase to specify server address and port
 	log.Printf("[DEBUG] Setting CLI arguments for server address and port: %s:%s\n", ipAddress, pbPort)
 	os.Args = []string{os.Args[0], "serve", "--http", fmt.Sprintf("%s:%s", ipAddress, pbPort)}
-
-	// Create a configuration object with custom settings
-	log.Println("[DEBUG] Creating PocketBase configuration object...")
-	config := pocketbase.Config{
-		DefaultDataDir:  dataDir,
-		DefaultDev:      enableApiLogs, // Enabling dev mode for detailed logging
-		HideStartBanner: false,
-	}
-
-	// Initialize PocketBase with the default configuration
-	log.Println("[DEBUG] Initializing PocketBase app...")
-	app := pocketbase.NewWithConfig(config)
-	log.Println("[DEBUG] PocketBase app initialized.")
 
 	// Standard setup for the app
 	log.Println("[DEBUG] Running standard setup for PocketBase...")
 	standard(app)
 	log.Println("[DEBUG] Standard setup for PocketBase app completed.")
 
-	// Register hooks from hooks.go
-	log.Println("[DEBUG] Registering hooks...")
+	// Register hooks, FHIR routes, and management routes
 	registerHooks(app)
-	log.Println("[DEBUG] Hooks registered.")
-
-	// Register FHIR routes
-	log.Println("[DEBUG] Registering FHIR routes...")
 	registerFHIRRoutes(app)
-	log.Println("[DEBUG] FHIR routes registered.")
-
-	// Register server management routes
-	log.Println("[DEBUG] Registering server management routes...")
 	registerManagementRoutes(app)
-	log.Println("[DEBUG] Server management routes registered.")
-
-	// Setup additional native callbacks and routes
-	log.Println("[DEBUG] Setting up PocketBase callbacks and routes...")
 	setupPocketbaseCallbacks(app, enableApiLogs)
-	log.Println("[DEBUG] PocketBase callbacks and routes set up.")
 
 	// Initialize collections if necessary
-	log.Println("[DEBUG] Initializing collections...")
 	if err := initializeCollections(app); err != nil {
 		log.Printf("[ERROR] Failed to initialize collections: %v", err)
 		return
 	}
-	log.Println("[DEBUG] Collections initialized successfully.")
 
-	// Start the server in a separate goroutine
-	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		log.Println("[DEBUG] Calling app.Start() to start the server...")
-		if err := app.Start(); err != nil {
-			sendCommand("error", fmt.Sprintf("Error: Failed to start PocketBase server: %v", err))
-			log.Printf("[ERROR] Failed to start the app: %v", err)
-		} else {
-			log.Println("[DEBUG] PocketFHIR server started successfully.")
-		}
-	}()
-
-	// Wait for server to complete
-	wg.Wait()
-}
-
-// Helper methods
-
-// NativeBridge interface to define the methods used for native callbacks
-type NativeBridge interface {
-	HandleCallback(string, string) string
-}
-
-// sendCommand sends command to native and returns the response
-func sendCommand(command string, data string) string {
-	if nativeBridge != nil {
-		log.Printf("[DEBUG] Sending command '%s' with data: %s", command, data)
-		return nativeBridge.HandleCallback(command, data)
+	// Start the server
+	log.Println("[DEBUG] Starting PocketBase server instance...")
+	if err := app.Start(); err != nil {
+		log.Fatalf("[ERROR] Failed to start PocketBase server: %v", err)
 	}
-	log.Printf("[DEBUG] No NativeBridge defined. Command '%s' not sent.", command)
-	return ""
 }
 
 // setupPocketbaseCallbacks sets up additional callbacks and native routes for PocketBase
