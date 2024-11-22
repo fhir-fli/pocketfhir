@@ -14,7 +14,7 @@ import (
 )
 
 // runServerInstance handles the setup and running of the PocketBase server instance.
-func runServerInstance(app *pocketbase.PocketBase, ipAddress, pbPort string, enableApiLogs bool) {
+func runServerInstance(app *pocketbase.PocketBase, ipAddress, pbPort string, enableApiLogs bool) error {
 	// Set CLI-like arguments for PocketBase to specify server address and port
 	log.Printf("[DEBUG] Setting CLI arguments for server address and port: %s:%s\n", ipAddress, pbPort)
 	os.Args = []string{os.Args[0], "serve", "--http", fmt.Sprintf("%s:%s", ipAddress, pbPort)}
@@ -33,14 +33,16 @@ func runServerInstance(app *pocketbase.PocketBase, ipAddress, pbPort string, ena
 	// Initialize collections if necessary
 	if err := initializeCollections(app); err != nil {
 		log.Printf("[ERROR] Failed to initialize collections: %v", err)
-		return
+		return err
 	}
 
 	// Start the server
 	log.Println("[DEBUG] Starting PocketBase server instance...")
 	if err := app.Start(); err != nil {
 		log.Fatalf("[ERROR] Failed to start PocketBase server: %v", err)
+		return err
 	}
+	return nil
 }
 
 // setupPocketbaseCallbacks sets up additional callbacks and native routes for PocketBase

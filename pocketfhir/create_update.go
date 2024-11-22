@@ -285,22 +285,26 @@ func validateFHIRResource(resourceData []byte) error {
 }
 
 // Extract meta from resource JSON
-func getMetaFromResource(resourceData []byte) *Meta {
+func getMetaFromResource(resourceData []byte) *meta {
 	var resourceJson map[string]interface{}
 	if err := json.Unmarshal(resourceData, &resourceJson); err != nil {
 		log.Printf("Failed to unmarshal resource data: %v", err)
-		return &Meta{}
+		return &meta{}
 	}
 
-	meta, ok := resourceJson["meta"].(map[string]interface{})
+	metaData, ok := resourceJson["meta"].(map[string]interface{})
 	if !ok {
 		log.Println("Meta field not found in resource")
-		return &Meta{}
+		return &meta{}
 	}
 
-	return &Meta{
-		LastUpdated: meta["lastUpdated"].(string),
-		VersionId:   meta["versionId"].(string),
+	// Use safe type assertions to avoid panics
+	lastUpdated, _ := metaData["lastUpdated"].(string)
+	versionId, _ := metaData["versionId"].(string)
+
+	return &meta{
+		LastUpdated: lastUpdated,
+		VersionId:   versionId,
 	}
 }
 
@@ -341,8 +345,8 @@ func moveResourceToHistory(app *pocketbase.PocketBase, collectionName string, re
 	return nil
 }
 
-// Meta struct to hold meta data fields
-type Meta struct {
+// meta struct to hold meta data fields
+type meta struct {
 	LastUpdated string
 	VersionId   string
 }

@@ -23,6 +23,7 @@ func StartPocketFHIR(
 	// Set environment variables for PocketBase configuration
 	log.Println("[DEBUG] Setting environment variables...")
 	if err := os.Setenv("POCKETBASE_DATA_DIR", dataDir); err != nil {
+		onPocketBaseError(err)
 		log.Fatalf("Failed to set data directory: %v", err)
 	}
 
@@ -45,7 +46,13 @@ func StartPocketFHIR(
 			DefaultDev:      enableApiLogs,
 			HideStartBanner: false,
 		})
-		runServerInstance(pocketBaseApp, pbUrl, pbPort, enableApiLogs)
+
+		if err := runServerInstance(pocketBaseApp, pbUrl, pbPort, enableApiLogs); err != nil {
+			log.Printf("[ERROR] PocketBase failed to start: %v", err)
+			onPocketBaseError(err)
+			return
+		}
+		onPocketBaseStart()
 	}()
 
 	// Start the Caddy server in a separate goroutine
@@ -54,7 +61,7 @@ func StartPocketFHIR(
 		log.Println("[DEBUG] Starting Caddy server with HTTPS...")
 
 		// Create the Caddy configuration
-		caddyConfig := CaddyConfig{
+		caddyConfig := caddyConfig{
 			PbPort:      pbPort,
 			HttpPort:    httpPort,
 			HttpsPort:   httpsPort,
@@ -63,7 +70,12 @@ func StartPocketFHIR(
 			IpAddress:   ipAddress,
 		}
 
-		startCaddyInstance(caddyConfig)
+		if err := startCaddyInstance(caddyConfig); err != nil {
+			log.Printf("[ERROR] Caddy failed to start: %v", err)
+			onCaddyError(err)
+			return
+		}
+		onCaddyStart()
 	}()
 
 	// Wait for interrupt signal to gracefully shut down the servers
@@ -99,8 +111,10 @@ func StopPocketFHIR() {
 			})
 			if err != nil {
 				log.Printf("[ERROR] Failed to terminate PocketBase: %v", err)
+				onPocketBaseError(err)
 			} else {
 				log.Println("[DEBUG] PocketBase server terminated successfully.")
+				onPocketBaseStop()
 			}
 		}
 	}()
@@ -112,8 +126,10 @@ func StopPocketFHIR() {
 
 		if err := caddy.Stop(); err != nil {
 			log.Printf("[ERROR] Failed to stop Caddy server: %v", err)
+			onCaddyError(err)
 		} else {
 			log.Println("[DEBUG] Caddy server stopped successfully.")
+			onCaddyStop()
 		}
 	}()
 

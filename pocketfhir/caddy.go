@@ -10,8 +10,8 @@ import (
 	_ "github.com/caddyserver/caddy/v2/modules/standard"
 )
 
-// CaddyConfig is a struct that contains the configuration parameters for starting the Caddy server.
-type CaddyConfig struct {
+// caddyConfig is a struct that contains the configuration parameters for starting the Caddy server.
+type caddyConfig struct {
 	PbPort      string
 	HttpPort    string
 	HttpsPort   string
@@ -21,10 +21,11 @@ type CaddyConfig struct {
 }
 
 // startCaddyInstance initializes and starts the Caddy server instance.
-func startCaddyInstance(config CaddyConfig) {
+func startCaddyInstance(config caddyConfig) error {
 	// Change working directory
 	if err := os.Chdir(config.StoragePath); err != nil {
 		log.Fatalf("Failed to change working directory to %s: %v", config.StoragePath, err)
+		return err
 	}
 
 	// Log consolidated configuration details
@@ -37,6 +38,7 @@ func startCaddyInstance(config CaddyConfig) {
 	configJSON, err := json.MarshalIndent(caddyCfg, "", "  ")
 	if err != nil {
 		log.Fatalf("Failed to serialize Caddy config: %v", err)
+		return err
 	}
 	log.Printf("Generated Caddy config: %s", string(configJSON))
 
@@ -45,12 +47,14 @@ func startCaddyInstance(config CaddyConfig) {
 	err = caddy.Load(configJSON, true)
 	if err != nil {
 		log.Fatalf("[ERROR] Failed to load Caddy configuration: %v", err)
+		return err
 	}
 	log.Println("Caddy server started successfully.")
+	return nil
 }
 
 // createConfig generates a basic Caddy configuration to run a reverse proxy with HTTP and a static file server.
-func createConfig(config CaddyConfig) *caddy.Config {
+func createConfig(config caddyConfig) *caddy.Config {
 	// Define paths for certs and proxy logs
 	pbProxyPath := fmt.Sprintf("%s/proxy_access.log", config.StoragePath)
 
@@ -108,7 +112,7 @@ func generateStorageConfig(storagePath string) string {
 }
 
 // Generates the HTTP application configuration section
-func generateHttpAppConfig(config CaddyConfig) string {
+func generateHttpAppConfig(config caddyConfig) string {
 	httpsServerConfig := generateHttpsServerConfig(config)
 	return fmt.Sprintf(`"http": {
             "http_port": %s,
@@ -119,7 +123,7 @@ func generateHttpAppConfig(config CaddyConfig) string {
 }
 
 // Generates the HTTP server configuration for reverse proxy with health checks
-func generateHttpsServerConfig(config CaddyConfig) string {
+func generateHttpsServerConfig(config caddyConfig) string {
 	return fmt.Sprintf(`"srv_https": {
             "listen": [":%s"],
             "routes": [
