@@ -6,9 +6,6 @@ Future<void> main() async {
   // Authenticate
   await pb.admins.authWithPassword('grey@fhirfli.dev', '01 password');
 
-  final resultList = await pb.collection('patient').getList(
-        page: 1,
-        perPage: 50,
-      );
-  resultList.items.forEach((record) => print(record.data['resource']['id']));
-}
+  final resultList = await pb.collection('Observation').getOne('8dazsc6sbge4tgh');
+  print(resultList.data);
+  }
